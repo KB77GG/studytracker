@@ -7,9 +7,10 @@
 
   const CONTEXT_KEY = "practice:return-context:v2";
   const LIST_STATE_PREFIX = "practice:list-state:v2:";
+  const HUB_CONTEXT_PREFIX = "practice:hub-context:v2:";
   const LEGACY_CONTEXT_KEY = "practice:return-context:v1";
   const NAVIGATION_PARAMS = ["practice_return", "practice_exit", "practice_source", "practice_identity"];
-  const PRACTICE_PAGE_PATH = /^(?:\/practice(?:\/|$)|\/listening(?:\/|$)|\/reading(?:\/|$)|\/exam(?:\/|$)|\/writing(?:\/|$)|\/tasks\/question-types(?:\/|$))/;
+  const PRACTICE_PAGE_PATH = /^(?:\/practices?(?:\/|$)|\/listening(?:\/|$)|\/reading(?:\/|$)|\/exam(?:\/|$)|\/writing(?:\/|$)|\/tasks\/question-types(?:\/|$))/;
 
   function safeStorage(storage, method, key, value) {
     try {
@@ -168,7 +169,8 @@
     const doc = win.document;
     const settings = mergedOptions(win, options);
     const origin = win.location.origin;
-    const current = cleanNavigationUrl(currentUrl(win), origin);
+    const browserUrl = currentUrl(win);
+    const current = cleanNavigationUrl(browserUrl, origin);
     const currentPath = current.pathname + current.search + current.hash;
     const targetPath = cleanLocalPath(options.targetPath || "", origin, "");
     const previous = storedContext(win);
@@ -185,8 +187,9 @@
       ) === currentPath
     );
 
-    let moduleExit = contextParts(settings.moduleExitUrl, origin, "/login");
-    let moduleExitLabel = settings.moduleExitLabel;
+    const explicitExit = safeLocalUrl(browserUrl.searchParams.get("practice_exit"), origin, "");
+    let moduleExit = contextParts(explicitExit || settings.moduleExitUrl, origin, "/login");
+    let moduleExitLabel = exitLabel(settings.identityMode, moduleExit.path, sourceModeForPath(moduleExit.path), settings.moduleExitLabel);
     if (!isPracticeModulePath(current.pathname) && targetPath && isPracticeModulePath(new URL(targetPath, origin).pathname)) {
       moduleExit = { path: current.pathname, search: current.search, hash: current.hash };
       moduleExitLabel = returnLabel(sourceModeForPath(current.pathname));
@@ -234,9 +237,17 @@
 
   function isPracticeEntry(link, win) {
     if (!link || link.hasAttribute("download")) return false;
-    if (link.dataset.practiceEntry !== undefined) return true;
+    // Return/exit/home links already have a destination; capturing them as a new
+    // entry would replace the parent with the page we are leaving.
+    if (["practiceModuleBack", "practiceModuleExit", "practiceBack", "practiceHome"]
+      .some((key) => link.dataset[key] !== undefined)) return false;
     const url = linkTarget(link, win);
-    return Boolean(url && url.origin === win.location.origin && isPracticeModulePath(url.pathname));
+    if (!url || url.origin !== win.location.origin) return false;
+    const current = cleanNavigationUrl(currentUrl(win), win.location.origin);
+    const target = cleanNavigationUrl(url, win.location.origin);
+    if (target.pathname === current.pathname && target.search === current.search) return false;
+    if (link.dataset.practiceNav !== undefined && target.pathname === "/practice") return false;
+    return link.dataset.practiceEntry !== undefined || isPracticeModulePath(url.pathname);
   }
 
   function contextUrl(context, origin) {
@@ -338,7 +349,8 @@
     const currentPath = current.pathname + current.search + current.hash;
     const explicitReturn = safeLocalUrl(browserUrl.searchParams.get("practice_return"), origin, "");
     const explicitExit = safeLocalUrl(browserUrl.searchParams.get("practice_exit"), origin, "");
-    if (explicitReturn) {
+    const explicitSource = explicitReturn ? cleanNavigationUrl(explicitReturn, origin) : null;
+    if (explicitSource && (explicitSource.pathname !== current.pathname || explicitSource.search !== current.search)) {
       const source = contextParts(explicitReturn, origin, fallbackUrl || settings.moduleRootUrl);
       const exit = contextParts(explicitExit || settings.moduleExitUrl, origin, settings.moduleExitUrl);
       const exitMode = sourceModeForPath(exit.path);
@@ -418,26 +430,85 @@
     win.__practiceHubInstalled = true;
     const settings = mergedOptions(win, options);
     const isRoot = marker.dataset.practiceHub === "root" || win.location.pathname === new URL(settings.moduleRootUrl, win.location.origin).pathname;
-    const context = resolveContext(win, settings.moduleRootUrl, "practice_library", settings);
+    const origin = win.location.origin;
+    const current = cleanNavigationUrl(currentUrl(win), origin);
+    const currentPath = current.pathname + current.search + current.hash;
+    const cacheKey = HUB_CONTEXT_PREFIX + current.pathname + current.search;
+    const savedParent = readJson(win.sessionStorage, cacheKey, null);
+    const previous = storedContext(win);
+    const returningToCurrent = previous && cleanLocalPath(contextUrl(previous, origin), origin) === currentPath;
+    let context = resolveContext(win, settings.moduleRootUrl, undefined, settings);
+    // Details return to a clean catalog URL. Keep that catalog's own parent
+    // separately from the details' list-state record, so a second Back still
+    // reaches (for example) the reading sprint rather than losing a level.
+    if (!currentUrl(win).searchParams.has("practice_return") && returningToCurrent
+      && savedParent && Date.now() - Number(savedParent.capturedAt || 0) < 4 * 60 * 60 * 1000
+      && cleanLocalPath(contextUrl(savedParent, origin), origin) !== currentPath) {
+      context = savedParent;
+    }
+    function parentChainCycles(parent) {
+      const visited = new Set([cacheKey]);
+      let cursor = parent;
+      // Catalogs are few, but do not trust old browser storage to be acyclic.
+      for (let depth = 0; cursor && depth < 32; depth += 1) {
+        const source = cleanNavigationUrl(contextUrl(cursor, origin), origin);
+        const key = HUB_CONTEXT_PREFIX + source.pathname + source.search;
+        if (visited.has(key)) return true;
+        visited.add(key);
+        cursor = readJson(win.sessionStorage, key, null);
+        if (cursor && Date.now() - Number(cursor.capturedAt || 0) >= 4 * 60 * 60 * 1000) return false;
+      }
+      return Boolean(cursor);
+    }
+
+    if (!isRoot && parentChainCycles(context)) {
+      // Revisiting a catalog through the main tabs closes that navigation loop.
+      // Keep its original parent instead of overwriting A -> root with A -> B -> A.
+      if (savedParent && Date.now() - Number(savedParent.capturedAt || 0) < 4 * 60 * 60 * 1000
+        && !parentChainCycles(savedParent)) {
+        context = savedParent;
+      } else {
+        const root = contextParts(settings.moduleRootUrl, origin, "/practice");
+        context = {
+          ...context, sourcePath: root.path, sourceSearchParams: root.search,
+          sourceHash: root.hash, sourceMode: sourceModeForPath(root.path),
+          activeTab: root.hash.replace(/^#/, "")
+        };
+      }
+    }
+    if (!isRoot) writeJson(win.sessionStorage, cacheKey, context);
+    const backUrl = contextUrl(context, origin);
     let bypassPopState = false;
 
-    function go(target) {
+    function go(target, returning = false) {
+      if (returning) {
+        const listKey = LIST_STATE_PREFIX + context.sourcePath + (context.sourceSearchParams || "");
+        const savedList = readJson(win.sessionStorage, listKey, null);
+        const returned = { ...(savedList || context), returning: true };
+        writeJson(win.sessionStorage, listKey, returned);
+        writeJson(win.sessionStorage, CONTEXT_KEY, returned);
+      }
       bypassPopState = true;
       assign(win, target);
     }
 
     win.document.querySelectorAll("[data-practice-module-back]").forEach((button) => {
-      button.textContent = "← 返回练习中心";
+      button.hidden = isRoot;
+      button.textContent = `← ${returnLabel(context.sourceMode)}`;
+      if (button.href !== undefined) button.href = backUrl;
       button.addEventListener("click", (event) => {
+        if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
         event.preventDefault();
-        go(cleanLocalPath(settings.moduleRootUrl, win.location.origin, "/practice"));
+        go(backUrl, true);
       });
     });
     win.document.querySelectorAll("[data-practice-module-exit]").forEach((button) => {
       button.textContent = context.moduleExitLabel || settings.moduleExitLabel;
+      if (button.href !== undefined) button.href = moduleExitUrl(context, origin);
       button.addEventListener("click", (event) => {
+        if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
         event.preventDefault();
-        go(moduleExitUrl(context, win.location.origin));
+        go(moduleExitUrl(context, origin));
       });
     });
 
@@ -445,7 +516,7 @@
     win.history.pushState({ practiceHubGuard: true }, "", win.location.href);
     win.addEventListener("popstate", () => {
       if (bypassPopState) return;
-      go(isRoot ? moduleExitUrl(context, win.location.origin) : contextUrl(context, win.location.origin));
+      go(isRoot ? moduleExitUrl(context, origin) : backUrl, !isRoot);
     });
     return { context };
   }

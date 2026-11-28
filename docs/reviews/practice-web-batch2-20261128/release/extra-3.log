@@ -1,0 +1,10 @@
+untouched {"prompt":false,"canLeave":true}
+typed-before-submit {"prompt":true,"canLeave":true}
+first-submit-inflight {"prompt":true,"canLeave":false}
+first-submit-failed {"prompt":true,"canLeave":false}
+first-submit-success {"prompt":false,"canLeave":true}
+correction-draft {"prompt":true,"canLeave":true}
+uncertain-response-before-refresh {"prompt":true,"canLeave":false}
+refresh-server-confirms-save {"prompt":false,"canLeave":true}
+refresh-server-has-no-save-can-retry {"prompt":false,"canLeave":true}
+independent cases passed: 9

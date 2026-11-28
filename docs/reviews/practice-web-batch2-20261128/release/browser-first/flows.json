@@ -1,0 +1,420 @@
+{
+  "base": "http://127.0.0.1:5116",
+  "scope": "synthetic local Chromium; external requests blocked",
+  "results": [
+    {
+      "name": "确认学生身份",
+      "ok": true
+    },
+    {
+      "name": "合成任务数",
+      "ok": false,
+      "error": "Expected values to be strictly equal:"
+    },
+    {
+      "name": "剑雅听力目录→做题",
+      "start": "/listening/tests",
+      "ok": false,
+      "error": "locator.innerText: Timeout 10000ms exceeded."
+    },
+    {
+      "name": "剑雅阅读目录→做题",
+      "start": "/reading/tests",
+      "clickText": "开始练习",
+      "landed": "/reading/test/ielts21_test1_reading?practice_return=%2Freading%2Ftests&practice_exit=%2Flogin&practice_source=reading_tests&practice_identity=verified_student",
+      "backButtons": [
+        "← 返回剑雅阅读",
+        "退出刷题"
+      ],
+      "backLabel": "← 返回剑雅阅读",
+      "afterBack": "/reading/tests",
+      "afterBrowserBack": "/reading/tests",
+      "dialogs": [],
+      "ok": true
+    },
+    {
+      "name": "听力机经目录→做题",
+      "start": "/listening/jijing",
+      "clickText": "Part 1 Q1-10",
+      "landed": "/listening/jijing/jijing_5_test_24_part_1_1671?practice_return=%2Flistening%2Fjijing&practice_exit=%2Flogin&practice_source=listening_jijing&practice_identity=verified_student",
+      "backButtons": [
+        "← 返回听力机经",
+        "退出刷题"
+      ],
+      "backLabel": "← 返回听力机经",
+      "afterBack": "/listening/jijing",
+      "afterBrowserBack": "/listening/jijing",
+      "dialogs": [],
+      "ok": true
+    },
+    {
+      "name": "阅读机经目录→做题",
+      "start": "/reading/jijing",
+      "clickText": "开始练习",
+      "landed": "/reading/jijing/reading_jijing_92_test_58?practice_return=%2Freading%2Fjijing&practice_exit=%2Flogin&practice_source=reading_jijing&practice_identity=verified_student",
+      "backButtons": [
+        "← 返回阅读机经",
+        "退出刷题"
+      ],
+      "backLabel": "← 返回阅读机经",
+      "afterBack": "/reading/jijing",
+      "afterBrowserBack": "/reading/jijing",
+      "dialogs": [],
+      "ok": true
+    },
+    {
+      "name": "精听目录→精听",
+      "start": "/practices",
+      "clickText": "Section 1",
+      "landed": "/listening/ielts4_test1_s1?practice_return=%2Fpractices&practice_exit=%2Flogin&practice_source=intensive_library&practice_identity=verified_student",
+      "backButtons": [
+        "← 返回精听列表",
+        "退出刷题"
+      ],
+      "backLabel": "← 返回精听列表",
+      "afterBack": "/practices",
+      "afterBrowserBack": "/practices",
+      "dialogs": [],
+      "ok": true
+    },
+    {
+      "name": "写作题库→范文",
+      "start": "/writing/",
+      "clickText": "Task 2 大作文 观点型 T08 · 犯罪成因、惩罚与预防 NO. 010 犯罪行为对策 Criminal Beha",
+      "landed": "/writing/t2-010?practice_return=%2Fwriting%2F&practice_exit=%2Flogin&practice_source=writing_library&practice_identity=verified_student",
+      "backButtons": [
+        "← 返回写作题库",
+        "← 返回写作题库"
+      ],
+      "backLabel": "← 返回写作题库",
+      "afterBack": "/writing/",
+      "afterBrowserBack": "/writing/",
+      "dialogs": [],
+      "ok": true
+    },
+    {
+      "name": "母题库→母题",
+      "start": "/writing/topics",
+      "clickText": "T01 学习与成长 28 题 教育目标、课程与方法 Education, Curriculum and Learning",
+      "landed": "/writing/topics/t01?practice_return=%2Fwriting%2Ftopics&practice_exit=%2Flogin&practice_source=writing_library&practice_identity=verified_student",
+      "backButtons": [],
+      "backLabel": "← 返回 27 个母题",
+      "afterBack": "/writing/topics",
+      "afterBrowserBack": "/writing/topics",
+      "dialogs": [],
+      "ok": true
+    },
+    {
+      "name": "阅读冲刺→做题",
+      "start": "/practice/sprint/reading",
+      "ok": false,
+      "error": "locator.innerText: Timeout 10000ms exceeded."
+    },
+    {
+      "name": "练习中心→剑雅听力",
+      "start": "/practice",
+      "clickText": "听力 20 本书 · 84 套 Test · 3360 题 进入",
+      "landed": "/listening/tests?practice_return=%2Fpractice&practice_exit=%2Flogin&practice_source=practice_library&practice_identity=verified_student",
+      "backButtons": [
+        "← 返回练习中心"
+      ],
+      "backLabel": "← 返回练习中心",
+      "afterBack": "/practice",
+      "afterBrowserBack": "/practice",
+      "dialogs": [],
+      "ok": true
+    },
+    {
+      "name": "练习中心→题型专项",
+      "start": "/practice",
+      "clickText": "题型专项",
+      "landed": "/practice/question-types?practice_return=%2Fpractice&practice_exit=%2Flogin&practice_source=practice_library&practice_identity=verified_student",
+      "backButtons": [
+        "← 返回练习中心"
+      ],
+      "backLabel": "← 返回练习中心",
+      "afterBack": "/practice",
+      "afterBrowserBack": "/practice",
+      "dialogs": [],
+      "ok": true
+    },
+    {
+      "name": "练习中心→写作",
+      "start": "/practice",
+      "clickText": "写作 27 个大作文母题 · 40 道试点真题 · 三档范文、逻辑链与打字记录 进入",
+      "landed": "/writing/?practice_return=%2Fpractice&practice_exit=%2Flogin&practice_source=practice_library&practice_identity=verified_student",
+      "backButtons": [
+        "← 返回练习中心"
+      ],
+      "backLabel": "← 返回练习中心",
+      "afterBack": "/practice",
+      "afterBrowserBack": "/practice",
+      "dialogs": [],
+      "ok": true
+    },
+    {
+      "name": "阅读冲刺→剑雅目录",
+      "start": "/practice/sprint/reading",
+      "clickText": "剑雅真题 返回整套阅读题库 进入",
+      "landed": "/reading/tests?practice_return=%2Fpractice%2Fsprint%2Freading&practice_exit=%2Flogin&practice_source=exam_sprint&practice_identity=verified_student",
+      "backButtons": [
+        "← 返回考前冲刺"
+      ],
+      "backLabel": "← 返回考前冲刺",
+      "afterBack": "/practice/sprint/reading",
+      "afterBrowserBack": "/practice/sprint/reading",
+      "dialogs": [],
+      "ok": true
+    },
+    {
+      "name": "听力冲刺→剑雅目录",
+      "start": "/practice/sprint/listening",
+      "clickText": "剑雅真题 返回整套听力题库 进入",
+      "landed": "/listening/tests?practice_return=%2Fpractice%2Fsprint%2Flistening&practice_exit=%2Flogin&practice_source=exam_sprint&practice_identity=verified_student",
+      "backButtons": [
+        "← 返回考前冲刺"
+      ],
+      "backLabel": "← 返回考前冲刺",
+      "afterBack": "/practice/sprint/listening",
+      "afterBrowserBack": "/practice/sprint/listening",
+      "dialogs": [],
+      "ok": true
+    },
+    {
+      "name": "目录 /practice @1440",
+      "title": "练习中心 · Sage Path",
+      "heading": "练习中心",
+      "backLabel": null,
+      "backTarget": null,
+      "identity": "学生：测试学生",
+      "horizontalOverflow": false,
+      "ok": true
+    },
+    {
+      "name": "目录 /practice @390",
+      "title": "练习中心 · Sage Path",
+      "heading": "练习中心",
+      "backLabel": null,
+      "backTarget": null,
+      "identity": "学生：测试学生",
+      "horizontalOverflow": false,
+      "ok": true
+    },
+    {
+      "name": "目录 /practices @1440",
+      "title": "精听练习 · Sage Path",
+      "heading": "精听练习",
+      "backLabel": "← 返回练习中心",
+      "backTarget": "/practice",
+      "identity": "学生：测试学生",
+      "horizontalOverflow": false,
+      "ok": true
+    },
+    {
+      "name": "目录 /practices @390",
+      "title": "精听练习 · Sage Path",
+      "heading": "精听练习",
+      "backLabel": "← 返回练习中心",
+      "backTarget": "/practice",
+      "identity": "学生：测试学生",
+      "horizontalOverflow": false,
+      "ok": true
+    },
+    {
+      "name": "目录 /listening/tests @1440",
+      "title": "剑雅听力 · Sage Path",
+      "heading": "剑雅听力",
+      "backLabel": "← 返回练习中心",
+      "backTarget": "/practice",
+      "identity": "学生：测试学生",
+      "horizontalOverflow": false,
+      "ok": true
+    },
+    {
+      "name": "目录 /listening/tests @390",
+      "title": "剑雅听力 · Sage Path",
+      "heading": "剑雅听力",
+      "backLabel": "← 返回练习中心",
+      "backTarget": "/practice",
+      "identity": "学生：测试学生",
+      "horizontalOverflow": false,
+      "ok": true
+    },
+    {
+      "name": "目录 /reading/tests @1440",
+      "title": "剑雅阅读 · Sage Path",
+      "heading": "剑雅阅读",
+      "backLabel": "← 返回练习中心",
+      "backTarget": "/practice",
+      "identity": "学生：测试学生",
+      "horizontalOverflow": false,
+      "ok": true
+    },
+    {
+      "name": "目录 /reading/tests @390",
+      "title": "剑雅阅读 · Sage Path",
+      "heading": "剑雅阅读",
+      "backLabel": "← 返回练习中心",
+      "backTarget": "/practice",
+      "identity": "学生：测试学生",
+      "horizontalOverflow": false,
+      "ok": true
+    },
+    {
+      "name": "目录 /listening/jijing @1440",
+      "title": "听力机经 · Sage Path",
+      "heading": "听力机经",
+      "backLabel": "← 返回练习中心",
+      "backTarget": "/practice",
+      "identity": "学生：测试学生",
+      "horizontalOverflow": false,
+      "ok": true
+    },
+    {
+      "name": "目录 /listening/jijing @390",
+      "title": "听力机经 · Sage Path",
+      "heading": "听力机经",
+      "backLabel": "← 返回练习中心",
+      "backTarget": "/practice",
+      "identity": "学生：测试学生",
+      "horizontalOverflow": false,
+      "ok": true
+    },
+    {
+      "name": "目录 /reading/jijing @1440",
+      "title": "阅读机经 · Sage Path",
+      "heading": "阅读机经",
+      "backLabel": "← 返回练习中心",
+      "backTarget": "/practice",
+      "identity": "学生：测试学生",
+      "horizontalOverflow": false,
+      "ok": true
+    },
+    {
+      "name": "目录 /reading/jijing @390",
+      "title": "阅读机经 · Sage Path",
+      "heading": "阅读机经",
+      "backLabel": "← 返回练习中心",
+      "backTarget": "/practice",
+      "identity": "学生：测试学生",
+      "horizontalOverflow": false,
+      "ok": true
+    },
+    {
+      "name": "目录 /writing/ @1440",
+      "title": "IELTS 写作范文库 · Sage Path",
+      "heading": "写作范文与打字训练",
+      "backLabel": "← 返回练习中心",
+      "backTarget": "/practice",
+      "identity": "学生：测试学生",
+      "horizontalOverflow": false,
+      "ok": true
+    },
+    {
+      "name": "目录 /writing/ @390",
+      "title": "IELTS 写作范文库 · Sage Path",
+      "heading": "写作范文与打字训练",
+      "backLabel": "← 返回练习中心",
+      "backTarget": "/practice",
+      "identity": "学生：测试学生",
+      "horizontalOverflow": false,
+      "ok": true
+    },
+    {
+      "name": "目录 /writing/topics @1440",
+      "title": "IELTS 大作文母题库 · Sage Path",
+      "heading": "大作文母题库",
+      "backLabel": "← 返回练习中心",
+      "backTarget": "/practice",
+      "identity": "学生：测试学生",
+      "horizontalOverflow": false,
+      "ok": true
+    },
+    {
+      "name": "目录 /writing/topics @390",
+      "title": "IELTS 大作文母题库 · Sage Path",
+      "heading": "大作文母题库",
+      "backLabel": "← 返回练习中心",
+      "backTarget": "/practice",
+      "identity": "学生：测试学生",
+      "horizontalOverflow": false,
+      "ok": true
+    },
+    {
+      "name": "目录 /practice/sprint/reading @1440",
+      "title": "阅读考前冲刺 · Sage Path",
+      "heading": "阅读考前冲刺",
+      "backLabel": "← 返回练习中心",
+      "backTarget": "/practice",
+      "identity": "学生：测试学生",
+      "horizontalOverflow": false,
+      "ok": true
+    },
+    {
+      "name": "目录 /practice/sprint/reading @390",
+      "title": "阅读考前冲刺 · Sage Path",
+      "heading": "阅读考前冲刺",
+      "backLabel": "← 返回练习中心",
+      "backTarget": "/practice",
+      "identity": "学生：测试学生",
+      "horizontalOverflow": false,
+      "ok": true
+    },
+    {
+      "name": "目录 /practice/sprint/listening @1440",
+      "title": "听力考前冲刺 · Sage Path",
+      "heading": "听力考前冲刺",
+      "backLabel": "← 返回练习中心",
+      "backTarget": "/practice",
+      "identity": "学生：测试学生",
+      "horizontalOverflow": false,
+      "ok": true
+    },
+    {
+      "name": "目录 /practice/sprint/listening @390",
+      "title": "听力考前冲刺 · Sage Path",
+      "heading": "听力考前冲刺",
+      "backLabel": "← 返回练习中心",
+      "backTarget": "/practice",
+      "identity": "学生：测试学生",
+      "horizontalOverflow": false,
+      "ok": true
+    },
+    {
+      "name": "目录 /practice/question-types @1440",
+      "title": "IELTS 题型专项 · Sage Path",
+      "heading": "IELTS 题型专项",
+      "backLabel": "← 返回练习中心",
+      "backTarget": "/practice",
+      "identity": "学生：测试学生",
+      "horizontalOverflow": false,
+      "ok": true
+    },
+    {
+      "name": "目录 /practice/question-types @390",
+      "title": "IELTS 题型专项 · Sage Path",
+      "heading": "IELTS 题型专项",
+      "backLabel": "← 返回练习中心",
+      "backTarget": "/practice",
+      "identity": "学生：测试学生",
+      "horizontalOverflow": false,
+      "ok": true
+    },
+    {
+      "name": "精听保留切换身份且无重复任务请求",
+      "duplicateRequests": [],
+      "ok": true
+    },
+    {
+      "name": "教师后台和精听管理入口保留",
+      "staffControls": {
+        "upload": true,
+        "logout": true,
+        "assignmentPreview": true
+      },
+      "ok": true
+    }
+  ],
+  "passed": 36,
+  "failed": 3
+}

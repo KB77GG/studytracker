@@ -1,5 +1,6 @@
-{% macro entrance_shell(panel_labelledby, panel_modifier='') -%}
+{% macro entrance_shell(panel_labelledby, panel_modifier='', show_brandbar=true) -%}
 <div class="auth-entry">
+  {% if show_brandbar %}
   <header class="auth-entry__brandbar">
     <a class="auth-entry__brand" href="{{ url_for('login') }}" aria-label="Sage Path 睿然国际教育">
       <img class="auth-entry__brand-mark"
@@ -11,6 +12,7 @@
       </span>
     </a>
   </header>
+  {% endif %}
 
   <div class="auth-entry__layout">
     <section class="auth-entry__visual" aria-label="Sage Path 品牌介绍">

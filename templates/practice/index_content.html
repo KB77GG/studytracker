@@ -26,6 +26,7 @@ main.container {
   letter-spacing: .12em;
   text-transform: uppercase;
 }
+.practice-hero h1,
 .practice-hero h2 {
   margin: 0;
   color: var(--text-strong);
@@ -514,12 +515,12 @@ a.practice-resource:hover {
   <section class="practice-hero">
     <div>
       <p class="practice-hero__eyebrow">Practice Library</p>
-      <h2>雅思与托福统一刷题入口</h2>
+      {% if practice_workspace_entry|default(false) %}<h1>练习中心</h1>{% else %}<h2>雅思与托福统一刷题入口</h2>{% endif %}
       <p>雅思按科目与教材进入；托福按真题日期进入正式考试模式。</p>
     </div>
   </section>
 
-  <section class="practice-identity{% if is_practice_staff_mode %} practice-identity--staff{% endif %}"
+  <section id="practiceIdentity" class="practice-identity{% if is_practice_staff_mode %} practice-identity--staff{% endif %}"
            aria-label="{{ '访问模式' if is_practice_staff_mode else '学生身份' }}"
            data-practice-staff-mode="{{ '1' if is_practice_staff_mode else '0' }}"
            data-staff-name="{{ practice_staff_label|default('课堂模式') }}"
@@ -936,6 +937,8 @@ body.admin-suite-v2 .practice-page{display:grid;grid-template-columns:190px minm
     localStorage.setItem('listening_student', name);
     sessionStorage.setItem('listening_student', name);
     nameEl.textContent = name;
+    const headerIdentity = document.querySelector('[data-practice-identity-label]');
+    if (headerIdentity) headerIdentity.textContent = `学生：${name}`;
     hintEl.textContent = '当前设备已绑定，提交后会进入后台练习记录。';
     form.hidden = true;
     switchBtn.hidden = false;
@@ -959,6 +962,8 @@ body.admin-suite-v2 .practice-page{display:grid;grid-template-columns:190px minm
     verified = false;
     setNavigationIdentity('guest');
     nameEl.textContent = '未绑定';
+    const headerIdentity = document.querySelector('[data-practice-identity-label]');
+    if (headerIdentity) headerIdentity.textContent = '未确认身份';
     hintEl.textContent = '输入后台学生档案中的姓名后，刷题记录会同步到后台。';
     form.hidden = false;
     switchBtn.hidden = true;

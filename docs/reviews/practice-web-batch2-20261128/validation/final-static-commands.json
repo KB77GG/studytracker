@@ -1,0 +1,54 @@
+[
+  {
+    "argv": [
+      "/Users/zhouxin/Desktop/studytracker/.venv/bin/python",
+      "-m",
+      "ruff",
+      "check",
+      "tests/test_practice_navigation_batch2.py",
+      "tests/test_practice_center_batch1.py",
+      "tests/test_practice_portal_catalog_grouping.py",
+      "tests/test_practice_workspace_regression.py",
+      "docs/reviews/practice-web-batch2-20261128/run_checks.py",
+      "docs/reviews/practice-web-batch2-20261128/verify_scope.py"
+    ],
+    "cwd": "/private/tmp/studytracker-practice-web-batch2-20261128",
+    "exit_code": 0,
+    "stdout": "All checks passed!\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "ruby",
+      "-e",
+      "require 'yaml'; YAML.load_file('.github/workflows/ci.yml'); puts 'CI_YAML_OK'"
+    ],
+    "cwd": "/private/tmp/studytracker-practice-web-batch2-20261128",
+    "exit_code": 0,
+    "stdout": "CI_YAML_OK\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "node",
+      "--check",
+      "docs/reviews/practice-web-audit-20261126/flows.js"
+    ],
+    "cwd": "/private/tmp/studytracker-practice-web-batch2-20261128",
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "lsof",
+      "-nP",
+      "-iTCP:5116",
+      "-sTCP:LISTEN"
+    ],
+    "cwd": "/private/tmp/studytracker-practice-web-batch2-20261128",
+    "exit_code": 1,
+    "stdout": "",
+    "stderr": ""
+  }
+]

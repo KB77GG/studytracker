@@ -528,3 +528,180 @@ test('intensive note storage failure remains unsaved and a later successful retr
   assert.equal(context.errorSummaries[0], 'new note')
   assert.equal(saved, 1)
 })
+
+function hubWindow(pathname = '/reading/tests', search = '', hash = '') {
+  const ui = interactiveWindow()
+  Object.assign(ui.win.location, { pathname, search, hash })
+  const marker = { dataset: { practiceHub: pathname === '/practice' ? 'root' : 'section' } }
+  const back = eventNode(), exit = eventNode(), brand = eventNode()
+  back.dataset.practiceModuleBack = ''
+  back.href = '/practice'
+  exit.dataset.practiceModuleExit = ''
+  exit.href = '/login'
+  brand.dataset.practiceHome = ''
+  brand.href = '/practice'
+  brand.textContent = 'Sage Path'
+  for (const node of [back, exit, brand]) node.hasAttribute = () => false
+  ui.win.document.querySelector = selector => selector === '[data-practice-hub]' ? marker : null
+  ui.win.document.querySelectorAll = selector => ({
+    '[data-practice-module-back]': [back], '[data-practice-module-exit]': [exit],
+    'a[href], [data-href]': [brand, back, exit]
+  })[selector] || []
+  ui.win.requestAnimationFrame = callback => callback()
+  ui.win.scrollTo = (_x, y) => { ui.win.scrollY = y }
+  return { ...ui, back, exit, brand, marker }
+}
+
+test('catalog back uses the incoming sprint context for its label, href, click and browser back', () => {
+  const query = '?practice_return=%2Fpractice%2Fsprint%2Freading%23sprint-2&practice_source=exam_sprint&practice_exit=%2Flogin&practice_identity=verified_student'
+  for (const browserBack of [false, true]) {
+    const ui = hubWindow('/reading/tests', query)
+    const { context } = shell.installHub({}, ui.win)
+    assert.equal(ui.brand.textContent, 'Sage Path')
+    assert.equal(ui.back.textContent, '← 返回考前冲刺')
+    assert.equal(ui.back.href, '/practice/sprint/reading#sprint-2')
+    assert.equal(context.identityMode, 'verified_student')
+    if (browserBack) ui.windowEvents.popstate()
+    else ui.back.fire('click')
+    assert.equal(ui.win.assigned, '/practice/sprint/reading#sprint-2')
+    assert.equal(JSON.parse(ui.win.sessionStorage.getItem(shell.CONTEXT_KEY)).returning, true)
+  }
+})
+
+test('catalog return infers a missing source mode and rejects a self-return bookmark', () => {
+  const sprint = hubWindow('/reading/tests', '?practice_return=%2Fpractice%2Fsprint%2Freading')
+  shell.installHub({}, sprint.win)
+  assert.equal(sprint.back.textContent, '← 返回考前冲刺')
+  const self = hubWindow('/reading/tests', '?practice_return=%2Freading%2Ftests%23book-10&practice_source=reading_tests')
+  shell.installHub({}, self.win)
+  assert.equal(self.back.href, '/practice')
+  assert.equal(self.back.textContent, '← 返回练习中心')
+  const root = hubWindow('/practice')
+  shell.installHub({}, root.win)
+  assert.equal(root.back.hidden, true)
+})
+
+test('return, exit and home links do not overwrite the incoming parent; main navigation to the center stays clean', () => {
+  const ui = hubWindow('/reading/tests', '?practice_return=%2Fpractice%2Fsprint%2Freading&practice_source=exam_sprint')
+  shell.installListContext({}, ui.win)
+  shell.installHub({}, ui.win)
+  const center = { href: 'http://practice.test/practice#practiceIdentity', dataset: { practiceNav: '' }, hasAttribute: () => false }
+  const samePage = { href: 'http://practice.test/reading/tests#cambridge-10', dataset: {}, hasAttribute: () => false }
+  for (const link of [ui.brand, ui.back, ui.exit, center, samePage]) {
+    const before = link.href
+    ui.documentEvents.click({ target: { closest: () => link }, defaultPrevented: false })
+    assert.equal(link.href, before)
+    assert.equal(ui.win.sessionStorage.getItem(shell.CONTEXT_KEY), null)
+  }
+})
+
+test('intensive entry participates in the module and sibling main navigation captures its immediate source', () => {
+  assert.equal(shell.isPracticeModulePath('/practices'), true)
+  const ui = hubWindow('/practice/sprint/reading', '', '#sprint-3')
+  ui.win.PRACTICE_NAVIGATION_DEFAULTS = { identityMode: 'verified_student' }
+  shell.installListContext({}, ui.win)
+  for (const path of ['/practices', '/reading/tests']) {
+    const link = { href: `http://practice.test${path}`, dataset: { practiceNav: '' }, hasAttribute: () => false }
+    ui.documentEvents.click({ target: { closest: () => link }, defaultPrevented: false })
+    const target = new URL(link.href)
+    assert.equal(target.searchParams.get('practice_return'), '/practice/sprint/reading#sprint-3')
+    assert.equal(target.searchParams.get('practice_source'), 'exam_sprint')
+    assert.equal(target.searchParams.get('practice_identity'), 'verified_student')
+    assert.equal(target.searchParams.get('practice_exit'), '/login')
+  }
+})
+
+test('a catalog opened in a new tab preserves its external module exit on the next navigation', () => {
+  const ui = hubWindow('/reading/tests', '?practice_return=%2Fpractice&practice_exit=%2Ftasks%3Ftab%3Dreading&practice_identity=staff')
+  ui.win.PRACTICE_NAVIGATION_DEFAULTS = { identityMode: 'staff', moduleExitUrl: '/', moduleExitLabel: '返回工作台' }
+  const captured = shell.captureListState(ui.win, { targetPath: '/reading/test/ielts10_test1' })
+  assert.equal(shell.moduleExitUrl(captured, ui.win.location.origin), '/tasks?tab=reading')
+  assert.equal(captured.moduleExitLabel, '返回任务中心')
+  assert.equal(captured.identityMode, 'staff')
+})
+
+test('sprint → catalog → detail → catalog retains the catalog parent and list position', async () => {
+  const catalog = hubWindow('/reading/tests', '?practice_return=%2Fpractice%2Fsprint%2Freading%23sprint-2&practice_source=exam_sprint', '#cambridge-10')
+  shell.installHub({}, catalog.win)
+  shell.captureListState(catalog.win, { targetPath: '/reading/test/ielts10_test1', filters: { status: 'todo' } })
+
+  const detail = interactiveWindow()
+  detail.win.location.search = ''
+  detail.win.sessionStorage = catalog.win.sessionStorage
+  const controller = shell.init({ fallbackUrl: '/reading/tests', fallbackMode: 'reading_tests' }, detail.win)
+  assert.equal(controller.context.sourceMode, 'reading_tests')
+  await controller.leave()
+  assert.equal(detail.win.assigned, '/reading/tests#cambridge-10')
+
+  const returned = hubWindow('/reading/tests', '', '#cambridge-10')
+  returned.win.sessionStorage = catalog.win.sessionStorage
+  shell.installListContext({}, returned.win)
+  shell.installHub({}, returned.win)
+  assert.equal(returned.win.scrollY, 684)
+  assert.equal(returned.back.textContent, '← 返回考前冲刺')
+  assert.equal(returned.back.href, '/practice/sprint/reading#sprint-2')
+  returned.back.fire('click')
+  assert.equal(returned.win.assigned, '/practice/sprint/reading#sprint-2')
+})
+
+test('an unrelated fresh catalog visit does not reuse an old parent and modified clicks keep native navigation', () => {
+  const first = hubWindow('/reading/tests', '?practice_return=%2Fpractice%2Fsprint%2Freading&practice_source=exam_sprint')
+  shell.installHub({}, first.win)
+  const fresh = hubWindow('/reading/tests')
+  fresh.win.sessionStorage = first.win.sessionStorage
+  shell.installHub({}, fresh.win)
+  assert.equal(fresh.back.href, '/practice')
+  first.back.fire('click', { ctrlKey: true })
+  assert.equal(first.win.assigned, undefined)
+  assert.equal(first.back.href, '/practice/sprint/reading')
+})
+
+
+function enterHub(previous, path) {
+  shell.navigate(path, {}, previous.win)
+  const target = new URL(previous.win.assigned)
+  const next = hubWindow(target.pathname, target.search, target.hash)
+  next.win.sessionStorage = previous.win.sessionStorage
+  shell.installHub({}, next.win)
+  return next
+}
+
+test('listening → reading → listening truncates the revisited parent instead of looping on Back', () => {
+  const listening = hubWindow('/listening/tests')
+  shell.installHub({}, listening.win)
+  const reading = enterHub(listening, '/reading/tests')
+  assert.equal(reading.back.href, '/listening/tests')
+  const revisited = enterHub(reading, '/listening/tests')
+  assert.equal(revisited.back.href, '/practice')
+  assert.equal(revisited.back.textContent, '← 返回练习中心')
+  revisited.back.fire('click')
+  assert.equal(revisited.win.assigned, '/practice')
+
+  // The other directory can still return to listening, whose parent is now stable.
+  const readingAgain = enterHub(revisited, '/reading/tests')
+  assert.equal(readingAgain.back.href, '/listening/tests')
+  readingAgain.back.fire('click')
+  const returned = hubWindow('/listening/tests')
+  returned.win.sessionStorage = readingAgain.win.sessionStorage
+  shell.installHub({}, returned.win)
+  returned.windowEvents.popstate()
+  assert.equal(returned.win.assigned, '/practice')
+})
+
+test('a three-catalog loop keeps the original sprint parent and remains acyclic on return', () => {
+  const sprint = hubWindow('/practice/sprint/reading', '', '#sprint-2')
+  shell.installHub({}, sprint.win)
+  const listening = enterHub(sprint, '/listening/tests')
+  const reading = enterHub(listening, '/reading/tests')
+  const writing = enterHub(reading, '/writing/')
+  const revisited = enterHub(writing, '/listening/tests')
+  assert.equal(revisited.back.href, '/practice/sprint/reading#sprint-2')
+  assert.equal(revisited.back.textContent, '← 返回考前冲刺')
+  revisited.back.fire('click')
+  const returned = hubWindow('/practice/sprint/reading', '', '#sprint-2')
+  returned.win.sessionStorage = revisited.win.sessionStorage
+  shell.installHub({}, returned.win)
+  assert.equal(returned.back.href, '/practice')
+  returned.back.fire('click')
+  assert.equal(returned.win.assigned, '/practice')
+})

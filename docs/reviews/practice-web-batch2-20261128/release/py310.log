@@ -1,0 +1,95 @@
+test_public_and_student_views_do_not_render_staff_controls (tests.test_practice_center_batch1.PracticeCenterBatch1Test) ... ok
+test_root_omits_self_back_link_but_child_pages_keep_it (tests.test_practice_center_batch1.PracticeCenterBatch1Test) ... ok
+test_staff_layout_and_working_subject_controls_remain (tests.test_practice_center_batch1.PracticeCenterBatch1Test) ... ok
+test_delete_requires_student (tests.test_reading_study.ExpressionApiTest) ... ok
+test_list_without_student_returns_empty (tests.test_reading_study.ExpressionApiTest) ... ok
+test_requires_student_identity (tests.test_reading_study.ExpressionApiTest) ... ok
+test_save_dedupe_list_delete_roundtrip (tests.test_reading_study.ExpressionApiTest) ... ok
+test_attribution_roles_are_not_generic_grammar_fallbacks (tests.test_reading_study.GlossaryTest) ... ok
+test_exact_mappings (tests.test_reading_study.GlossaryTest) ... ok
+test_flavor_combination (tests.test_reading_study.GlossaryTest) ... ok
+test_glossary_payload_covers_every_resolved_concept (tests.test_reading_study.GlossaryTest) ... ok
+test_unknown_fallback_is_renderable (tests.test_reading_study.GlossaryTest) ... ok
+test_bad_and_non_analysis_files_are_ignored_not_fatal (tests.test_reading_study.ImportTest) ... ok
+test_changed_payload_triggers_update (tests.test_reading_study.ImportTest) ... ok
+test_dry_run_writes_nothing (tests.test_reading_study.ImportTest) ... ok
+test_first_run_inserts_and_normalizes (tests.test_reading_study.ImportTest) ... ok
+test_invalid_analysis_counts_as_failed (tests.test_reading_study.ImportTest) ... ok
+test_second_run_skips_unchanged (tests.test_reading_study.ImportTest) ... ok
+test_catalog_all_grouped_by_source_kind (tests.test_reading_study.ReadOnlyApiTest) ... ok
+test_catalog_by_test_id (tests.test_reading_study.ReadOnlyApiTest) ... ok
+test_catalog_unknown_test_id_is_empty (tests.test_reading_study.ReadOnlyApiTest) ... ok
+test_glossary_endpoint (tests.test_reading_study.ReadOnlyApiTest) ... ok
+test_missing_analysis_never_redirects_to_caller_destination (tests.test_reading_study.ReadOnlyApiTest) ... ok
+test_page_route_falls_back_when_template_missing (tests.test_reading_study.ReadOnlyApiTest) ... ok
+test_page_route_returns_to_practice_without_ready_passages (tests.test_reading_study.ReadOnlyApiTest) ... ok
+test_passage_200_and_404 (tests.test_reading_study.ReadOnlyApiTest) ... ok
+test_unpublished_analysis_returns_with_task_and_navigation_context (tests.test_reading_study.ReadOnlyApiTest) ... ok
+test_identity_modes_have_distinct_stable_module_exits (tests.test_practice_navigation.PracticeNavigationPolicyTest) ... ok
+test_safe_local_target_keeps_only_same_site_paths (tests.test_practice_navigation.PracticeNavigationPolicyTest) ... ok
+test_login_keeps_only_a_local_return_target (tests.test_practice_navigation_routes.PracticeNavigationRouteTest) ... ok
+test_practice_root_exposes_guest_and_verified_student_identity_modes (tests.test_practice_navigation_routes.PracticeNavigationRouteTest) ... ok
+test_public_catalogs_return_to_practice_without_staff_login_guard (tests.test_practice_navigation_routes.PracticeNavigationRouteTest) ... ok
+test_every_workspace_catalog_has_shared_navigation_and_one_back_entry (tests.test_practice_workspace_regression.PracticeWorkspaceRegressionTest) ... ok
+test_public_catalog_routes_are_unchanged (tests.test_practice_workspace_regression.PracticeWorkspaceRegressionTest) ... ok
+test_unbound_student_has_no_continue_strip_or_route_error (tests.test_practice_workspace_regression.PracticeWorkspaceRegressionTest) ... ok
+test_workspace_keeps_hash_study_and_nine_score_catalog_hooks (tests.test_practice_workspace_regression.PracticeWorkspaceRegressionTest) ... ok
+test_classroom_mode_still_bypasses_student_binding (tests.test_practice_portal_catalog_grouping.PracticePortalCatalogGroupingTest) ... ok
+test_guest_identity_gate_remains_enabled (tests.test_practice_portal_catalog_grouping.PracticePortalCatalogGroupingTest) ... ok
+test_ielts_catalogs_keep_all_six_direct_entries (tests.test_practice_portal_catalog_grouping.PracticePortalCatalogGroupingTest) ... ok
+test_legacy_toefl_catalog_redirects_to_new_workbench (tests.test_practice_portal_catalog_grouping.PracticePortalCatalogGroupingTest) ... ok
+test_toefl_tasks_and_identity_sections_remain_available (tests.test_practice_portal_catalog_grouping.PracticePortalCatalogGroupingTest) ... ok
+test_adds_workspace_fields_without_overwriting_existing_values (tests.test_practice_catalog.DecorateReadingBooksTests) ... ok
+test_supports_reading_jijing_labels_and_series (tests.test_practice_catalog.DecorateReadingBooksTests) ... ok
+test_recommends_first_unfinished_test_in_next_book (tests.test_practice_catalog.PickContinueTargetTests) ... ok
+test_recommends_next_unfinished_test_in_same_book (tests.test_practice_catalog.PickContinueTargetTests) ... ok
+test_returns_no_next_target_when_all_tests_are_finished (tests.test_practice_catalog.PickContinueTargetTests) ... ok
+test_progress_counts_and_rounds_average_accuracy (tests.test_practice_catalog.SummarizeBookProgressTests) ... ok
+test_counts_completed_parts_across_tests (tests.test_practice_catalog.SummarizeJijingBookProgressTests) ... ok
+test_answer_column_cannot_consume_the_question_column (tests.test_reading_practice_layout.ReadingPracticeLayoutTests) ... ok
+test_choice_questions_stack_below_the_question_text (tests.test_reading_practice_layout.ReadingPracticeLayoutTests) ... ok
+test_desktop_splitter_is_accessible_resizable_and_hidden_for_exam (tests.test_reading_practice_layout.ReadingPracticeLayoutTests) ... ok
+test_filtered_passage_keeps_its_source_number_in_bottom_navigation (tests.test_reading_practice_layout.ReadingPracticeLayoutTests) ... ok
+test_question_navigation_is_grouped_and_focuses_each_control_kind (tests.test_reading_practice_layout.ReadingPracticeLayoutTests) ... ok
+test_endpoint_uses_teacher_scope_and_unique_student_count (tests.test_teacher_practice_access.TeacherPracticeAccessTest) ... /private/tmp/studytracker-web-vocab-py310/lib/python3.10/site-packages/jwt/api_jwt.py:149: InsecureKeyLengthWarning: The HMAC key is 11 bytes long, which is below the minimum recommended length of 32 bytes for SHA256. See RFC 7518 Section 3.2.
+  return self._jws.encode(
+/private/tmp/studytracker-web-vocab-py310/lib/python3.10/site-packages/jwt/api_jwt.py:370: InsecureKeyLengthWarning: The HMAC key is 11 bytes long, which is below the minimum recommended length of 32 bytes for SHA256. See RFC 7518 Section 3.2.
+  decoded = self.decode_complete(
+ok
+test_generic_homework_keeps_existing_custom_source_flow (tests.test_teacher_practice_access.TeacherPracticeAccessTest) ... ok
+test_quick_listening_creation_succeeds_and_forged_reading_is_forbidden (tests.test_teacher_practice_access.TeacherPracticeAccessTest) ... ok
+test_subject_normalization_and_teacher_owned_aggregation (tests.test_teacher_practice_access.TeacherPracticeAccessTest) ... ok
+test_groups_registered_assets_and_sorts_series_book_test_part (tests.test_listening_intensive_catalog.ListeningIntensiveCatalogTests) ... ok
+test_loader_requires_registered_exact_filename_and_existing_file (tests.test_listening_intensive_catalog.ListeningIntensiveCatalogTests) ... ok
+test_bottom_bar_reserves_content_space_and_honors_mobile_safe_area (tests.test_question_type_catalog_ui_contract.QuestionTypeCatalogUiContractTest) ... ok
+test_catalog_auto_refresh_has_only_an_error_retry_control (tests.test_question_type_catalog_ui_contract.QuestionTypeCatalogUiContractTest) ... ok
+test_start_action_lives_once_in_the_persistent_selection_bar (tests.test_question_type_catalog_ui_contract.QuestionTypeCatalogUiContractTest) ... ok
+test_existing_manual_exact_mapping_is_eligible_and_rechecked (tests.test_exam_sprint_catalog.SprintCatalogTests) ... ok
+test_latest_snapshot_refresh_does_not_erase_old_version (tests.test_exam_sprint_catalog.SprintCatalogTests) ... ok
+test_missing_media_or_tampered_content_disables_new_assignments (tests.test_exam_sprint_catalog.SprintCatalogTests) ... ok
+test_only_ready_entries_with_fixed_versions_and_no_answers (tests.test_exam_sprint_catalog.SprintCatalogTests) ... ok
+test_options_do_not_confuse_legacy_and_sprint_values (tests.test_exam_sprint_catalog.SprintCatalogTests) ... ok
+test_selection_validation_rejects_wrong_subject_scope_and_traversal (tests.test_exam_sprint_catalog.SprintCatalogTests) ... ok
+test_login_error_remains_visible_and_accessible (tests.test_auth_entry_pages.AuthEntryPageTests) ... ok
+test_login_page_keeps_compatible_form_and_entry_links (tests.test_auth_entry_pages.AuthEntryPageTests) ... ok
+test_practices_gate_keeps_name_verification_contract (tests.test_auth_entry_pages.AuthEntryPageTests) ... ok
+test_practices_verify_keeps_success_session_contract (tests.test_auth_entry_pages.AuthEntryPageTests) ... ok
+test_practices_verify_rejects_a_missing_name (tests.test_auth_entry_pages.AuthEntryPageTests) ... ok
+test_all_workbench_catalogs_have_one_back_brand_and_page_h1 (tests.test_practice_navigation_batch2.PracticeNavigationBatch2Test) ... ok
+test_classroom_keeps_browsing_and_hides_student_gate_and_management (tests.test_practice_navigation_batch2.PracticeNavigationBatch2Test) ... ok
+test_empty_catalogs_still_have_page_titles_and_one_return (tests.test_practice_navigation_batch2.PracticeNavigationBatch2Test) ... ok
+test_guest_center_has_one_brand_and_no_self_back (tests.test_practice_navigation_batch2.PracticeNavigationBatch2Test) ... ok
+test_intensive_aliases_have_one_header_identity_gate_and_no_overview (tests.test_practice_navigation_batch2.PracticeNavigationBatch2Test) ... ok
+test_parent_verified_session_displays_child_instead_of_parent_account (tests.test_practice_navigation_batch2.PracticeNavigationBatch2Test) ... ok
+test_parent_without_verified_student_never_appears_as_student_identity (tests.test_practice_navigation_batch2.PracticeNavigationBatch2Test) ... ok
+test_regular_login_retains_its_original_brand_header (tests.test_practice_navigation_batch2.PracticeNavigationBatch2Test) ... ok
+test_student_account_uses_shared_center_and_question_type_header (tests.test_practice_navigation_batch2.PracticeNavigationBatch2Test) ... ok
+test_teacher_center_retains_staff_shell_and_assignment_tools (tests.test_practice_navigation_batch2.PracticeNavigationBatch2Test) ... ok
+test_teacher_intensive_catalog_keeps_management_and_staff_exit (tests.test_practice_navigation_batch2.PracticeNavigationBatch2Test) ... ok
+test_verified_name_survives_catalog_render_and_navigation_defaults (tests.test_practice_navigation_batch2.PracticeNavigationBatch2Test) ... ok
+
+----------------------------------------------------------------------
+Ran 85 tests in 5.336s
+
+OK
+PRIVATE_CONFIG_OK: temporary SQLite, no .env/app.db, network calls=0

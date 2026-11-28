@@ -246,51 +246,57 @@ function templatePage(templateName, response) {
     });
   }
   const identity = { dataset: { practiceStaffMode: '0' } };
+  const headerIdentity = { textContent: '' };
+  const requests = [];
+  elements.set('practiceIntensiveIdentitySwitch', { hidden: true });
   const storage = { getItem: () => null, setItem() {}, removeItem() {} };
   const sandbox = {
     PracticeTaskLists: lists,
     document: {
       getElementById: id => elements.get(id) || null,
-      querySelector: selector => selector === '.practice-identity' ? identity : null,
+      querySelector: selector => selector === '.practice-identity' ? identity : selector === '[data-practice-identity-label]' ? headerIdentity : null,
       querySelectorAll: () => [],
       addEventListener() {},
     },
     window: { addEventListener() {} },
     localStorage: storage, sessionStorage: storage,
-    fetch: async () => ({ ok: true, json: async () => response }),
+    fetch: async url => { requests.push(url); return { ok: true, json: async () => response }; },
     console, Date, Intl,
   };
   let script = [...html.matchAll(/<script>([\s\S]*?)<\/script>/g)]
     .map(match => match[1])
-    .find(source => source.includes('function renderNewTasks(') || source.includes('async function loadAssignedTasks('));
+    .find(source => source.includes('function updateIntensiveIdentity(') || source.includes('async function loadAssignedTasks('));
   assert.ok(script, 'the real task-rendering script must exist');
   if (templateName === 'practice/index_content.html') {
     script = script.replace(/\}\)\(\);\s*$/, 'globalThis.taskPage = { loadAssignedTasks, hideAssignedTasks };\n})();');
   }
   vm.runInNewContext(script, sandbox, { filename });
-  return { sandbox, elements, html };
+  return { sandbox, elements, html, requests, headerIdentity };
 }
 
-test('the actual listening homepage shows one current assignment, not forty expired cards', () => {
-  const { sandbox, elements } = templatePage('listening/index.html');
-  const backlog = Array.from({ length: 40 }, (_, index) => expired(index + 1, { title: `Closed assignment ${index}` }));
-  const available = current(101, { title: 'Current assignment', category: '精听', status_label: '待完成' });
-  sandbox.renderNewTasks({ groups: { assistant: backlog, teacher: [available] } });
-
-  assert.equal(elements.get('newTasksMeta').textContent, '1 项待完成');
-  assert.match(elements.get('newTasksList').innerHTML, /Current assignment/);
-  assert.doesNotMatch(elements.get('newTasksList').innerHTML, /Closed assignment/);
-  assert.equal((elements.get('newTasksList').innerHTML.match(/<a class="today-task[" ]/g) || []).length, 1);
-  assert.equal(elements.get('newTasksMore').hidden, false);
+test('intensive catalog verification keeps identity and progress without loading duplicate task lists', () => {
+  const { sandbox, elements, html, requests, headerIdentity } = templatePage('listening/index.html');
+  sandbox.showMain('Synthetic Student');
+  assert.equal(elements.get('loginGate').style.display, 'none');
+  assert.equal(elements.get('mainContent').style.display, 'block');
+  assert.equal(headerIdentity.textContent, '学生：Synthetic Student');
+  assert.equal(elements.get('practiceIntensiveIdentitySwitch').hidden, false);
+  assert.equal(sandbox.window.PRACTICE_NAVIGATION_DEFAULTS.identity_mode, 'verified_student');
+  assert.deepEqual(requests, []);
+  assert.doesNotMatch(html, /id="(?:newTasksList|practiceHistoryList)"|loadPracticeOverview/);
+  assert.match(html, /#practiceAssignedTasks/);
 });
 
-test('the actual listening homepage keeps the history entry when all assignments are closed', () => {
-  const { sandbox, elements } = templatePage('listening/index.html');
-  sandbox.renderNewTasks({ groups: { assistant: [expired(1)] } });
-
-  assert.equal(elements.get('newTasksMeta').textContent, '0 项待完成');
-  assert.match(elements.get('newTasksList').innerHTML, /当前没有待完成任务/);
-  assert.equal(elements.get('newTasksMore').hidden, false);
+test('intensive catalog switching restores the identity gate without removed overview references', () => {
+  const { sandbox, elements, requests, headerIdentity } = templatePage('listening/index.html');
+  sandbox.showMain('Synthetic Student');
+  sandbox.logout();
+  assert.equal(elements.get('loginGate').style.display, 'block');
+  assert.equal(elements.get('mainContent').style.display, 'none');
+  assert.equal(elements.get('practiceIntensiveIdentitySwitch').hidden, true);
+  assert.equal(headerIdentity.textContent, '未确认身份');
+  assert.equal(sandbox.window.PRACTICE_NAVIGATION_DEFAULTS.identity_mode, 'guest');
+  assert.deepEqual(requests, []);
 });
 
 test('the actual practice center counts current work and defaults every historical section to collapsed', async () => {

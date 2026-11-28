@@ -1,0 +1,36 @@
+{
+  "baseline": "9c211ee807fa1084017cbf8e8a05c1c9fe95de77",
+  "commands": [
+    {
+      "argv": [
+        "git",
+        "read-tree",
+        "9c211ee807fa1084017cbf8e8a05c1c9fe95de77"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "index": "temporary independent index"
+    },
+    {
+      "argv": [
+        "git",
+        "apply",
+        "--check",
+        "--cached",
+        "/private/tmp/studytracker-practice-web-batch2-20261128/docs/reviews/practice-web-batch2-20261128/batch2.patch"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "index": "temporary independent index"
+    }
+  ],
+  "file_count": 25,
+  "apply_check": "passed",
+  "actual_user_index_untouched": true,
+  "patch_sha256": "31f3c6a64d6f1240f582139fc8087b1c08acabaa35e4cb1b2575970de976f3da",
+  "limits": [
+    "A prior extra git apply --cached (without --check) to an independent index failed because writing Git objects in the shared .git directory was sandbox-restricted. No full application is claimed. The required non-mutating baseline applicability check above passed; user working files and actual index were not altered."
+  ]
+}

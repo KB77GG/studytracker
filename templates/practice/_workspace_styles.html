@@ -295,7 +295,8 @@
   align-items: baseline;
   gap: 12px;
 }
-.practice-workspace__page-heading h1 {
+.practice-workspace__page-heading h1,
+.practice-workspace__page-heading h2 {
   margin: 0;
   color: var(--lw-neutral-900);
   font-size: 32px;
@@ -708,7 +709,8 @@
   .practice-workspace__main { padding: 20px 14px 36px; }
   .practice-workspace__page-watermark { display: none; }
   .practice-workspace__page-heading { align-items: flex-start; flex-direction: column; gap: 14px; }
-  .practice-workspace__page-heading h1 { font-size: 27px; }
+  .practice-workspace__page-heading h1,
+.practice-workspace__page-heading h2 { font-size: 27px; }
   .practice-workspace__book-progress { width: 100%; flex-direction: row; align-items: center; }
   .practice-workspace__book-progress > span:first-child { display: block; }
   .practice-workspace__progress-track { flex: 1; width: auto; }
@@ -747,5 +749,29 @@
     scroll-behavior: auto !important;
     transition-duration: .01ms !important;
   }
+}
+/* Shared navigation remains available at narrow widths. Catalog visuals stay unchanged. */
+.practice-workspace__title { margin: 0 0 20px; font-size: 24px; line-height: 1.3; }
+[data-practice-workspace-header] [hidden] { display: none !important; }
+[data-practice-workspace-header] .practice-workspace__identity {
+  max-width: 180px; padding: 7px 10px; border-radius: 999px;
+  background: var(--lw-green-50); color: var(--lw-green-600);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+[data-practice-workspace-header] .practice-workspace__subjects a { white-space: nowrap; }
+[data-practice-workspace-header] .practice-workspace__account { min-width: 0; }
+@media (max-width: 1180px) {
+  [data-practice-workspace-header] { position: relative; height: auto; min-height: 60px; flex-wrap: wrap; gap: 8px; padding-top: 10px; padding-bottom: 10px; }
+  [data-practice-workspace-header] .practice-workspace__brand-nav { width: 100%; flex-wrap: wrap; gap: 12px; }
+  [data-practice-workspace-header] .practice-workspace__brand span { display: inline; }
+  [data-practice-workspace-header] .practice-workspace__subjects { flex-wrap: wrap; gap: 4px; min-height: 36px; }
+  [data-practice-workspace-header] .practice-workspace__subjects a { min-height: 36px; }
+  [data-practice-workspace-header] .practice-workspace__account { width: 100%; height: auto; flex-wrap: wrap; gap: 10px; }
+  [data-practice-workspace-header] .practice-workspace__account a,
+  [data-practice-workspace-header] .practice-workspace__account button { display: inline-flex; align-items: center; min-height: 32px; }
+}
+@media (max-width: 520px) {
+  [data-practice-workspace-header] .practice-workspace__subjects { width: 100%; justify-content: space-between; }
+  [data-practice-workspace-header] .practice-workspace__subjects a { min-width: 0; padding: 0 5px; font-size: 13px; }
 }
 </style>

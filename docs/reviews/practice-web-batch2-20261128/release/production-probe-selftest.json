@@ -1,0 +1,68 @@
+{
+  "scope": "Local disposable SQLite plus actual anonymous route HTML; no production/network/browser access",
+  "routes": [
+    {
+      "path": "/practice",
+      "status": 200,
+      "structure_passed": true
+    },
+    {
+      "path": "/practices",
+      "status": 200,
+      "structure_passed": true
+    },
+    {
+      "path": "/listening",
+      "status": 200,
+      "structure_passed": true
+    },
+    {
+      "path": "/listening/tests",
+      "status": 200,
+      "structure_passed": true
+    },
+    {
+      "path": "/reading/tests",
+      "status": 200,
+      "structure_passed": true
+    },
+    {
+      "path": "/listening/jijing",
+      "status": 200,
+      "structure_passed": true
+    },
+    {
+      "path": "/reading/jijing",
+      "status": 200,
+      "structure_passed": true
+    },
+    {
+      "path": "/practice/sprint/listening",
+      "status": 200,
+      "structure_passed": true
+    },
+    {
+      "path": "/practice/sprint/reading",
+      "status": 200,
+      "structure_passed": true
+    },
+    {
+      "path": "/practice/question-types",
+      "status": 200,
+      "structure_passed": true
+    },
+    {
+      "path": "/writing/",
+      "status": 302,
+      "anonymous_gate_preserved": true
+    },
+    {
+      "path": "/writing/topics",
+      "status": 302,
+      "anonymous_gate_preserved": true
+    }
+  ],
+  "route_checks_passed": 12,
+  "manifest_validation": "exact 15 paths accepted; missing/extra/traversal rejected",
+  "production_execution": false
+}

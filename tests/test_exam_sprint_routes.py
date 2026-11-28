@@ -84,8 +84,10 @@ class ExamSprintRoutesTest(unittest.TestCase):
                 self.assertIn("九分学长 · 7天热榜", html)
                 self.assertIn("每周一 06:00 更新（北京时间）", html)
                 self.assertIn("根据考生近期反馈整理，仅供复习参考。", html)
-                self.assertIn('href="/practice/sprint/listening"', html)
-                self.assertIn('href="/practice/sprint/reading"', html)
+                for target in ("/practice", "/listening/tests", "/reading/tests", "/writing/", "/practice/question-types"):
+                    self.assertIn(f'href="{target}" data-practice-nav', html)
+                self.assertEqual(html.count("data-practice-home"), 1)
+                self.assertEqual(html.count("data-practice-module-back"), 1)
 
     def test_only_ready_entries_get_practice_links_and_preserve_passage(self):
         html = self.get_page()

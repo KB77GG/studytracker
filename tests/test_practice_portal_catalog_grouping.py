@@ -21,6 +21,7 @@ class PracticePortalCatalogGroupingTest(unittest.TestCase):
         self.assertIn('class="practice-subject__name">机经</h3>', html)
         self.assertIn('class="practice-subject__name">精听</h3>', html)
 
+        catalog = html.split('<section class="practice-subjects"', 1)[1].split('id="toeflPractice"', 1)[0]
         for path in (
             "/listening/tests",
             "/reading/tests",
@@ -29,7 +30,7 @@ class PracticePortalCatalogGroupingTest(unittest.TestCase):
             "/reading/jijing",
             "/listening",
         ):
-            self.assertEqual(html.count(f'href="{path}"'), 1)
+            self.assertEqual(catalog.count(f'href="{path}"'), 1)
 
     def test_toefl_tasks_and_identity_sections_remain_available(self):
         response = self.client.get("/practice")

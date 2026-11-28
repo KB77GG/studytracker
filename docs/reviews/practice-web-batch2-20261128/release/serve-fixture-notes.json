@@ -1,0 +1,43 @@
+{
+  "purpose": "本机第二批网页导航回归：为缺失运行时冲刺资源的隔离工作树提供可见标记的阅读冲刺导航样例。",
+  "worktree": "/private/tmp/studytracker-practice-web-batch2-20261128",
+  "fixture": "docs/reviews/practice-web-batch2-20261128/release/serve_fixture.py",
+  "reuses": [
+    "docs/reviews/practice-web-batch1-20261126/serve_fixture.py：真实 Flask app、临时 SQLite、合成学生/教师/助教及任务",
+    "tests/test_exam_sprint_routes.py:sprint_view：冲刺页面 view 结构"
+  ],
+  "override": {
+    "process_only": true,
+    "function": "services.exam_sprint.load_sprint_view",
+    "subject": "reading",
+    "visible_marker": "本机合成导航样例：仅验证导航，不代表真实热榜",
+    "synthetic_entries": 1,
+    "real_reading_target": "/reading/test/ielts10_test1_reading?passage=1",
+    "listening_view": "保留真实 loader，不合成听力条目"
+  },
+  "server_command": "/Users/zhouxin/Desktop/studytracker/tmp/web-vocab-py310-20261126/bin/python docs/reviews/practice-web-batch2-20261128/release/serve_fixture.py /private/tmp/studytracker-practice-web-batch2-20261128 5116",
+  "self_test_command": "/Users/zhouxin/Desktop/studytracker/tmp/web-vocab-py310-20261126/bin/python docs/reviews/practice-web-batch2-20261128/release/serve_fixture.py /private/tmp/studytracker-practice-web-batch2-20261128 --self-test",
+  "self_test_result": {
+    "ok": true,
+    "passed": 8,
+    "checks": [
+      "阅读冲刺目录 200",
+      "合成导航标记可见",
+      "恰好 1 个 data-practice-entry",
+      "链接指向真实仓库剑雅阅读路由",
+      "目录保留 exam_sprint 来源上下文",
+      "真实阅读目标页 200",
+      "目标页保留 practice_shell.js",
+      "听力冲刺未被 mock 替换"
+    ],
+    "mechanism": "Flask test_client 本机 GET，不启动监听；额外用 unittest.mock 阻断 socket.connect/connect_ex/getaddrinfo 再跑，三者均零调用。",
+    "ruff": "passed"
+  },
+  "limits": [
+    "该 worktree 无生产运行时热榜资产；原 seed 为 2026-11-15，原阅读目录 0/60 可练习。",
+    "合成目录用于验证来源导航、返回链及真实模板/JS；不证明真实热榜内容、最新排名、冲刺资产或生产内容完整性。",
+    "脚本不修改产品、仓库 seed、运行时热榜状态或数据库模型。只在临时 SQLite 创建既有合成测试账号/任务。",
+    "只监听 127.0.0.1；不得在生产执行。没有读取生产数据、账号或秘密。",
+    "此自检不执行浏览器 JS，不覆盖判分、计时、保存或提交操作；浏览器回归另行记录。"
+  ]
+}

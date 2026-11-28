@@ -1,0 +1,76 @@
+test_public_and_student_views_do_not_render_staff_controls (tests.test_practice_center_batch1.PracticeCenterBatch1Test.test_public_and_student_views_do_not_render_staff_controls) ... 
+  test_public_and_student_views_do_not_render_staff_controls (tests.test_practice_center_batch1.PracticeCenterBatch1Test.test_public_and_student_views_do_not_render_staff_controls) (role=None) ... ERROR
+test_root_omits_self_back_link_but_child_pages_keep_it (tests.test_practice_center_batch1.PracticeCenterBatch1Test.test_root_omits_self_back_link_but_child_pages_keep_it) ... ERROR
+test_staff_layout_and_working_subject_controls_remain (tests.test_practice_center_batch1.PracticeCenterBatch1Test.test_staff_layout_and_working_subject_controls_remain) ... ok
+
+======================================================================
+ERROR: test_public_and_student_views_do_not_render_staff_controls (tests.test_practice_center_batch1.PracticeCenterBatch1Test.test_public_and_student_views_do_not_render_staff_controls) (role=None)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/studytracker-practice-web-batch2-20261128/tests/test_practice_center_batch1.py", line 69, in test_public_and_student_views_do_not_render_staff_controls
+    html = render_practice(role=role)
+  File "/private/tmp/studytracker-practice-web-batch2-20261128/tests/test_practice_center_batch1.py", line 49, in render_practice
+    return env.get_template("practice/index.html").render(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        current_user=SimpleNamespace(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<10 lines>...
+        },
+        ^^
+    )
+    ^
+  File "/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/jinja2/environment.py", line 1295, in render
+    self.environment.handle_exception()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/jinja2/environment.py", line 942, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "/private/tmp/studytracker-practice-web-batch2-20261128/templates/practice/index.html", line 1, in top-level template code
+    {% extends "base.html" %}
+  File "/private/tmp/studytracker-practice-web-batch2-20261128/templates/base.html", line 153, in top-level template code
+    {% with workspace_active='center' if request.endpoint == 'practice_library' else 'question_types' %}{% include "practice/_workspace_header.html" %}{% endwith %}
+    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/studytracker-practice-web-batch2-20261128/templates/practice/_workspace_header.html", line 4, in top-level template code
+    {% set identity_name = (current_user.display_name or current_user.username) if current_user.is_authenticated else session.get('practice_student_name', '') %}
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/jinja2/environment.py", line 490, in getattr
+    return getattr(obj, attribute)
+jinja2.exceptions.UndefinedError: 'session' is undefined
+
+======================================================================
+ERROR: test_root_omits_self_back_link_but_child_pages_keep_it (tests.test_practice_center_batch1.PracticeCenterBatch1Test.test_root_omits_self_back_link_but_child_pages_keep_it)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/studytracker-practice-web-batch2-20261128/tests/test_practice_center_batch1.py", line 96, in test_root_omits_self_back_link_but_child_pages_keep_it
+    root = Elements(render_practice())
+                    ~~~~~~~~~~~~~~~^^
+  File "/private/tmp/studytracker-practice-web-batch2-20261128/tests/test_practice_center_batch1.py", line 49, in render_practice
+    return env.get_template("practice/index.html").render(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        current_user=SimpleNamespace(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<10 lines>...
+        },
+        ^^
+    )
+    ^
+  File "/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/jinja2/environment.py", line 1295, in render
+    self.environment.handle_exception()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/jinja2/environment.py", line 942, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "/private/tmp/studytracker-practice-web-batch2-20261128/templates/practice/index.html", line 1, in top-level template code
+    {% extends "base.html" %}
+  File "/private/tmp/studytracker-practice-web-batch2-20261128/templates/base.html", line 153, in top-level template code
+    {% with workspace_active='center' if request.endpoint == 'practice_library' else 'question_types' %}{% include "practice/_workspace_header.html" %}{% endwith %}
+    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/studytracker-practice-web-batch2-20261128/templates/practice/_workspace_header.html", line 4, in top-level template code
+    {% set identity_name = (current_user.display_name or current_user.username) if current_user.is_authenticated else session.get('practice_student_name', '') %}
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/jinja2/environment.py", line 490, in getattr
+    return getattr(obj, attribute)
+jinja2.exceptions.UndefinedError: 'session' is undefined
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.104s
+
+FAILED (errors=2)

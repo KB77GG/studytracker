@@ -6,24 +6,26 @@
   'module_exit_url': '/login',
   'module_exit_label': '退出刷题'
 }, true) %}
+{% set practice_workspace_entry = request.endpoint in ['practice_library', 'question_type_practice.student_index'] and not (current_user.is_authenticated and current_user.role in ['admin', 'teacher', 'assistant']) %}
 
 <head>
   <meta charset="utf-8">
-  <title>学习计划与打卡系统</title>
+  <title>{% if practice_workspace_entry %}{{ '练习中心' if request.endpoint == 'practice_library' else 'IELTS 题型专项' }} · Sage Path{% else %}学习计划与打卡系统{% endif %}</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+  {% if practice_workspace_entry %}{% include "practice/_workspace_styles.html" %}{% endif %}
   {% block extra_head %}{% endblock %}
   {% if current_user.is_authenticated and current_user.role in ['admin', 'teacher', 'assistant'] %}
   <link href="{{ url_for('static', filename='admin_suite_v2.css') }}" rel="stylesheet">
   {% endif %}
 </head>
 
-<body class="{{ 'dashboard-body' if current_user.is_authenticated else '' }}{{ ' admin-suite-v2' if current_user.is_authenticated and current_user.role in ['admin', 'teacher', 'assistant'] else '' }}">
-  {% if current_user.is_authenticated %}
+<body class="{{ 'practice-workspace-page' if practice_workspace_entry else ('dashboard-body' if current_user.is_authenticated else '') }}{{ ' admin-suite-v2' if current_user.is_authenticated and current_user.role in ['admin', 'teacher', 'assistant'] else '' }}">
+  {% if current_user.is_authenticated and not practice_workspace_entry %}
   {% set endpoint = request.endpoint or '' %}
   <div class="app-shell">
     <button type="button" class="sidebar-overlay" id="sidebarOverlay" aria-hidden="true" tabindex="-1"></button>
@@ -147,6 +149,9 @@
     </div>
   </div>
   {% else %}
+  {% if practice_workspace_entry %}
+  {% with workspace_active='center' if request.endpoint == 'practice_library' else 'question_types' %}{% include "practice/_workspace_header.html" %}{% endwith %}
+  {% else %}
   <header class="topbar">
     <h1>学习计划与打卡系统</h1>
     <nav>
@@ -161,6 +166,7 @@
       <a href="{{ url_for('login') }}">登录</a>
     </nav>
   </header>
+  {% endif %}
   <main class="container">
     {% with messages = get_flashed_messages() %}
     {% if messages %}

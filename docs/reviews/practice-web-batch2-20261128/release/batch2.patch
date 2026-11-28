@@ -1,0 +1,2865 @@
+diff --git a/.github/workflows/ci.yml b/.github/workflows/ci.yml
+index bef012bd..5f64c699 100644
+--- a/.github/workflows/ci.yml
++++ b/.github/workflows/ci.yml
+@@ -134,6 +134,8 @@ jobs:
+             tests.test_reading_study \
+             tests.test_practice_navigation \
+             tests.test_practice_navigation_routes \
++            tests.test_practice_navigation_batch2 \
++            tests.test_auth_entry_pages \
+             tests.test_practice_workspace_regression \
+             tests.test_practice_portal_catalog_grouping \
+             tests.test_practice_catalog \
+diff --git a/docs/reviews/practice-web-audit-20261126/flows.js b/docs/reviews/practice-web-audit-20261126/flows.js
+index d90f48a7..53ffad64 100644
+--- a/docs/reviews/practice-web-audit-20261126/flows.js
++++ b/docs/reviews/practice-web-audit-20261126/flows.js
+@@ -1,70 +1,227 @@
++// Run only against boot.py/serve_fixture.py synthetic local data, never production.
+ const { chromium } = require('playwright');
++const assert = require('node:assert/strict');
+ const fs = require('fs');
+-const BASE = 'http://127.0.0.1:5055';
+-const OUT = __dirname + '/out';
+-const rel = (u) => u.replace(BASE, '');
+-async function verified(browser) {
++const path = require('path');
++const BASE = (process.env.AUDIT_BASE || process.env.BASE || 'http://127.0.0.1:5055').replace(/\/$/, '');
++const OUT = process.env.AUDIT_OUT || process.env.OUT || path.join(__dirname, 'out');
++assert(['127.0.0.1', 'localhost', '[::1]'].includes(new URL(BASE).hostname), 'Synthetic audit requires a loopback URL');
++const rel = (value) => {
++  const url = new URL(value, BASE);
++  for (const key of [...url.searchParams.keys()]) {
++    if (/token|csrf|session|password/i.test(key)) url.searchParams.set(key, 'REDACTED_SYNTHETIC');
++    else if (/return|exit/.test(key) && url.searchParams.get(key).startsWith('/')) {
++      url.searchParams.set(key, rel(url.searchParams.get(key)));
++    }
++  }
++  return url.pathname + url.search + url.hash;
++};
++const pathname = (value) => new URL(value, BASE).pathname;
++const results = [];
++async function check(name, run) {
++  const row = { name };
++  try { await run(row); row.ok = true; }
++  catch (error) { row.ok = false; row.error = error.message.split('\n')[0].replace(/([?&]token=)[^&\s)]+/g, '$1REDACTED_SYNTHETIC'); }
++  results.push(row); console.log(JSON.stringify(row));
++}
++async function context(browser) {
+   const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+-  const p = await ctx.newPage();
+-  await p.goto(BASE + '/practice', { waitUntil: 'networkidle' });
+-  await p.fill('#practiceStudentName', '测试学生'); await p.click('#practiceIdentitySubmit'); await p.waitForTimeout(1200);
+-  await p.close(); return ctx;
++  ctx.setDefaultTimeout(10000);
++  // Match the original offline audit: external CDN/audio quality is not acceptance evidence.
++  await ctx.route('**/*', (route) => new URL(route.request().url()).origin === new URL(BASE).origin ? route.continue() : route.abort());
++  return ctx;
++}
++async function verify(page) {
++  await page.goto(BASE + '/practice', { waitUntil: 'networkidle' });
++  await page.fill('#practiceStudentName', '测试学生');
++  await page.click('#practiceIdentitySubmit');
++  await page.waitForFunction(() => document.querySelector('#practiceIdentityForm').hidden);
++  assert.match(await page.locator('[data-practice-identity-label]').innerText(), /测试学生/);
++  await page.locator('#practiceCurrentGroups .practice-task').first().waitFor({ state: 'visible' });
+ }
+-async function backButtons(p) {
+-  return p.evaluate(() => [...document.querySelectorAll('[data-practice-back],[data-practice-module-exit],.practice-shell__back,a,button')]
+-    .filter((e) => { const r = e.getBoundingClientRect(); return r.width > 0 && r.height > 0 && /返回|退出/.test(e.innerText || ''); })
+-    .map((e) => (e.innerText || '').trim().replace(/\s+/g, ' ').slice(0, 24)));
++async function backButtons(page) {
++  return page.locator('[data-practice-back]:visible, [data-practice-module-back]:visible, .practice-shell__back:visible').allTextContents();
+ }
+ async function flow(ctx, name, startPath, clickSel, opts = {}) {
+-  const p = await ctx.newPage(); const steps = { name, start: startPath };
+-  try {
+-    await p.goto(BASE + startPath, { waitUntil: 'networkidle' });
+-    if (opts.scroll) { await p.evaluate((y) => window.scrollTo(0, y), opts.scroll); await p.waitForTimeout(200); }
+-    steps.scrollBefore = await p.evaluate(() => Math.round(scrollY));
+-    const target = p.locator(clickSel).first();
+-    steps.clickText = ((await target.innerText().catch(() => '')) || '').replace(/\s+/g, ' ').slice(0, 40);
+-    await Promise.all([p.waitForLoadState('networkidle'), target.click()]);
+-    await p.waitForTimeout(800);
+-    steps.landed = rel(p.url());
+-    steps.backButtons = await backButtons(p);
+-    const back = p.locator('[data-practice-back]:visible, .practice-shell__back:visible').first();
+-    if (await back.count()) {
+-      steps.backLabel = ((await back.innerText()) || '').trim();
+-      await Promise.all([p.waitForURL((u) => rel(u.toString()) !== steps.landed, { timeout: 8000 }).catch(() => {}), back.click()]);
+-      await p.waitForLoadState('networkidle').catch(() => {}); await p.waitForTimeout(800);
+-      steps.afterBack = rel(p.url()); steps.scrollAfterBack = await p.evaluate(() => Math.round(scrollY));
+-    } else steps.afterBack = '(无返回按钮)';
+-    // browser back from a fresh entry
+-    await p.goto(BASE + startPath, { waitUntil: 'networkidle' });
+-    await Promise.all([p.waitForLoadState('networkidle'), p.locator(clickSel).first().click()]); await p.waitForTimeout(600);
+-    await p.goBack().catch(() => {}); await p.waitForTimeout(1200);
+-    steps.afterBrowserBack = rel(p.url());
+-    const dlg = await p.evaluate(() => !!document.querySelector('dialog[open]'));
+-    if (dlg) steps.afterBrowserBack += ' (弹出对话框)';
+-  } catch (e) { steps.error = e.message.slice(0, 160); }
+-  await p.close(); return steps;
++  await check(name, async (row) => {
++    const page = await ctx.newPage();
++    const dialogs = [];
++    page.on('dialog', async (dialog) => { dialogs.push(dialog.type()); await dialog.accept(); });
++    async function prepare() {
++      if (opts.openTest) {
++        const test = page.locator('details[data-test-id]:visible').first();
++        if (!await test.evaluate((element) => element.open)) await test.locator('summary').click();
++      }
++    }
++    try {
++      row.start = startPath;
++      await page.goto(BASE + startPath, { waitUntil: 'networkidle' });
++      await prepare();
++      if (opts.scroll) await page.evaluate((y) => window.scrollTo(0, y), opts.scroll);
++      const target = page.locator(clickSel).first();
++      row.clickText = (await target.innerText()).trim().replace(/\s+/g, ' ').slice(0, 60);
++      const expectedLanding = pathname(await target.getAttribute('href'));
++      await target.click();
++      await page.waitForURL((url) => url.pathname === expectedLanding);
++      await page.waitForLoadState('networkidle');
++      row.landed = rel(page.url());
++      row.backButtons = (await backButtons(page)).map((text) => text.trim());
++      const back = page.locator(opts.backSel || '[data-practice-back]:visible, [data-practice-module-back]:visible, .practice-shell__back:visible').first();
++      row.backLabel = (await back.innerText()).trim();
++      assert.match(row.backLabel, opts.label || /返回/);
++      await back.click();
++      await page.waitForURL((url) => url.pathname === pathname(startPath));
++      await page.waitForLoadState('networkidle');
++      row.afterBack = rel(page.url());
++      assert.equal(pathname(page.url()), pathname(startPath));
++      // Repeat the original browser-back check without swallowing navigation failures.
++      await page.goto(BASE + startPath, { waitUntil: 'networkidle' });
++      await prepare();
++      await page.locator(clickSel).first().click();
++      await page.waitForURL((url) => url.pathname === expectedLanding);
++      await page.waitForLoadState('networkidle');
++      await page.goBack({ waitUntil: 'networkidle' });
++      await page.waitForURL((url) => url.pathname === pathname(startPath));
++      await page.waitForLoadState('networkidle');
++      row.afterBrowserBack = rel(page.url());
++      assert.equal(pathname(page.url()), pathname(startPath));
++      row.dialogs = dialogs;
++      assert.deepEqual(dialogs, [], 'Untouched practice must not prompt to exit');
++    } finally { await page.close(); }
++  });
++}
++async function catalog(ctx, route, title, width = 1440) {
++  await check(`目录 ${route} @${width}`, async (row) => {
++    const page = await ctx.newPage();
++    try {
++      await page.setViewportSize({ width, height: width === 390 ? 844 : 900 });
++      await page.goto(BASE + route, { waitUntil: 'networkidle' });
++      const header = page.locator('[data-practice-workspace-header]');
++      assert.equal(await header.count(), 1);
++      const brand = header.locator('[data-practice-home]');
++      assert.equal(await brand.count(), 1);
++      assert.match(await brand.innerText(), /Sage Path/);
++      assert.equal(await brand.getAttribute('data-practice-module-back'), null);
++      assert.equal(await brand.locator('img').count(), 1);
++      assert.equal(await header.locator('.practice-workspace__subjects [data-practice-nav]').count(), 5);
++      assert.equal(await header.locator('[data-practice-module-back]').count(), route === '/practice' ? 0 : 1);
++      assert.equal(await header.locator('[data-practice-module-exit]').count(), 1);
++      row.title = await page.title();
++      assert.match(row.title, / · Sage Path$/);
++      const headings = page.locator('h1');
++      assert.equal(await headings.count(), 1);
++      row.heading = (await headings.innerText()).trim();
++      if (title) assert.equal(row.heading, title);
++      row.backLabel = route === '/practice' ? null : (await header.locator('[data-practice-module-back]').innerText()).trim();
++      if (row.backLabel) assert.match(row.backLabel, /返回练习中心/);
++      row.backTarget = route === '/practice' ? null : rel(await header.locator('[data-practice-module-back]').getAttribute('href'));
++      if (row.backTarget) assert.equal(pathname(row.backTarget), '/practice');
++      row.identity = (await header.locator('[data-practice-identity-label]').innerText()).trim();
++      assert.match(row.identity, /测试学生/);
++      row.horizontalOverflow = await page.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1);
++      assert.equal(row.horizontalOverflow, false);
++      if (process.env.AUDIT_SCREENSHOTS === '1') await page.screenshot({ path: path.join(OUT, `${route.replace(/\W+/g, '-')}-${width}.png`), fullPage: false });
++    } finally { await page.close(); }
++  });
+ }
+ (async () => {
+-  const browser = await chromium.launch();
+-  const ctx = await verified(browser);
+-  const flows = [];
+-  // task cards
+-  const p = await ctx.newPage(); await p.goto(BASE + '/practice', { waitUntil: 'networkidle' }); await p.waitForTimeout(800);
+-  const cards = await p.$$eval('.practice-task:not(.practice-task--locked)', (as) => as.map((a) => a.getAttribute('href')));
+-  await p.close();
+-  for (let i = 0; i < cards.length; i++) flows.push(await flow(ctx, `任务卡片 ${i + 1}`, '/practice', `.practice-task:not(.practice-task--locked) >> nth=${i}`));
+-  flows.push(await flow(ctx, '剑雅听力目录→做题', '/listening/tests', 'a[href^="/listening/test/"]', { scroll: 1400 }));
+-  flows.push(await flow(ctx, '剑雅阅读目录→做题', '/reading/tests', 'a[href^="/reading/test/"]', { scroll: 900 }));
+-  flows.push(await flow(ctx, '听力机经目录→做题', '/listening/jijing', 'a[href^="/listening/jijing/"]', { scroll: 600 }));
+-  flows.push(await flow(ctx, '阅读机经目录→做题', '/reading/jijing', 'a[href^="/reading/jijing/"]', { scroll: 600 }));
+-  flows.push(await flow(ctx, '精听目录→精听', '/practices', 'a[href^="/listening/ielts"]', { scroll: 800 }));
+-  flows.push(await flow(ctx, '写作题库→范文', '/writing/', 'a[href^="/writing/t"]'));
+-  flows.push(await flow(ctx, '母题库→母题', '/writing/topics', 'a[href^="/writing/topics/"]'));
+-  flows.push(await flow(ctx, '阅读冲刺→做题', '/practice/sprint/reading', 'a[href^="/practice/sprint/reading/"], a[href^="/reading/"]'));
+-  flows.push(await flow(ctx, '练习中心→剑雅听力', '/practice', 'a[href="/listening/tests"]'));
+-  flows.push(await flow(ctx, '练习中心→题型专项', '/practice', 'a[href^="/practice/question-types"]'));
+-  flows.push(await flow(ctx, '练习中心→写作', '/practice', 'a[href^="/writing"]'));
+-  fs.writeFileSync(OUT + '/flows.json', JSON.stringify({ cards, flows }, null, 1));
+-  for (const f of flows) console.log(JSON.stringify(f));
+-  await browser.close();
+-})();
++  fs.mkdirSync(OUT, { recursive: true });
++  const browser = await chromium.launch(process.env.AUDIT_CHROMIUM ? { executablePath: process.env.AUDIT_CHROMIUM } : {});
++  try {
++    const ctx = await context(browser);
++    const page = await ctx.newPage();
++    await check('确认学生身份', async () => { await verify(page); });
++    const cards = await page.locator('.practice-task:not(.practice-task--locked):visible').count();
++    await check('合成任务数', async () => { assert.equal(cards, 3); });
++    await page.close();
++    for (let i = 0; i < cards; i++) await flow(ctx, `任务卡片 ${i + 1}`, '/practice', `.practice-task:not(.practice-task--locked):visible >> nth=${i}`, { label: /返回练习中心/ });
++    const cases = [
++      ['剑雅听力目录→做题', '/listening/tests', 'a[href^="/listening/test/"]:visible', { label: /返回剑雅听力/, openTest: true }],
++      ['剑雅阅读目录→做题', '/reading/tests', 'a[href^="/reading/test/"]:visible', { label: /返回剑雅阅读/ }],
++      ['听力机经目录→做题', '/listening/jijing', 'a[href^="/listening/jijing/"]:visible', { label: /返回听力机经/ }],
++      ['阅读机经目录→做题', '/reading/jijing', 'a[href^="/reading/jijing/"]:visible', { label: /返回阅读机经/ }],
++      ['精听目录→精听', '/practices', '#mainContent a[href^="/listening/ielts"]:visible', { label: /返回精听列表/ }],
++      ['写作题库→范文', '/writing/', '.writing-card__link:visible', { label: /返回写作题库/ }],
++      ['母题库→母题', '/writing/topics', 'a[href^="/writing/topics/"]:visible', { backSel: '.writing-back-link:visible', label: /返回.*母题/ }],
++      ['阅读冲刺→做题', '/practice/sprint/reading', '.exam-sprint__start:visible', { label: /返回.*冲刺/ }],
++      ['练习中心→剑雅听力', '/practice', '.practice-subjects a[href="/listening/tests"]:visible', { label: /返回练习中心/ }],
++      ['练习中心→题型专项', '/practice', 'a[href^="/practice/question-types"]:visible', { label: /返回练习中心/ }],
++      ['练习中心→写作', '/practice', '.practice-subjects a[href^="/writing"]:visible', { label: /返回练习中心/ }],
++      ['阅读冲刺→剑雅目录', '/practice/sprint/reading', '.practice-workspace__source-nav a[href="/reading/tests"]:visible', { label: /返回.*冲刺/ }],
++      ['听力冲刺→剑雅目录', '/practice/sprint/listening', '.practice-workspace__source-nav a[href="/listening/tests"]:visible', { label: /返回.*冲刺/ }],
++    ];
++    for (const args of cases) await flow(ctx, ...args);
++    await check('冲刺→阅读目录→做题→目录→冲刺', async (row) => {
++      const p = await ctx.newPage();
++      try {
++        await p.goto(BASE + '/practice/sprint/reading', { waitUntil: 'networkidle' });
++        await p.locator('.practice-workspace__subjects a[href="/reading/tests"]').click();
++        await p.waitForURL((url) => url.pathname === '/reading/tests');
++        await p.locator('a[href^="/reading/test/"]:visible').first().click();
++        await p.waitForURL((url) => url.pathname.startsWith('/reading/test/'));
++        await p.locator('[data-practice-back]:visible, .practice-shell__back:visible').first().click();
++        await p.waitForURL((url) => url.pathname === '/reading/tests');
++        const back = p.locator('[data-practice-module-back]');
++        row.catalogBackLabel = (await back.innerText()).trim();
++        assert.match(row.catalogBackLabel, /返回考前冲刺/);
++        await back.click();
++        await p.waitForURL((url) => url.pathname === '/practice/sprint/reading');
++        row.afterBack = rel(p.url());
++      } finally { await p.close(); }
++    });
++    await check('听力→阅读→听力重访无返回循环', async (row) => {
++      const p = await ctx.newPage();
++      try {
++        await p.goto(BASE + '/listening/tests', { waitUntil: 'networkidle' });
++        await p.locator('.practice-workspace__subjects a[href="/reading/tests"]').click();
++        await p.waitForURL((url) => url.pathname === '/reading/tests');
++        await p.locator('.practice-workspace__subjects a[href="/listening/tests"]').click();
++        await p.waitForURL((url) => url.pathname === '/listening/tests');
++        await p.locator('[data-practice-module-back]').click();
++        await p.waitForURL((url) => url.pathname === '/practice');
++        row.afterBack = rel(p.url());
++      } finally { await p.close(); }
++    });
++    const catalogs = [['/practice', '练习中心'], ['/practices', '精听练习'], ['/listening/tests', '剑雅听力'], ['/reading/tests', '剑雅阅读'], ['/listening/jijing', '听力机经'], ['/reading/jijing', '阅读机经'], ['/writing/'], ['/writing/topics'], ['/practice/sprint/reading', '阅读考前冲刺'], ['/practice/sprint/listening', '听力考前冲刺'], ['/practice/question-types']];
++    for (const [route, title] of catalogs) for (const width of [1440, 390]) await catalog(ctx, route, title, width);
++    await check('精听保留切换身份且无重复任务请求', async (row) => {
++      const p = await ctx.newPage(); const requests = [];
++      p.on('request', (request) => requests.push(pathname(request.url())));
++      try {
++        await p.goto(BASE + '/practices', { waitUntil: 'networkidle' });
++        await p.locator('#practiceIntensiveIdentitySwitch').click();
++        await p.locator('#studentName').waitFor({ state: 'visible' });
++        await p.fill('#studentName', '测试学生'); await p.click('#btnVerify');
++        await p.locator('#mainContent').waitFor({ state: 'visible' });
++        assert.match(await p.locator('[data-practice-identity-label]').innerText(), /测试学生/);
++        row.duplicateRequests = requests.filter((url) => /^\/api\/practice\/(tasks|history)(\/|$)/.test(url));
++        assert.deepEqual(row.duplicateRequests, []);
++        assert.equal(await p.locator('#practiceAssignedTasks, #practiceTaskList, #practiceHistoryList').count(), 0);
++      } finally { await p.close(); }
++    });
++    // Teacher login only exists in the batch1 disposable fixture, never use real accounts.
++    if (process.env.AUDIT_TEACHER === '1') await check('教师后台和精听管理入口保留', async (row) => {
++      const staff = await context(browser); const p = await staff.newPage();
++      try {
++        await p.goto(BASE + '/login?next=/practice', { waitUntil: 'networkidle' });
++        await p.fill('#username', 'audit_teacher'); await p.fill('#password', 'audit-fixture-only');
++        await p.locator('button[type="submit"]').click();
++        await p.waitForURL((url) => url.pathname === '/practice');
++        assert.equal(await p.locator('body.admin-suite-v2').count(), 1);
++        assert.equal(await p.locator('.practice-suite-filters').count(), 1);
++        assert.equal(await p.locator('.practice-suite-preview').count(), 1);
++        await p.goto(BASE + '/practices', { waitUntil: 'networkidle' });
++        assert.equal(await p.locator('a[href="/listening/upload"]:visible').count(), 1);
++        assert.match(await p.locator('[data-practice-identity-label]').innerText(), /教师/);
++        assert.equal(await p.locator('a[href="/logout"]').count(), 1);
++        row.staffControls = { upload: true, logout: true, assignmentPreview: true };
++      } finally { await staff.close(); }
++    });
++    await ctx.close();
++  } finally {
++    await browser.close();
++    const failed = results.filter((row) => !row.ok);
++    fs.writeFileSync(path.join(OUT, 'flows.json'), JSON.stringify({ base: BASE, scope: 'synthetic local Chromium; external requests blocked', results, passed: results.length - failed.length, failed: failed.length }, null, 2) + '\n');
++    if (failed.length) process.exitCode = 1;
++  }
++})().catch((error) => { console.error(error.message.split('\n')[0]); process.exitCode = 1; });
+diff --git a/docs/reviews/practice-web-batch2-20261128/release/serve_fixture.py b/docs/reviews/practice-web-batch2-20261128/release/serve_fixture.py
+new file mode 100644
+index 00000000..adf0ae03
+--- /dev/null
++++ b/docs/reviews/practice-web-batch2-20261128/release/serve_fixture.py
+@@ -0,0 +1,108 @@
++"""Local batch-2 navigation fixture; never use this script on production.
++
++Reuse the batch-1 disposable SQLite/users/tasks fixture and the sprint route
++unit-test view builder. Only the reading sprint view is synthetic: one visibly
++labelled entry points to a real repository Cambridge reading route. This tests
++navigation and existing templates/JS, not current rankings or sprint assets.
++No tracked seed, runtime sprint state, database model, or product code changes.
++"""
++
++import argparse
++import json
++import runpy
++import sys
++from pathlib import Path
++from unittest.mock import patch
++
++MARKER = "本机合成导航样例：仅验证导航，不代表真实热榜"
++READING_PATH = "/reading/test/ielts10_test1_reading?passage=1"
++
++
++def load_fixture_app(root, port):
++    """Let the existing fixture build only its temporary DB; delay serving."""
++    source = root / "docs/reviews/practice-web-batch1-20261126/serve_fixture.py"
++    argv = [str(source), str(root), str(port)]
++    with patch.object(sys, "argv", argv), patch("flask.Flask.run") as run:
++        namespace = runpy.run_path(str(source), run_name="__main__")
++    run.assert_called_once()
++    return namespace["app"]
++
++
++def make_sprint_loader():
++    from services.exam_sprint import load_sprint_view as real_loader
++    from tests.test_exam_sprint_routes import sprint_view
++
++    def navigation_fixture(root, subject, **kwargs):
++        if subject != "reading":
++            return real_loader(root, subject, **kwargs)
++        view = sprint_view("reading")
++        entry = view["groups"][0]["items"][0]
++        entry.update(
++            source_id="local-navigation-fixture",
++            title="LOCAL NAVIGATION FIXTURE · Cambridge 10 Test 1",
++            title_zh=MARKER,
++            heat_label="真实剑雅阅读页；合成冲刺来源",
++            practice_url=READING_PATH,
++        )
++        view["groups"][0]["items"] = [entry]
++        view.update(
++            total=1,
++            ready_count=1,
++            updated_at_label="本机临时测试",
++            source_updated_at_label="合成导航样例",
++            next_update_label="",
++        )
++        return view
++
++    return navigation_fixture
++
++
++def self_test(app):
++    """Read-only local GETs; no browser, server, credentials, or network."""
++    client = app.test_client()
++    sprint = client.get("/practice/sprint/reading")
++    html = sprint.get_data(as_text=True)
++    target = client.get(READING_PATH)
++    target_html = target.get_data(as_text=True)
++    listening = client.get("/practice/sprint/listening")
++    checks = {
++        "synthetic_reading_catalog_status_200": sprint.status_code == 200,
++        "visible_synthetic_navigation_marker": MARKER in html,
++        "one_synthetic_practice_entry": html.count("data-practice-entry") == 1,
++        "real_cambridge_reading_href": f'href="{READING_PATH}"' in html,
++        "sprint_source_context": "sourceMode: 'exam_sprint'" in html,
++        "real_reading_target_status_200": target.status_code == 200,
++        "real_reading_target_shell": "practice_shell.js" in target_html,
++        "listening_view_not_replaced": (
++            listening.status_code == 200
++            and MARKER not in listening.get_data(as_text=True)
++        ),
++    }
++    print(json.dumps({"ok": all(checks.values()), "checks": checks}, indent=2))
++    return 0 if all(checks.values()) else 1
++
++
++def main():
++    parser = argparse.ArgumentParser(description=__doc__)
++    parser.add_argument("root", type=Path)
++    parser.add_argument("port", type=int, nargs="?", default=5116)
++    parser.add_argument("--self-test", action="store_true")
++    args = parser.parse_args()
++    root = args.root.resolve()
++    if not (root / "app.py").is_file():
++        parser.error("root must be a local StudyTracker checkout")
++    if str(root).startswith("/root/apps/"):
++        parser.error("production checkout is forbidden")
++    if not 1024 <= args.port <= 65535:
++        parser.error("port must be in the local unprivileged range")
++    app = load_fixture_app(root, args.port)
++    with patch("services.exam_sprint.load_sprint_view", side_effect=make_sprint_loader()):
++        if args.self_test:
++            return self_test(app)
++        print("LOCAL_NAVIGATION_FIXTURE: synthetic reading sprint; not real rankings", flush=True)
++        app.run(host="127.0.0.1", port=args.port, threaded=True, use_reloader=False, debug=False)
++    return 0
++
++
++if __name__ == "__main__":
++    raise SystemExit(main())
+diff --git a/docs/reviews/practice-web-batch2-20261128/release/verify_production.py b/docs/reviews/practice-web-batch2-20261128/release/verify_production.py
+new file mode 100644
+index 00000000..94956b5b
+--- /dev/null
++++ b/docs/reviews/practice-web-batch2-20261128/release/verify_production.py
+@@ -0,0 +1,270 @@
++"""Read-only batch-two release probe; never import app/models or read credentials/DB.
++
++Run on the server through SSH stdin. Output is allowlisted metadata and booleans;
++no response body, cookie, identity, environment value or raw redirect is emitted.
++"""
++
++from __future__ import annotations
++
++import argparse
++import ast
++import base64
++import hashlib
++import json
++import re
++import subprocess
++from datetime import datetime, timezone
++from html.parser import HTMLParser
++from pathlib import Path
++from urllib.error import HTTPError
++from urllib.parse import urlsplit
++from urllib.request import HTTPRedirectHandler, ProxyHandler, Request, build_opener
++
++EXPECTED_GUNICORN = {
++    "bind": "127.0.0.1:5002", "workers": 1, "worker_class": "gthread", "threads": 6,
++}
++PRODUCTS = {
++    "static/js/practice_shell.js",
++    "templates/auth/_entrance_shell.html", "templates/base.html",
++    "templates/listening/index.html", "templates/listening/jijing_index.html",
++    "templates/listening/test_index.html", "templates/practice/_workspace_header.html",
++    "templates/practice/_workspace_styles.html", "templates/practice/exam_sprint.html",
++    "templates/practice/index_content.html", "templates/question_type_practice/student_index.html",
++    "templates/reading/jijing_index.html", "templates/reading/test_index.html",
++    "templates/writing/index.html", "templates/writing/topics.html",
++}
++PUBLIC_CATALOGS = {
++    "/practice": "练习中心",
++    "/practices": "精听练习",
++    "/listening": "精听练习",
++    "/listening/tests": "剑雅听力",
++    "/reading/tests": "剑雅阅读",
++    "/listening/jijing": "听力机经",
++    "/reading/jijing": "阅读机经",
++    "/practice/sprint/listening": "听力考前冲刺",
++    "/practice/sprint/reading": "阅读考前冲刺",
++    "/practice/question-types": "IELTS 题型专项",
++}
++MAX_BODY = 8 * 1024 * 1024
++
++
++class NoRedirect(HTTPRedirectHandler):
++    def redirect_request(self, request, file, code, message, headers, url):
++        return None
++
++
++class Elements(HTMLParser):
++    def __init__(self, html):
++        super().__init__()
++        self.rows = []
++        self.feed(html)
++
++    def handle_starttag(self, tag, attrs):
++        self.rows.append((tag, dict(attrs)))
++
++    def with_attr(self, name):
++        return [attrs for _, attrs in self.rows if name in attrs]
++
++
++def command(root, *args):
++    return subprocess.check_output(args, cwd=root, text=True, stderr=subprocess.DEVNULL).strip()
++
++
++def fetch(base, path):
++    request = Request(
++        base + path, method="GET",
++        headers={"User-Agent": "StudyTracker read-only batch2 release probe"},
++    )
++    try:
++        response = build_opener(ProxyHandler({}), NoRedirect()).open(request, timeout=20)
++    except HTTPError as error:
++        response = error
++    with response:
++        body = response.read(MAX_BODY + 1)
++        if len(body) > MAX_BODY:
++            raise ValueError("response_too_large")
++        redirect = urlsplit(response.headers.get("Location", ""))
++        local_redirect = not redirect.netloc or redirect.netloc == urlsplit(base).netloc
++        info = {
++            "status": response.code,
++            "sha256": hashlib.sha256(body).hexdigest(),
++            "redirects_to_login": local_redirect and redirect.path == "/login",
++            "redirects_to_practice": local_redirect and redirect.path == "/practice",
++            "no_store": "no-store" in response.headers.get("Cache-Control", ""),
++        }
++        return info, body
++
++
++def file_manifest(raw):
++    data = json.loads(base64.b64decode(raw, validate=True)) if raw else {}
++    if not isinstance(data, dict) or set(data) != PRODUCTS:
++        raise ValueError("manifest_requires_exactly_15_batch2_product_files")
++    if any(not isinstance(value, str) or not re.fullmatch(r"[0-9a-f]{64}", value) for value in data.values()):
++        raise ValueError("invalid_manifest_digest")
++    return data
++
++
++def catalog_structure(body, path):
++    html = body.decode("utf-8", errors="replace")
++    headers = re.findall(r"<header[^>]*data-practice-workspace-header[^>]*>(.*?)</header>", html, re.S)
++    if len(headers) != 1:
++        return {"shared_header_count": len(headers), "ok": False}
++    header = headers[0]
++    all_elements, elements = Elements(html), Elements(header)
++    brands = elements.with_attr("data-practice-home")
++    expected_back_count = 0 if path == "/practice" else 1
++    nav = re.search(r"<nav[^>]*>(.*?)</nav>", header, re.S)
++    labels = re.findall(r">([^<>]+)</a>", nav.group(1)) if nav else []
++    headings = re.findall(r"<h1[^>]*>(.*?)</h1>", html, re.S)
++    checks = {
++        "brand_intact": len(brands) == 1 and "data-practice-module-back" not in brands[0]
++            and brands[0].get("href") == "/practice" and "Sage Path</span>" in header
++            and 'brand/sagepath-mark.png' in header,
++        "five_navigation_items": labels == ["练习中心", "听力", "阅读", "写作", "题型专项"],
++        "one_context_back_or_none_at_root": len(elements.with_attr("data-practice-module-back")) == expected_back_count
++            and len(all_elements.with_attr("data-practice-module-back")) == expected_back_count,
++        "one_module_exit": len(elements.with_attr("data-practice-module-exit")) == 1,
++        "guest_identity_label": len(elements.with_attr("data-practice-identity-label")) == 1
++            and "未确认身份" in header,
++        "one_expected_h1": headings == [PUBLIC_CATALOGS[path]],
++        "branded_title": bool(re.search(r"<title>[^<]+ · Sage Path</title>", html)),
++    }
++    if path in {"/practices", "/listening"}:
++        checks["identity_gate_preserved"] = 'id="studentVerifyForm"' in html and 'id="practiceIntensiveIdentitySwitch"' in html
++        checks["duplicate_overview_removed"] = all(marker not in html for marker in (
++            'id="newTasksList"', 'id="practiceHistoryList"', 'class="auth-entry__brandbar"',
++        ))
++    if path == "/practice":
++        checks["batch1_identity_tasks_preserved"] = all(marker in html for marker in (
++            'id="practiceIdentityForm"', 'id="practiceAssignedTasks"', 'data-practice-hub="root"',
++        ))
++    return {"shared_header_count": 1, "checks": checks, "ok": all(checks.values())}
++
++
++def inspect(args):
++    root = args.root.resolve()
++    state = dict(line.split("=", 1) for line in command(
++        root, "systemctl", "show", "studytracker.service", "-p", "ActiveState", "-p", "SubState",
++        "-p", "NRestarts", "-p", "MainPID", "-p", "ExecMainStartTimestamp",
++    ).splitlines())
++    pid = state["MainPID"]
++    children = Path(f"/proc/{pid}/task/{pid}/children").read_text().split() if pid.isdigit() and pid != "0" else []
++    config = {}
++    for node in ast.parse((root / "gunicorn.conf.py").read_text()).body:
++        if isinstance(node, ast.Assign):
++            for target in node.targets:
++                if isinstance(target, ast.Name) and target.id in EXPECTED_GUNICORN:
++                    config[target.id] = ast.literal_eval(node.value)
++    head = command(root, "git", "rev-parse", "HEAD")
++    result = {
++        "checked_at_utc": datetime.now(timezone.utc).isoformat(),  # noqa: UP017 - production Python3.10
++        "mode": "preflight" if args.preflight else "postdeploy",
++        "scope": "Read-only git/files/systemd/proc metadata and anonymous GET; no app/models import, DB, secrets/environment, cookies or write requests.",
++        "head": head, "expected_head": args.expected_head,
++        "tracked_clean": not command(root, "git", "status", "--porcelain", "--untracked-files=no"),
++        "service": state, "gunicorn_file_config": config, "runtime_worker_count": len(children),
++        "files_match": {}, "loopback_pages": {}, "public_pages": {}, "public_assets": {}, "checks": {},
++        "limitations": [
++            "Anonymous HTML structure checks do not execute JS, render a browser or prove signed-in/student/teacher journeys.",
++            "Writing catalogs retain their existing anonymous redirect; their authenticated HTML is not checked here.",
++            "Gunicorn class/thread/bind values are read from config; worker count and loopback health are independent runtime checks.",
++            "Vocabulary feature remains enabled by requiring existing identity_missing responses; no .env or process environment is read or changed.",
++        ],
++    }
++    checks = result["checks"]
++    checks["head_matches"] = not args.expected_head or head == args.expected_head
++    checks["tracked_clean"] = result["tracked_clean"]
++    checks["service_active"] = state["ActiveState"] == "active" and state["SubState"] == "running"
++    checks["gunicorn_config_expected"] = config == EXPECTED_GUNICORN
++    checks["one_worker_running"] = len(children) == 1
++    for label, base in (("loopback", "http://127.0.0.1:5002"), ("public", args.public_base)):
++        pages = result[label + "_pages"]
++        for path in ("/login", "/practice", "/tasks", "/materials"):
++            try:
++                info, body = fetch(base, path)
++                pages[path] = info
++                checks[label + path + "_health"] = (
++                    info["status"] == 200 if path in {"/login", "/practice"}
++                    else info["status"] == 302 and info["redirects_to_login"]
++                )
++            except Exception as error:
++                pages[path] = {"error_type": type(error).__name__}
++                checks[label + path + "_health"] = False
++        for path in ("/practice/vocabulary/tasks/0", "/api/practice/vocabulary/tasks/0/state"):
++            try:
++                info, body = fetch(base, path)
++                if path.startswith("/api/"):
++                    data = json.loads(body)
++                else:
++                    match = re.search(rb'<script[^>]*id="pv-boot"[^>]*>(.*?)</script>', body, re.S)
++                    data = json.loads(match.group(1)) if match else {}
++                info["identity_missing"] = data.get("error") == "identity_missing"
++                info["no_student_or_csrf_payload"] = not any(key in data for key in ("identity_key", "csrf_token", "task"))
++                pages[path] = info
++                checks[label + path + "_enabled_and_gated"] = (
++                    info["status"] == 401 and info["identity_missing"]
++                    and info["no_store"] and info["no_student_or_csrf_payload"]
++                )
++            except Exception as error:
++                pages[path] = {"error_type": type(error).__name__}
++                checks[label + path + "_enabled_and_gated"] = False
++        if args.preflight:
++            continue
++        for path in PUBLIC_CATALOGS:
++            try:
++                info, body = fetch(base, path)
++                info["structure"] = catalog_structure(body, path)
++                pages[path] = info
++                checks[label + path + "_batch2_markup"] = info["status"] == 200 and info["structure"]["ok"]
++            except Exception as error:
++                pages[path] = {"error_type": type(error).__name__}
++                checks[label + path + "_batch2_markup"] = False
++        for path in ("/writing/", "/writing/topics"):
++            try:
++                info, _ = fetch(base, path)
++                pages[path] = info
++                checks[label + path + "_anonymous_gate"] = info["status"] == 302 and info["redirects_to_practice"]
++            except Exception as error:
++                pages[path] = {"error_type": type(error).__name__}
++                checks[label + path + "_anonymous_gate"] = False
++    if not args.preflight:
++        manifest = file_manifest(args.manifest_b64)
++        for name, digest in manifest.items():
++            result["files_match"][name] = hashlib.sha256((root / name).read_bytes()).hexdigest() == digest
++        checks["source_manifest_matches"] = all(result["files_match"].values())
++        name = "static/js/practice_shell.js"
++        try:
++            info, _ = fetch(args.public_base, "/" + name)
++            result["public_assets"][name] = info
++            checks["public_practice_shell_sha_matches"] = info["status"] == 200 and info["sha256"] == manifest[name]
++        except Exception as error:
++            result["public_assets"][name] = {"error_type": type(error).__name__}
++            checks["public_practice_shell_sha_matches"] = False
++    result["ok"] = all(checks.values())
++    return result
++
++
++def main():
++    parser = argparse.ArgumentParser(description=__doc__)
++    parser.add_argument("--root", type=Path, default=Path("/root/apps/studytracker"))
++    parser.add_argument("--preflight", action="store_true")
++    parser.add_argument("--expected-head")
++    parser.add_argument("--manifest-b64")
++    parser.add_argument("--public-base", default="https://studytracker.xin")
++    args = parser.parse_args()
++    if not args.preflight and (not args.expected_head or not args.manifest_b64):
++        parser.error("postdeploy requires --expected-head and --manifest-b64")
++    if args.expected_head and not re.fullmatch(r"[0-9a-f]{40}", args.expected_head):
++        parser.error("--expected-head must be a full commit hash")
++    if args.public_base != "https://studytracker.xin":
++        parser.error("only the known StudyTracker production origin is allowed")
++    try:
++        result = inspect(args)
++    except Exception as error:
++        result = {"ok": False, "mode": "preflight" if args.preflight else "postdeploy", "error_type": type(error).__name__}
++    print(json.dumps(result, ensure_ascii=False, indent=2))
++    return 0 if result["ok"] else 1
++
++
++if __name__ == "__main__":
++    raise SystemExit(main())
+diff --git a/docs/reviews/practice-web-batch2-20261128/run_checks.py b/docs/reviews/practice-web-batch2-20261128/run_checks.py
+new file mode 100644
+index 00000000..a4319ac6
+--- /dev/null
++++ b/docs/reviews/practice-web-batch2-20261128/run_checks.py
+@@ -0,0 +1,59 @@
++"""Repeat batch-two checks with a private database; preserve earlier release evidence."""
++import argparse
++import json
++import os
++import subprocess
++import sys
++import time
++from pathlib import Path
++
++HERE = Path(__file__).resolve().parent
++ROOT = HERE.parents[2]
++OUT = HERE / "validation"
++PYTHON_MODULES = [
++    "tests.test_practice_center_batch1", "tests.test_reading_study",
++    "tests.test_practice_navigation", "tests.test_practice_navigation_routes",
++    "tests.test_practice_workspace_regression", "tests.test_practice_portal_catalog_grouping",
++    "tests.test_practice_catalog", "tests.test_reading_practice_layout",
++    "tests.test_teacher_practice_access", "tests.test_listening_intensive_catalog",
++    "tests.test_question_type_catalog_ui_contract", "tests.test_exam_sprint_catalog",
++    "tests.test_auth_entry_pages", "tests.test_practice_navigation_batch2",
++]
++
++
++def main():
++    parser = argparse.ArgumentParser(description=__doc__)
++    parser.add_argument("mode", choices=["python", "node"])
++    args = parser.parse_args()
++    OUT.mkdir(parents=True, exist_ok=True)
++    if args.mode == "python":
++        commands = [[sys.executable, "docs/reviews/practice-web-batch1-20261126/run_tests.py", *PYTHON_MODULES]]
++        label = "py" + str(sys.version_info.major) + str(sys.version_info.minor)
++    else:
++        reviews = ROOT / "docs/reviews"
++        vocab = json.loads((reviews / "web-vocabulary-task-page-20261126/main-integration/node-commands.json").read_text())[0]["argv"][2:]
++        batch1 = json.loads((reviews / "practice-web-batch1-20261126/validation/node-command.json").read_text())["argv"][2:]
++        commands = [
++            ["node", "--test", *dict.fromkeys(vocab + batch1)],
++            ["node", "docs/reviews/practice-web-batch1-20261126/independent_exit_probe.js"],
++        ]
++        label = "node"
++    results = []
++    for index, argv in enumerate(commands, 1):
++        log = OUT / f"{label}-{index}.log"
++        started = time.monotonic()
++        with log.open("w") as output:
++            result = subprocess.run(argv, cwd=ROOT, env=os.environ.copy(), stdout=output, stderr=subprocess.STDOUT)
++        row = {"argv": argv, "cwd": str(ROOT), "exit_code": result.returncode,
++               "seconds": round(time.monotonic() - started, 3), "log": str(log.relative_to(HERE))}
++        results.append(row)
++        (OUT / f"{label}-commands.json").write_text(json.dumps(results, indent=2) + "\n")
++        print(json.dumps(row), flush=True)
++        print("\n".join(log.read_text().splitlines()[-8:]), flush=True)
++        if result.returncode:
++            return result.returncode
++    return 0
++
++
++if __name__ == "__main__":
++    raise SystemExit(main())
+diff --git a/docs/reviews/practice-web-batch2-20261128/verify_scope.py b/docs/reviews/practice-web-batch2-20261128/verify_scope.py
+new file mode 100644
+index 00000000..38f09c1f
+--- /dev/null
++++ b/docs/reviews/practice-web-batch2-20261128/verify_scope.py
+@@ -0,0 +1,247 @@
++"""Verify batch-two navigation scope against HEAD without importing the app."""
++
++from __future__ import annotations
++
++import argparse
++import hashlib
++import json
++import subprocess
++import sys
++from datetime import datetime, timezone
++from pathlib import Path
++
++from jinja2 import Environment
++
++ROOT = Path(__file__).resolve().parents[3]
++REPORT_DIR = Path(__file__).resolve().parent
++ALLOWED_PRODUCT_FILES = {
++    "static/js/practice_shell.js",
++    "templates/auth/_entrance_shell.html",
++    "templates/base.html",
++    "templates/listening/index.html",
++    "templates/listening/jijing_index.html",
++    "templates/listening/test_index.html",
++    "templates/practice/_workspace_header.html",
++    "templates/practice/_workspace_styles.html",
++    "templates/practice/exam_sprint.html",
++    "templates/practice/index_content.html",
++    "templates/question_type_practice/student_index.html",
++    "templates/reading/jijing_index.html",
++    "templates/reading/test_index.html",
++    "templates/writing/index.html",
++    "templates/writing/topics.html",
++}
++EXPLICIT_UNCHANGED_FILES = (
++    "app.py",
++    "models.py",
++    "templates/listening/test_practice.html",
++    "templates/listening/player.html",
++    "templates/reading/test_practice.html",
++)
++
++
++def sha256(data: bytes) -> str:
++    return hashlib.sha256(data).hexdigest()
++
++
++def protected_product(path: str) -> bool:
++    return (
++        path in EXPLICIT_UNCHANGED_FILES
++        or path.startswith(("api/", "services/"))
++        or (
++            path.endswith(".js")
++            and path.startswith(("static/", "miniprogram/"))
++            and path != "static/js/practice_shell.js"
++        )
++    )
++
++
++def main() -> int:
++    parser = argparse.ArgumentParser(description=__doc__)
++    parser.add_argument("--baseline", default="HEAD", help="Git baseline; defaults to current HEAD")
++    args = parser.parse_args()
++    commands: list[dict] = []
++    checks: list[dict] = []
++
++    def run(argv: list[str], *, record_output: bool = True) -> subprocess.CompletedProcess:
++        result = subprocess.run(argv, cwd=ROOT, capture_output=True, check=False)
++        command = {"argv": argv, "cwd": str(ROOT), "exit_code": result.returncode}
++        if record_output:
++            command["stdout"] = result.stdout.decode("utf-8", errors="replace")
++            command["stderr"] = result.stderr.decode("utf-8", errors="replace")
++        else:
++            command["stdout_sha256"] = sha256(result.stdout)
++            command["stdout_bytes"] = len(result.stdout)
++        commands.append(command)
++        return result
++
++    def git_text(*argv: str) -> str:
++        result = run(
++            ["git", *argv], record_output=not (argv[0] == "ls-files" and "--others" not in argv)
++        )
++        if result.returncode:
++            raise RuntimeError(f"Git command failed: {argv!r}")
++        return result.stdout.decode("utf-8")
++
++    baseline = git_text("rev-parse", "--verify", f"{args.baseline}^{{commit}}").strip()
++    branch = git_text("branch", "--show-current").strip()
++    tracked_changes = sorted(
++        filter(None, git_text("diff", "--name-only", "-z", baseline, "--").split("\0"))
++    )
++    untracked = sorted(
++        filter(None, git_text("ls-files", "--others", "--exclude-standard", "-z").split("\0"))
++    )
++    changed = sorted(set(tracked_changes + untracked))
++    tracked = sorted(filter(None, git_text("ls-files", "-z").split("\0")))
++
++    def check(name: str, passed: bool, **evidence) -> None:
++        checks.append({"name": name, "passed": bool(passed), **evidence})
++
++    protected_changes = [path for path in changed if protected_product(path)]
++    check(
++        "protected_products_have_no_git_changes",
++        not protected_changes,
++        changed_paths=protected_changes,
++        protected_tracked_count=sum(protected_product(path) for path in tracked),
++        rule="app.py/models.py/api/**/services/**, listening/player and listening/reading test templates, all static and miniprogram JS except practice_shell.js",
++    )
++    product_changes = [
++        path
++        for path in changed
++        if path.startswith(("static/", "templates/", "api/", "services/", "miniprogram/"))
++        or path in {"app.py", "models.py", "config.py"}
++    ]
++    unexpected_products = sorted(set(product_changes) - ALLOWED_PRODUCT_FILES)
++    check(
++        "product_scope_allowlist",
++        not unexpected_products,
++        changed_paths=product_changes,
++        unexpected_paths=unexpected_products,
++    )
++
++    def baseline_bytes(path: str) -> bytes:
++        result = run(["git", "show", f"{baseline}:{path}"], record_output=False)
++        if result.returncode:
++            raise RuntimeError(f"Cannot read baseline file: {path}")
++        return result.stdout
++
++    def compare(name: str, path: str, extract=lambda value: value) -> None:
++        try:
++            before = extract(baseline_bytes(path))
++            after = extract((ROOT / path).read_bytes())
++            check(
++                name,
++                before == after,
++                path=path,
++                baseline_sha256=sha256(before),
++                current_sha256=sha256(after),
++                baseline_bytes=len(before),
++                current_bytes=len(after),
++            )
++        except (OSError, ValueError, RuntimeError) as error:
++            check(name, False, path=path, error=str(error))
++
++    for path in EXPLICIT_UNCHANGED_FILES:
++        compare("byte_identical:" + path, path)
++
++    compare(
++        "shell_init_and_all_save_exit_timer_code_byte_identical",
++        "static/js/practice_shell.js",
++        lambda data: data[data.index(b"  function init(options = {}, win = window) {") :],
++    )
++
++    def catalog_macro(data: bytes) -> bytes:
++        start = data.index(b"{% macro render_intensive_catalog(")
++        end = data.index(b"{% endmacro %}", start) + len(b"{% endmacro %}")
++        return data[start:end]
++
++    def progress_and_management(data: bytes) -> bytes:
++        start = data.index(b"function refreshExerciseProgress(studentName) {")
++        end = data.index(b"</script>", start)
++        return data[start:end]
++
++    compare(
++        "intensive_catalog_macro_byte_identical", "templates/listening/index.html", catalog_macro
++    )
++    compare(
++        "intensive_progress_card_and_management_script_byte_identical",
++        "templates/listening/index.html",
++        progress_and_management,
++    )
++
++    environment = Environment()
++    templates = [
++        path
++        for path in changed
++        if path.startswith("templates/") and path.endswith(".html") and (ROOT / path).is_file()
++    ]
++    for path in templates:
++        try:
++            environment.parse((ROOT / path).read_text(), name=path)
++            check("jinja_parse:" + path, True)
++        except Exception as error:
++            check("jinja_parse:" + path, False, error=str(error))
++
++    javascript = [path for path in changed if path.endswith(".js") and (ROOT / path).is_file()]
++    for path in javascript:
++        result = run(["node", "--check", path])
++        check("node_check:" + path, result.returncode == 0)
++
++    # Raw logs, historical patches and generated evidence are not source checks.
++    source_suffixes = {".py", ".js", ".html", ".css", ".yml", ".yaml", ".md"}
++    diff_paths = [
++        path
++        for path in changed
++        if Path(path).suffix in source_suffixes and "/validation/" not in path
++    ]
++    tracked_diff_paths = [path for path in diff_paths if path in tracked_changes]
++    if tracked_diff_paths:
++        result = run(["git", "diff", "--check", baseline, "--", *tracked_diff_paths])
++        check("git_diff_check_tracked_sources", result.returncode == 0, paths=tracked_diff_paths)
++    for path in diff_paths:
++        if path not in untracked or not (ROOT / path).is_file():
++            continue
++        result = run(["git", "diff", "--no-index", "--check", "--", "/dev/null", path])
++        # --no-index implies --exit-code: 1 with no diagnostics is a clean new file.
++        check(
++            "git_diff_check_new_source:" + path,
++            result.returncode in (0, 1) and not result.stdout and not result.stderr,
++        )
++
++    report = {
++        "generated_at": datetime.now(timezone.utc).isoformat(),  # noqa: UP017 - Python 3.10 compatibility
++        "command": [sys.executable, str(Path(__file__).resolve()), *sys.argv[1:]],
++        "worktree": str(ROOT),
++        "branch": branch,
++        "baseline_ref": args.baseline,
++        "baseline_commit": baseline,
++        "python": sys.version,
++        "tracked_changes": tracked_changes,
++        "untracked_paths": untracked,
++        "checks": checks,
++        "commands": commands,
++        "summary": {
++            "passed": sum(row["passed"] for row in checks),
++            "failed": sum(not row["passed"] for row in checks),
++            "jinja_templates": len(templates),
++            "standalone_js": len(javascript),
++        },
++        "limits": [
++            "Static scope and syntax verification only; no application import, browser execution, database access, network or production requests.",
++            "Jinja parse does not resolve template context, render pages or validate inline JavaScript; browser/HTTP regressions are separate evidence.",
++            "Git diff covers tracked files against the recorded baseline plus nonignored untracked filenames; ignored data/assets and historical runtime state are outside this check.",
++            "No commit, push, deployment or mini-program publication is performed.",
++        ],
++    }
++    (REPORT_DIR / "scope-check.json").write_text(
++        json.dumps(report, ensure_ascii=False, indent=2) + "\n"
++    )
++    print(json.dumps(report["summary"], ensure_ascii=False))
++    for row in checks:
++        if not row["passed"]:
++            print("FAIL " + json.dumps(row, ensure_ascii=False))
++    return int(any(not row["passed"] for row in checks))
++
++
++if __name__ == "__main__":
++    raise SystemExit(main())
+diff --git a/static/js/practice_shell.js b/static/js/practice_shell.js
+index 31f04232..e800de8c 100644
+--- a/static/js/practice_shell.js
++++ b/static/js/practice_shell.js
+@@ -7,9 +7,10 @@
+ 
+   const CONTEXT_KEY = "practice:return-context:v2";
+   const LIST_STATE_PREFIX = "practice:list-state:v2:";
++  const HUB_CONTEXT_PREFIX = "practice:hub-context:v2:";
+   const LEGACY_CONTEXT_KEY = "practice:return-context:v1";
+   const NAVIGATION_PARAMS = ["practice_return", "practice_exit", "practice_source", "practice_identity"];
+-  const PRACTICE_PAGE_PATH = /^(?:\/practice(?:\/|$)|\/listening(?:\/|$)|\/reading(?:\/|$)|\/exam(?:\/|$)|\/writing(?:\/|$)|\/tasks\/question-types(?:\/|$))/;
++  const PRACTICE_PAGE_PATH = /^(?:\/practices?(?:\/|$)|\/listening(?:\/|$)|\/reading(?:\/|$)|\/exam(?:\/|$)|\/writing(?:\/|$)|\/tasks\/question-types(?:\/|$))/;
+ 
+   function safeStorage(storage, method, key, value) {
+     try {
+@@ -168,7 +169,8 @@
+     const doc = win.document;
+     const settings = mergedOptions(win, options);
+     const origin = win.location.origin;
+-    const current = cleanNavigationUrl(currentUrl(win), origin);
++    const browserUrl = currentUrl(win);
++    const current = cleanNavigationUrl(browserUrl, origin);
+     const currentPath = current.pathname + current.search + current.hash;
+     const targetPath = cleanLocalPath(options.targetPath || "", origin, "");
+     const previous = storedContext(win);
+@@ -185,8 +187,9 @@
+       ) === currentPath
+     );
+ 
+-    let moduleExit = contextParts(settings.moduleExitUrl, origin, "/login");
+-    let moduleExitLabel = settings.moduleExitLabel;
++    const explicitExit = safeLocalUrl(browserUrl.searchParams.get("practice_exit"), origin, "");
++    let moduleExit = contextParts(explicitExit || settings.moduleExitUrl, origin, "/login");
++    let moduleExitLabel = exitLabel(settings.identityMode, moduleExit.path, sourceModeForPath(moduleExit.path), settings.moduleExitLabel);
+     if (!isPracticeModulePath(current.pathname) && targetPath && isPracticeModulePath(new URL(targetPath, origin).pathname)) {
+       moduleExit = { path: current.pathname, search: current.search, hash: current.hash };
+       moduleExitLabel = returnLabel(sourceModeForPath(current.pathname));
+@@ -234,9 +237,17 @@
+ 
+   function isPracticeEntry(link, win) {
+     if (!link || link.hasAttribute("download")) return false;
+-    if (link.dataset.practiceEntry !== undefined) return true;
++    // Return/exit/home links already have a destination; capturing them as a new
++    // entry would replace the parent with the page we are leaving.
++    if (["practiceModuleBack", "practiceModuleExit", "practiceBack", "practiceHome"]
++      .some((key) => link.dataset[key] !== undefined)) return false;
+     const url = linkTarget(link, win);
+-    return Boolean(url && url.origin === win.location.origin && isPracticeModulePath(url.pathname));
++    if (!url || url.origin !== win.location.origin) return false;
++    const current = cleanNavigationUrl(currentUrl(win), win.location.origin);
++    const target = cleanNavigationUrl(url, win.location.origin);
++    if (target.pathname === current.pathname && target.search === current.search) return false;
++    if (link.dataset.practiceNav !== undefined && target.pathname === "/practice") return false;
++    return link.dataset.practiceEntry !== undefined || isPracticeModulePath(url.pathname);
+   }
+ 
+   function contextUrl(context, origin) {
+@@ -338,7 +349,8 @@
+     const currentPath = current.pathname + current.search + current.hash;
+     const explicitReturn = safeLocalUrl(browserUrl.searchParams.get("practice_return"), origin, "");
+     const explicitExit = safeLocalUrl(browserUrl.searchParams.get("practice_exit"), origin, "");
+-    if (explicitReturn) {
++    const explicitSource = explicitReturn ? cleanNavigationUrl(explicitReturn, origin) : null;
++    if (explicitSource && (explicitSource.pathname !== current.pathname || explicitSource.search !== current.search)) {
+       const source = contextParts(explicitReturn, origin, fallbackUrl || settings.moduleRootUrl);
+       const exit = contextParts(explicitExit || settings.moduleExitUrl, origin, settings.moduleExitUrl);
+       const exitMode = sourceModeForPath(exit.path);
+@@ -418,26 +430,85 @@
+     win.__practiceHubInstalled = true;
+     const settings = mergedOptions(win, options);
+     const isRoot = marker.dataset.practiceHub === "root" || win.location.pathname === new URL(settings.moduleRootUrl, win.location.origin).pathname;
+-    const context = resolveContext(win, settings.moduleRootUrl, "practice_library", settings);
++    const origin = win.location.origin;
++    const current = cleanNavigationUrl(currentUrl(win), origin);
++    const currentPath = current.pathname + current.search + current.hash;
++    const cacheKey = HUB_CONTEXT_PREFIX + current.pathname + current.search;
++    const savedParent = readJson(win.sessionStorage, cacheKey, null);
++    const previous = storedContext(win);
++    const returningToCurrent = previous && cleanLocalPath(contextUrl(previous, origin), origin) === currentPath;
++    let context = resolveContext(win, settings.moduleRootUrl, undefined, settings);
++    // Details return to a clean catalog URL. Keep that catalog's own parent
++    // separately from the details' list-state record, so a second Back still
++    // reaches (for example) the reading sprint rather than losing a level.
++    if (!currentUrl(win).searchParams.has("practice_return") && returningToCurrent
++      && savedParent && Date.now() - Number(savedParent.capturedAt || 0) < 4 * 60 * 60 * 1000
++      && cleanLocalPath(contextUrl(savedParent, origin), origin) !== currentPath) {
++      context = savedParent;
++    }
++    function parentChainCycles(parent) {
++      const visited = new Set([cacheKey]);
++      let cursor = parent;
++      // Catalogs are few, but do not trust old browser storage to be acyclic.
++      for (let depth = 0; cursor && depth < 32; depth += 1) {
++        const source = cleanNavigationUrl(contextUrl(cursor, origin), origin);
++        const key = HUB_CONTEXT_PREFIX + source.pathname + source.search;
++        if (visited.has(key)) return true;
++        visited.add(key);
++        cursor = readJson(win.sessionStorage, key, null);
++        if (cursor && Date.now() - Number(cursor.capturedAt || 0) >= 4 * 60 * 60 * 1000) return false;
++      }
++      return Boolean(cursor);
++    }
++
++    if (!isRoot && parentChainCycles(context)) {
++      // Revisiting a catalog through the main tabs closes that navigation loop.
++      // Keep its original parent instead of overwriting A -> root with A -> B -> A.
++      if (savedParent && Date.now() - Number(savedParent.capturedAt || 0) < 4 * 60 * 60 * 1000
++        && !parentChainCycles(savedParent)) {
++        context = savedParent;
++      } else {
++        const root = contextParts(settings.moduleRootUrl, origin, "/practice");
++        context = {
++          ...context, sourcePath: root.path, sourceSearchParams: root.search,
++          sourceHash: root.hash, sourceMode: sourceModeForPath(root.path),
++          activeTab: root.hash.replace(/^#/, "")
++        };
++      }
++    }
++    if (!isRoot) writeJson(win.sessionStorage, cacheKey, context);
++    const backUrl = contextUrl(context, origin);
+     let bypassPopState = false;
+ 
+-    function go(target) {
++    function go(target, returning = false) {
++      if (returning) {
++        const listKey = LIST_STATE_PREFIX + context.sourcePath + (context.sourceSearchParams || "");
++        const savedList = readJson(win.sessionStorage, listKey, null);
++        const returned = { ...(savedList || context), returning: true };
++        writeJson(win.sessionStorage, listKey, returned);
++        writeJson(win.sessionStorage, CONTEXT_KEY, returned);
++      }
+       bypassPopState = true;
+       assign(win, target);
+     }
+ 
+     win.document.querySelectorAll("[data-practice-module-back]").forEach((button) => {
+-      button.textContent = "← 返回练习中心";
++      button.hidden = isRoot;
++      button.textContent = `← ${returnLabel(context.sourceMode)}`;
++      if (button.href !== undefined) button.href = backUrl;
+       button.addEventListener("click", (event) => {
++        if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+         event.preventDefault();
+-        go(cleanLocalPath(settings.moduleRootUrl, win.location.origin, "/practice"));
++        go(backUrl, true);
+       });
+     });
+     win.document.querySelectorAll("[data-practice-module-exit]").forEach((button) => {
+       button.textContent = context.moduleExitLabel || settings.moduleExitLabel;
++      if (button.href !== undefined) button.href = moduleExitUrl(context, origin);
+       button.addEventListener("click", (event) => {
++        if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+         event.preventDefault();
+-        go(moduleExitUrl(context, win.location.origin));
++        go(moduleExitUrl(context, origin));
+       });
+     });
+ 
+@@ -445,7 +516,7 @@
+     win.history.pushState({ practiceHubGuard: true }, "", win.location.href);
+     win.addEventListener("popstate", () => {
+       if (bypassPopState) return;
+-      go(isRoot ? moduleExitUrl(context, win.location.origin) : contextUrl(context, win.location.origin));
++      go(isRoot ? moduleExitUrl(context, origin) : backUrl, !isRoot);
+     });
+     return { context };
+   }
+diff --git a/templates/auth/_entrance_shell.html b/templates/auth/_entrance_shell.html
+index 288a5baa..110a3234 100644
+--- a/templates/auth/_entrance_shell.html
++++ b/templates/auth/_entrance_shell.html
+@@ -1,5 +1,6 @@
+-{% macro entrance_shell(panel_labelledby, panel_modifier='') -%}
++{% macro entrance_shell(panel_labelledby, panel_modifier='', show_brandbar=true) -%}
+ <div class="auth-entry">
++  {% if show_brandbar %}
+   <header class="auth-entry__brandbar">
+     <a class="auth-entry__brand" href="{{ url_for('login') }}" aria-label="Sage Path 睿然国际教育">
+       <img class="auth-entry__brand-mark"
+@@ -11,6 +12,7 @@
+       </span>
+     </a>
+   </header>
++  {% endif %}
+ 
+   <div class="auth-entry__layout">
+     <section class="auth-entry__visual" aria-label="Sage Path 品牌介绍">
+diff --git a/templates/base.html b/templates/base.html
+index ce7d014f..aed69dda 100644
+--- a/templates/base.html
++++ b/templates/base.html
+@@ -6,24 +6,26 @@
+   'module_exit_url': '/login',
+   'module_exit_label': '退出刷题'
+ }, true) %}
++{% set practice_workspace_entry = request.endpoint in ['practice_library', 'question_type_practice.student_index'] and not (current_user.is_authenticated and current_user.role in ['admin', 'teacher', 'assistant']) %}
+ 
+ <head>
+   <meta charset="utf-8">
+-  <title>学习计划与打卡系统</title>
++  <title>{% if practice_workspace_entry %}{{ '练习中心' if request.endpoint == 'practice_library' else 'IELTS 题型专项' }} · Sage Path{% else %}学习计划与打卡系统{% endif %}</title>
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <!-- Bootstrap CSS -->
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+   <!-- Font Awesome -->
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+   <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
++  {% if practice_workspace_entry %}{% include "practice/_workspace_styles.html" %}{% endif %}
+   {% block extra_head %}{% endblock %}
+   {% if current_user.is_authenticated and current_user.role in ['admin', 'teacher', 'assistant'] %}
+   <link href="{{ url_for('static', filename='admin_suite_v2.css') }}" rel="stylesheet">
+   {% endif %}
+ </head>
+ 
+-<body class="{{ 'dashboard-body' if current_user.is_authenticated else '' }}{{ ' admin-suite-v2' if current_user.is_authenticated and current_user.role in ['admin', 'teacher', 'assistant'] else '' }}">
+-  {% if current_user.is_authenticated %}
++<body class="{{ 'practice-workspace-page' if practice_workspace_entry else ('dashboard-body' if current_user.is_authenticated else '') }}{{ ' admin-suite-v2' if current_user.is_authenticated and current_user.role in ['admin', 'teacher', 'assistant'] else '' }}">
++  {% if current_user.is_authenticated and not practice_workspace_entry %}
+   {% set endpoint = request.endpoint or '' %}
+   <div class="app-shell">
+     <button type="button" class="sidebar-overlay" id="sidebarOverlay" aria-hidden="true" tabindex="-1"></button>
+@@ -147,6 +149,9 @@
+     </div>
+   </div>
+   {% else %}
++  {% if practice_workspace_entry %}
++  {% with workspace_active='center' if request.endpoint == 'practice_library' else 'question_types' %}{% include "practice/_workspace_header.html" %}{% endwith %}
++  {% else %}
+   <header class="topbar">
+     <h1>学习计划与打卡系统</h1>
+     <nav>
+@@ -161,6 +166,7 @@
+       <a href="{{ url_for('login') }}">登录</a>
+     </nav>
+   </header>
++  {% endif %}
+   <main class="container">
+     {% with messages = get_flashed_messages() %}
+     {% if messages %}
+diff --git a/templates/listening/index.html b/templates/listening/index.html
+index 7a9a65c3..4193082b 100644
+--- a/templates/listening/index.html
++++ b/templates/listening/index.html
+@@ -9,7 +9,7 @@
+ <head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+-<title>睿然练习系统 · Sage Path</title>
++<title>精听练习 · Sage Path</title>
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+ <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+ <style>
+@@ -292,208 +292,26 @@
+ }
+ .login-gate .staff-link:hover { color: var(--muted); text-decoration: underline; }
+ 
+-/* 学生概览：新任务 / 做题记录 */
+-.practice-overview {
+-  display: grid;
+-  grid-template-columns: repeat(2, minmax(0, 1fr));
+-  gap: 16px;
+-  margin: 0 0 18px;
+-}
+-.practice-overview__panel {
+-  min-width: 0;
+-  padding: 18px 20px;
+-  background: #fff;
+-  border: 1px solid var(--line);
+-  border-radius: var(--r);
+-  box-shadow: var(--shadow-sm);
+-}
+-.practice-overview__panel--tasks { border-top: 4px solid var(--brand); }
+-.practice-overview__panel--history { border-top: 4px solid var(--success); }
+-.practice-overview__header {
+-  display: flex;
+-  align-items: flex-start;
+-  justify-content: space-between;
+-  gap: 12px;
+-  margin-bottom: 12px;
+-}
+-.practice-overview__heading { min-width: 0; }
+-.practice-overview__title { margin: 0; font-size: var(--fs-lg); color: var(--text-strong); }
+-.practice-overview__description {
+-  margin: 3px 0 0;
+-  color: var(--muted);
+-  font-size: var(--fs-xs);
+-  line-height: 1.45;
+-}
+-.practice-overview__meta {
+-  flex: 0 0 auto;
+-  padding: 3px 9px;
+-  border-radius: var(--r-pill);
+-  background: var(--brand-tint);
+-  color: var(--brand-dark);
+-  font-size: var(--fs-xs);
+-  font-weight: 700;
+-}
+-.practice-overview__panel--history .practice-overview__meta {
+-  background: var(--success-soft);
+-  color: var(--success);
+-}
+-.practice-overview__list { display: grid; gap: 10px; }
+-.practice-overview__footer {
+-  display: block;
+-  margin-top: 12px;
+-  text-align: right;
+-  color: var(--brand-dark);
+-  font-size: var(--fs-sm);
+-  font-weight: 600;
+-  text-decoration: none;
+-}
+-.practice-overview__footer[hidden] { display: none; }
+-.practice-overview__footer:hover { text-decoration: underline; }
+-.today-task {
+-  display: flex;
+-  flex-direction: column;
+-  gap: 8px;
+-  padding: 12px 14px;
+-  border: 1px solid var(--line);
+-  border-radius: var(--r-sm);
+-  background: var(--brand-soft);
+-  text-decoration: none;
+-  color: var(--text-strong);
+-  transition: border-color .15s ease, transform .15s ease;
+-}
+-.today-task:hover { border-color: var(--brand); transform: translateY(-1px); }
+-.today-task__row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+-.today-task__category {
+-  display: inline-block;
+-  padding: 2px 8px;
+-  border-radius: 999px;
+-  background: var(--brand);
+-  color: #fff;
+-  font-size: var(--fs-xs);
+-  font-weight: 700;
+-  letter-spacing: .04em;
+-}
+-.today-task__status {
+-  font-size: var(--fs-xs);
+-  font-weight: 700;
+-  padding: 2px 8px;
+-  border-radius: 999px;
+-}
+-.today-task__status--pending { background: var(--line); color: var(--muted); }
+-.today-task__status--in_progress { background: #fff3cd; color: #8a6d00; }
+-.today-task__status--done { background: #d8f5e3; color: #186b3a; }
+-.today-task__title { font-size: var(--fs-base); font-weight: 700; line-height: 1.35; }
+-.today-task__hint { font-size: var(--fs-sm); color: var(--muted); }
+-.practice-history {
+-  display: block;
+-  overflow: hidden;
+-  border: 1px solid var(--line);
+-  border-radius: var(--r-sm);
+-  background: var(--success-soft);
+-  color: var(--text-strong);
+-  text-decoration: none;
+-  transition: border-color .15s ease, transform .15s ease;
+-}
+-.practice-history:hover { border-color: var(--success); transform: translateY(-1px); }
+-.practice-history__summary,
+-.practice-history__single {
+-  display: flex;
+-  flex-direction: column;
+-  gap: 8px;
+-  padding: 12px 14px;
+-  color: inherit;
+-  text-decoration: none;
+-}
+-.practice-history__summary { cursor: pointer; list-style: none; }
+-.practice-history__summary::-webkit-details-marker { display: none; }
+-.practice-history__expand {
+-  color: var(--success);
+-  font-size: var(--fs-xs);
+-  font-weight: 700;
+-}
+-.practice-history[open] .practice-history__expand::after { content: "收起"; }
+-.practice-history:not([open]) .practice-history__expand::after { content: "查看各部分"; }
+-.practice-history__row {
+-  display: flex;
+-  align-items: center;
+-  justify-content: space-between;
+-  gap: 10px;
+-}
+-.practice-history__source {
+-  color: var(--success);
+-  font-size: var(--fs-xs);
+-  font-weight: 800;
+-  letter-spacing: .04em;
+-}
+-.practice-history__date { color: var(--muted); font-size: var(--fs-xs); }
+-.practice-history__title {
+-  overflow: hidden;
+-  color: var(--text-strong);
+-  font-size: var(--fs-base);
+-  font-weight: 700;
+-  line-height: 1.35;
+-  text-overflow: ellipsis;
+-  white-space: nowrap;
+-}
+-.practice-history__result {
+-  display: flex;
+-  align-items: baseline;
+-  justify-content: space-between;
+-  gap: 10px;
+-  color: var(--muted);
+-  font-size: var(--fs-sm);
+-}
+-.practice-history__score { color: var(--success); font-weight: 800; }
+-.practice-history__attempts {
+-  display: grid;
+-  gap: 7px;
+-  padding: 10px 12px 12px;
+-  border-top: 1px solid rgba(22, 163, 74, .2);
+-  background: rgba(255, 255, 255, .62);
+-}
+-.practice-history__attempt {
+-  display: flex;
+-  align-items: center;
+-  justify-content: space-between;
+-  gap: 10px;
+-  padding: 9px 10px;
+-  border: 1px solid rgba(22, 163, 74, .2);
+-  border-radius: 10px;
+-  background: #fff;
+-  color: var(--text-strong);
+-  font-size: var(--fs-sm);
+-  font-weight: 700;
+-  text-decoration: none;
+-}
+-.practice-history__attempt:hover { border-color: var(--success); }
+-.practice-history__attempt-meta { color: var(--muted); font-size: var(--fs-xs); font-weight: 500; }
+-.practice-history__legacy-note {
+-  padding: 9px 10px;
+-  border-radius: 10px;
+-  background: #fff8dc;
+-  color: #765b00;
+-  font-size: var(--fs-xs);
+-  line-height: 1.5;
++@media (max-width: 720px) {
++  .listening-page { padding: 22px 14px 40px; }
+ }
+-.practice-overview__empty {
+-  padding: 16px;
+-  text-align: center;
+-  color: var(--muted);
+-  font-size: var(--fs-sm);
+-  border: 1px dashed var(--line-strong);
+-  border-radius: var(--r-sm);
+-  background: #fafbfd;
++.listening-library.listening-library__page-title { padding-bottom: 0; }
++.auth-entry__heading #studentEntryTitle {
++  margin: 0; color: #10263f;
++  font-family: "Songti SC", "Noto Serif SC", STSong, SimSun, serif;
++  font-size: 40px; line-height: 1.25; font-weight: 700; letter-spacing: .02em;
+ }
+ @media (max-width: 720px) {
+-  .listening-page { padding: 22px 14px 40px; }
+-  .practice-overview { grid-template-columns: 1fr; }
+-  .practice-overview__panel { padding: 16px; }
++  .auth-entry__heading #studentEntryTitle { font-size: 34px; }
+ }
+ </style>
+ {% include "listening/_library_styles.html" %}
++{% include "practice/_workspace_styles.html" %}
+ </head>
+ {% set auth_gate_visible = not (staff_mode|default(show_upload)) %}
+-<body class="{{ 'auth-entry-body' if auth_gate_visible else '' }}" data-practice-hub="section">
++<body class="practice-workspace-page {{ 'auth-entry-body' if auth_gate_visible else '' }}" data-practice-hub="section">
++{% with workspace_active='listening', workspace_intensive=true %}{% include "practice/_workspace_header.html" %}{% endwith %}
++<div class="listening-page listening-library listening-library__page-title"><h1 class="listening-library__title">精听练习</h1></div>
+ 
+ {% macro render_intensive_catalog(catalog, staff=False, can_manage=False) %}
+ {% set suffix = 'staff' if staff else 'student' %}
+@@ -651,23 +469,11 @@
+ {% if staff_mode|default(show_upload) %}
+ {# 已登录员工或课堂口令模式：跳过学生姓名验证，直接显示内容 #}
+ <div class="listening-page listening-library" id="mainContent">
+-  <div class="identity-bar identity-bar--staff listening-library__identity">
+-    <span>{{ '员工模式' if show_upload else '课堂模式' }} · <span class="name">{{ practice_staff_label or (current_user.display_name if current_user.is_authenticated else '课堂模式') or (current_user.username if current_user.is_authenticated else '课堂模式') }}</span></span>
+-    <span class="actions">
+-      <a href="{{ url_for('practice_library') }}" data-practice-module-back>返回练习中心</a>
+-      <a href="{{ practice_navigation.module_exit_url }}" data-practice-module-exit>{{ practice_navigation.module_exit_label }}</a>
+-      {% if current_user.is_authenticated %}
+-      <a href="{{ url_for('logout') }}">退出登录</a>
+-      {% else %}
+-      <a href="{{ url_for('login') }}">员工登录</a>
+-      {% endif %}
+-    </span>
+-  </div>
++
+ 
+   <div class="listening-library__header">
+     <div>
+       <p class="listening-library__eyebrow">听力 / 精听</p>
+-      <h1 class="listening-library__title">精听练习</h1>
+       <p class="listening-library__summary">选择一个练习开始精听训练。学生自由练习会在当前浏览器自动保存进度。</p>
+     </div>
+     {% if show_upload %}
+@@ -677,9 +483,7 @@
+     {% endif %}
+   </div>
+ 
+-  {% set nav_subject = 'listening' %}
+-  {% set nav_active = 'intensive' %}
+-  {% include "practice/_nav.html" %}
++  <p><a href="{{ url_for('practice_library') }}#practiceAssignedTasks" data-practice-nav>在练习中心查看任务与记录</a></p>
+ 
+   {% if exercises %}
+   {{ render_intensive_catalog(intensive_catalog, staff=True, can_manage=show_upload) }}
+@@ -701,9 +505,9 @@
+ 
+ {% from "auth/_entrance_shell.html" import entrance_shell %}
+ <div id="loginGate">
+-  {% call entrance_shell('studentEntryTitle', 'auth-entry__panel-inner--student') %}
++  {% call entrance_shell('studentEntryTitle', 'auth-entry__panel-inner--student', show_brandbar=false) %}
+   <div class="auth-entry__heading">
+-    <h1 id="studentEntryTitle">学生练习入口</h1>
++    <h2 id="studentEntryTitle">确认学生身份</h2>
+     <p>输入老师登记的姓名，继续你的练习。</p>
+   </div>
+ 
+@@ -739,55 +543,18 @@
+ 
+ <!-- Main content (hidden until student verified) -->
+ <div class="listening-page listening-library" id="mainContent" style="display:none">
+-  <div class="identity-bar listening-library__identity">
+-    <span>欢迎，<span class="name" id="displayName"></span></span>
+-    <span class="actions">
+-      <button onclick="logout()">切换账号</button>
+-      <a href="{{ url_for('practice_library') }}" data-practice-module-back>返回练习中心</a>
+-      <a href="{{ practice_navigation.module_exit_url }}" data-practice-module-exit>{{ practice_navigation.module_exit_label }}</a>
+-    </span>
+-  </div>
++
+ 
+   <div class="listening-library__header">
+     <div>
+       <p class="listening-library__eyebrow">听力 / 精听</p>
+-      <h1 class="listening-library__title">精听练习</h1>
+       <p class="listening-library__summary">选择一个练习开始精听训练。自由练习进度会保存在当前浏览器。</p>
+     </div>
+   </div>
+ 
+-  <section class="practice-overview" id="practiceOverview" aria-label="任务与做题记录">
+-    <article class="practice-overview__panel practice-overview__panel--tasks">
+-      <div class="practice-overview__header">
+-        <div class="practice-overview__heading">
+-          <h2 class="practice-overview__title">当前任务</h2>
+-          <p class="practice-overview__description">现在可以开始或继续的练习</p>
+-        </div>
+-        <span class="practice-overview__meta" id="newTasksMeta">加载中</span>
+-      </div>
+-      <div class="practice-overview__list" id="newTasksList" aria-live="polite">
+-        <div class="practice-overview__empty">正在加载任务…</div>
+-      </div>
+-      <a class="practice-overview__footer" id="newTasksMore" href="{{ url_for('practice_library') }}#practiceAssignedTasks">查看全部任务与历史 →</a>
+-    </article>
+ 
+-    <article class="practice-overview__panel practice-overview__panel--history">
+-      <div class="practice-overview__header">
+-        <div class="practice-overview__heading">
+-          <h2 class="practice-overview__title">做题记录</h2>
+-          <p class="practice-overview__description">服务器已保存的最近提交</p>
+-        </div>
+-        <span class="practice-overview__meta" id="practiceHistoryMeta">加载中</span>
+-      </div>
+-      <div class="practice-overview__list" id="practiceHistoryList" aria-live="polite">
+-        <div class="practice-overview__empty">正在加载记录…</div>
+-      </div>
+-    </article>
+-  </section>
+ 
+-  {% set nav_subject = 'listening' %}
+-  {% set nav_active = 'intensive' %}
+-  {% include "practice/_nav.html" %}
++  <p><a href="{{ url_for('practice_library') }}#practiceAssignedTasks" data-practice-nav>在练习中心查看任务与记录</a></p>
+ 
+   {% if exercises %}
+   {{ render_intensive_catalog(intensive_catalog, staff=False) }}
+@@ -801,7 +568,6 @@
+ 
+ {% endif %}
+ 
+-<script src="{{ url_for('static', filename='js/practice_task_lists.js') }}"></script>
+ <script>
+ // Only run student verification JS if not in staff mode
+ if (document.getElementById('loginGate')) {
+@@ -878,134 +644,23 @@ if (document.getElementById('loginGate')) {
+     });
+   }
+ 
++  function updateIntensiveIdentity(name) {
++    const label = document.querySelector('[data-practice-identity-label]');
++    if (label) label.textContent = name ? `学生：${name}` : '未确认身份';
++    const switchButton = document.getElementById('practiceIntensiveIdentitySwitch');
++    if (switchButton) switchButton.hidden = !name;
++    const defaults = window.PRACTICE_NAVIGATION_DEFAULTS || {};
++    if ((defaults.identityMode || defaults.identity_mode) !== 'student_account') {
++      defaults.identityMode = defaults.identity_mode = name ? 'verified_student' : 'guest';
++      window.PRACTICE_NAVIGATION_DEFAULTS = defaults;
++    }
++  }
++
+   function showMain(name) {
+     document.getElementById('loginGate').style.display = 'none';
+     document.getElementById('mainContent').style.display = 'block';
+-    document.getElementById('displayName').textContent = name;
++    updateIntensiveIdentity(name);
+     refreshExerciseProgress(name);
+-    loadPracticeOverview();
+-  }
+-
+-  function escapeHtml(s) {
+-    return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({
+-      '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+-    })[c]);
+-  }
+-
+-  function formatPracticeDate(value) {
+-    const match = String(value || '').match(/^(\d{4})-(\d{2})-(\d{2})$/);
+-    return match ? `${Number(match[2])}月${Number(match[3])}日` : (value || '');
+-  }
+-
+-  function formatAttemptTime(value) {
+-    if (!value) return '';
+-    const normalized = /(?:Z|[+-]\d{2}:?\d{2})$/.test(value) ? value : `${value}Z`;
+-    const date = new Date(normalized);
+-    if (Number.isNaN(date.getTime())) return '';
+-    return new Intl.DateTimeFormat('zh-CN', {
+-      hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'Asia/Shanghai'
+-    }).format(date);
+-  }
+-
+-  function renderNewTasks(data) {
+-    const list = document.getElementById('newTasksList');
+-    const meta = document.getElementById('newTasksMeta');
+-    const more = document.getElementById('newTasksMore');
+-    if (!list || !meta) return;
+-    const tasks = PracticeTaskLists.fromGroups(data && data.groups).current;
+-    meta.textContent = `${tasks.length} 项待完成`;
+-    if (more) more.hidden = false;
+-    if (tasks.length === 0) {
+-      list.innerHTML = '<div class="practice-overview__empty">当前没有待完成任务，可以从下方题库自由练习。</div>';
+-      return;
+-    }
+-    list.innerHTML = tasks.slice(0, 4).map(task => {
+-      const locked = PracticeTaskLists.isLocked(task);
+-      const href = locked ? '#' : (task.url || '#');
+-      const hint = task.status === 'in_progress'
+-        ? ((task.completion_rate != null) ? `进度 ${task.completion_rate}% · 继续做题` : '继续做题')
+-        : (locked ? (task.status_label || task.task_status_label || task.availability_label) : `${formatPracticeDate(task.date)} · 点击进入练习`);
+-      return `
+-        <a class="today-task${locked ? ' today-task--locked' : ''}" href="${escapeHtml(href)}"${locked ? ' aria-disabled="true" onclick="return false"' : ''}>
+-          <div class="today-task__row">
+-            <span class="today-task__category">${escapeHtml(task.category)}</span>
+-            <span class="today-task__status today-task__status--${escapeHtml(task.status)}">${escapeHtml(task.status_label)}</span>
+-          </div>
+-          <div class="today-task__title">${escapeHtml(task.title)}</div>
+-          <div class="today-task__hint">${escapeHtml(hint)}</div>
+-        </a>`;
+-    }).join('');
+-  }
+-
+-  function renderPracticeHistory(data) {
+-    const list = document.getElementById('practiceHistoryList');
+-    const meta = document.getElementById('practiceHistoryMeta');
+-    if (!list || !meta) return;
+-    const records = Array.isArray(data && data.records) ? data.records : [];
+-    meta.textContent = records.length ? `最近 ${records.length} 条` : '暂无记录';
+-    if (records.length === 0) {
+-      list.innerHTML = '<div class="practice-overview__empty">完成并提交练习后，记录会显示在这里。</div>';
+-      return;
+-    }
+-    list.innerHTML = records.map(record => {
+-      const attempts = Array.isArray(record.attempts) ? record.attempts : [];
+-      const missing = Number(record.legacy_missing_attempts || 0);
+-      const expandable = attempts.length > 1 || missing > 0;
+-      const content = `
+-        <div class="practice-history__row">
+-          <span class="practice-history__source">${escapeHtml(record.source_label)}</span>
+-          <span class="practice-history__date">${escapeHtml(formatPracticeDate(record.date))}</span>
+-        </div>
+-        <div class="practice-history__title">${escapeHtml(record.title)}</div>
+-        <div class="practice-history__result">
+-          <span>${escapeHtml(record.scope_label)}</span>
+-          <span class="practice-history__score">${escapeHtml(record.correct_count)}/${escapeHtml(record.total_count)} · ${escapeHtml(record.accuracy)}%</span>
+-        </div>`;
+-      if (!expandable) {
+-        return `<div class="practice-history"><a class="practice-history__single" href="${escapeHtml(record.url)}">${content}</a></div>`;
+-      }
+-      const attemptLinks = attempts.map(attempt => {
+-        const time = formatAttemptTime(attempt.submitted_at);
+-        return `
+-          <a class="practice-history__attempt" href="${escapeHtml(attempt.url)}">
+-            <span>${escapeHtml(attempt.label)}</span>
+-            <span class="practice-history__attempt-meta">${time ? `${escapeHtml(time)} · ` : ''}${escapeHtml(attempt.correct_count)}/${escapeHtml(attempt.total_count)} · ${escapeHtml(attempt.accuracy)}%</span>
+-          </a>`;
+-      }).join('');
+-      const legacyNote = missing > 0
+-        ? `<div class="practice-history__legacy-note">另有 ${missing} 次旧版提交。旧版会覆盖前一次答案，因此只能确认提交发生过，无法安全还原答题明细。</div>`
+-        : '';
+-      return `
+-        <details class="practice-history">
+-          <summary class="practice-history__summary">
+-            ${content}
+-            <span class="practice-history__expand" aria-hidden="true"></span>
+-          </summary>
+-          <div class="practice-history__attempts">${attemptLinks}${legacyNote}</div>
+-        </details>`;
+-    }).join('');
+-  }
+-
+-  function renderOverviewError(listId, metaId, message) {
+-    const list = document.getElementById(listId);
+-    const meta = document.getElementById(metaId);
+-    if (list) list.innerHTML = `<div class="practice-overview__empty">${escapeHtml(message)}</div>`;
+-    if (meta) meta.textContent = '加载失败';
+-  }
+-
+-  function loadPracticeOverview() {
+-    Promise.all([
+-      fetch('/api/practice/tasks', { credentials: 'same-origin' }).then(r => r.ok ? r.json() : null),
+-      fetch('/api/practice/history?limit=4', { credentials: 'same-origin' }).then(r => r.ok ? r.json() : null),
+-    ]).then(([tasks, history]) => {
+-      if (tasks && tasks.ok) renderNewTasks(tasks);
+-      else renderOverviewError('newTasksList', 'newTasksMeta', '任务加载失败，请刷新重试。');
+-      if (history && history.ok) renderPracticeHistory(history);
+-      else renderOverviewError('practiceHistoryList', 'practiceHistoryMeta', '记录加载失败，请刷新重试。');
+-    }).catch(() => {
+-      renderOverviewError('newTasksList', 'newTasksMeta', '任务加载失败，请刷新重试。');
+-      renderOverviewError('practiceHistoryList', 'practiceHistoryMeta', '记录加载失败，请刷新重试。');
+-    });
+   }
+ 
+   function logout() {
+@@ -1015,10 +670,7 @@ if (document.getElementById('loginGate')) {
+     document.getElementById('mainContent').style.display = 'none';
+     document.getElementById('studentName').value = '';
+     document.getElementById('errorMsg').hidden = true;
+-    document.getElementById('newTasksList').innerHTML = '<div class="practice-overview__empty">正在加载任务…</div>';
+-    document.getElementById('newTasksMeta').textContent = '加载中';
+-    document.getElementById('practiceHistoryList').innerHTML = '<div class="practice-overview__empty">正在加载记录…</div>';
+-    document.getElementById('practiceHistoryMeta').textContent = '加载中';
++    updateIntensiveIdentity('');
+     document.getElementById('studentName').focus();
+   }
+ 
+@@ -1032,7 +684,6 @@ if (document.getElementById('loginGate')) {
+     const saved = sessionStorage.getItem('listening_student') || localStorage.getItem('listening_student');
+     if (saved && document.getElementById('mainContent').style.display !== 'none') {
+       refreshExerciseProgress(saved);
+-      loadPracticeOverview();
+     }
+   });
+ 
+diff --git a/templates/listening/jijing_index.html b/templates/listening/jijing_index.html
+index 1475ff56..f0239418 100644
+--- a/templates/listening/jijing_index.html
++++ b/templates/listening/jijing_index.html
+@@ -19,27 +19,7 @@
+   {% set collections = [{"id": "idictation", "title": "听力机经", "part_count": catalog.part_count}] %}
+ {% endif %}
+ <div class="practice-workspace" data-practice-workspace>
+-  <header class="practice-workspace__topbar">
+-    <div class="practice-workspace__brand-nav">
+-      <a class="practice-workspace__brand" href="{{ url_for('practice_library') }}" data-practice-module-back aria-label="返回练习中心">
+-        <img src="{{ url_for('static', filename='brand/sagepath-mark.png') }}" alt="">
+-        <span>Sage Path</span>
+-      </a>
+-      <span class="practice-workspace__context">机经</span>
+-      <nav class="practice-workspace__subjects" aria-label="科目导航">
+-        <a class="is-active" href="{{ url_for('listening_jijing_index') }}" aria-current="page">听力</a>
+-        <a href="{{ url_for('reading_jijing_index') }}">阅读</a>
+-        <a href="{{ url_for('writing_library.index') }}">写作</a>
+-      </nav>
+-    </div>
+-    <div class="practice-workspace__account">
+-      <a href="{{ url_for('practice_library') }}" data-practice-module-back>返回练习中心</a>
+-      <a href="{{ practice_navigation.module_exit_url }}" data-practice-module-exit>{{ practice_navigation.module_exit_label }}</a>
+-      {% if current_user.is_authenticated %}
+-      <span aria-label="当前用户 {{ current_user.username }}">{{ current_user.username[:1]|upper }}</span>
+-      {% endif %}
+-    </div>
+-  </header>
++  {% with workspace_active='listening' %}{% include "practice/_workspace_header.html" %}{% endwith %}
+ 
+   <div class="practice-workspace__layout">
+     <aside class="practice-workspace__sidebar practice-workspace__sidebar--scroll" id="practice-catalog" aria-label="听力机经目录">
+@@ -96,6 +76,7 @@
+     <button class="practice-workspace__scrim" type="button" aria-label="关闭题库目录" data-catalog-scrim hidden></button>
+ 
+     <main class="practice-workspace__main">
++      <h1 class="practice-workspace__title">听力机经</h1>
+       <span class="practice-workspace__page-watermark" aria-hidden="true">SAGEPATH</span>
+       <button class="practice-workspace__catalog-button"
+               type="button"
+@@ -121,7 +102,7 @@
+             <div>
+               <p>听力 / 机经 / {{ collection.title }} {{ book.in_book }}</p>
+               <div>
+-                <h1>{{ book_label }} {{ book.in_book }}</h1>
++                <h2>{{ book_label }} {{ book.in_book }}</h2>
+                 <span>{{ book.tests|length }} 个练习 · {{ book.progress.total }} 个 Part</span>
+               </div>
+             </div>
+diff --git a/templates/listening/test_index.html b/templates/listening/test_index.html
+index dda23415..a27d241d 100644
+--- a/templates/listening/test_index.html
++++ b/templates/listening/test_index.html
+@@ -9,34 +9,14 @@
+ <head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+-<title>剑桥雅思听力真题 · Sage Path</title>
++<title>剑雅听力 · Sage Path</title>
+ <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+ {% include "practice/_workspace_styles.html" %}
+ </head>
+ <body class="practice-workspace-page" data-practice-hub="section">
+ {% set workspace_watermark = 'LISTENING' %}
+ <div class="practice-workspace" data-practice-workspace>
+-  <header class="practice-workspace__topbar">
+-    <div class="practice-workspace__brand-nav">
+-      <a class="practice-workspace__brand" href="{{ url_for('practice_library') }}" data-practice-module-back aria-label="返回练习中心">
+-        <img src="{{ url_for('static', filename='brand/sagepath-mark.png') }}" alt="">
+-        <span>Sage Path</span>
+-      </a>
+-      <span class="practice-workspace__context">剑雅真题</span>
+-      <nav class="practice-workspace__subjects" aria-label="科目导航">
+-        <a class="is-active" href="{{ url_for('listening_test_index') }}" aria-current="page">听力</a>
+-        <a href="{{ url_for('reading_test_index') }}">阅读</a>
+-        <a href="{{ url_for('writing_library.index') }}">写作</a>
+-      </nav>
+-    </div>
+-    <div class="practice-workspace__account">
+-      <a href="{{ url_for('practice_library') }}" data-practice-module-back>返回练习中心</a>
+-      <a href="{{ practice_navigation.module_exit_url }}" data-practice-module-exit>{{ practice_navigation.module_exit_label }}</a>
+-      {% if current_user.is_authenticated %}
+-      <span aria-label="当前用户 {{ current_user.username }}">{{ current_user.username[:1]|upper }}</span>
+-      {% endif %}
+-    </div>
+-  </header>
++  {% with workspace_active='listening' %}{% include "practice/_workspace_header.html" %}{% endwith %}
+ 
+   <div class="practice-workspace__layout">
+     <aside class="practice-workspace__sidebar" id="practice-catalog" aria-label="听力题库目录">
+@@ -109,6 +89,7 @@
+     <button class="practice-workspace__scrim" type="button" aria-label="关闭题库目录" data-catalog-scrim hidden></button>
+ 
+     <main class="practice-workspace__main">
++      <h1 class="practice-workspace__title">剑雅听力</h1>
+       <span class="practice-workspace__page-watermark" aria-hidden="true">SAGEPATH</span>
+       <button class="practice-workspace__catalog-button"
+               type="button"
+@@ -134,7 +115,7 @@
+             <div>
+               <p>听力 / {{ '剑桥真题' if book.series == 'cambridge' else group.name }} / {{ book.label }}</p>
+               <div>
+-                <h1>{% if book.series == 'cambridge' %}剑桥雅思 {{ book.book }}{% else %}{{ book.label }} 听力{% endif %}</h1>
++                <h2>{% if book.series == 'cambridge' %}剑桥雅思 {{ book.book }}{% else %}{{ book.label }} 听力{% endif %}</h2>
+                 <span>{{ book.tests|length }} Tests · 每套 {{ '4 个 Part' if book.series == 'jfdr' else '40 题' }} / 约 30 分钟</span>
+               </div>
+             </div>
+diff --git a/templates/practice/_workspace_header.html b/templates/practice/_workspace_header.html
+new file mode 100644
+index 00000000..b8a49b76
+--- /dev/null
++++ b/templates/practice/_workspace_header.html
+@@ -0,0 +1,39 @@
++{# Shared catalog navigation. The brand is never a context-sensitive back button. #}
++{% set workspace_active = workspace_active|default('center') %}
++{% set identity_mode = practice_navigation.identity_mode|default('guest') %}
++{% set identity_name = (current_user.display_name or current_user.username) if identity_mode in ['staff', 'student_account'] else (session.get('practice_student_name', '') if identity_mode == 'verified_student' else '') %}
++{% if identity_mode in ['verified_student', 'student_account'] and student is defined and student %}{% set identity_name = student.full_name %}{% endif %}
++<header class="practice-workspace__topbar" data-practice-workspace-header>
++  <div class="practice-workspace__brand-nav">
++    <a class="practice-workspace__brand" href="{{ url_for('practice_library') }}" data-practice-home aria-label="Sage Path 练习中心">
++      <img src="{{ url_for('static', filename='brand/sagepath-mark.png') }}" alt="">
++      <span>Sage Path</span>
++    </a>
++    <nav class="practice-workspace__subjects" aria-label="练习导航">
++      {% for key, label, target in [('center', '练习中心', url_for('practice_library')), ('listening', '听力', url_for('listening_test_index')), ('reading', '阅读', url_for('reading_test_index')), ('writing', '写作', url_for('writing_library.index')), ('question_types', '题型专项', '/practice/question-types')] %}
++      <a href="{{ target }}" data-practice-nav{% if workspace_active == key %} class="is-active" aria-current="page"{% endif %}>{{ label }}</a>
++      {% endfor %}
++    </nav>
++  </div>
++  <div class="practice-workspace__account">
++    {% if request.endpoint != 'practice_library' %}
++    <a href="{{ url_for('practice_library') }}" data-practice-module-back>返回练习中心</a>
++    {% endif %}
++    <a class="practice-workspace__identity" href="{{ url_for('practice_library') }}#practiceIdentity" data-practice-nav data-practice-identity-label>
++      {%- if identity_mode == 'staff' -%}{{ {'admin': '管理员', 'teacher': '教师', 'assistant': '助教'}.get(current_user.role, '员工') }} · {{ identity_name }}
++      {%- elif identity_mode == 'classroom' -%}课堂模式
++      {%- elif identity_name -%}学生：{{ identity_name }}
++      {%- else -%}未确认身份
++      {%- endif -%}
++    </a>
++    {% if workspace_intensive|default(false) and identity_mode not in ['staff', 'classroom'] %}
++    <button type="button" id="practiceIntensiveIdentitySwitch" onclick="logout()" hidden>切换学生</button>
++    {% endif %}
++    <a href="{{ practice_navigation.module_exit_url }}" data-practice-module-exit>{{ practice_navigation.module_exit_label }}</a>
++    {% if identity_mode == 'staff' %}
++    <a href="{{ url_for('logout') }}">退出登录</a>
++    {% elif identity_mode == 'classroom' %}
++    <a href="{{ url_for('login') }}">员工登录</a>
++    {% endif %}
++  </div>
++</header>
+diff --git a/templates/practice/_workspace_styles.html b/templates/practice/_workspace_styles.html
+index a95521b7..3d3cd663 100644
+--- a/templates/practice/_workspace_styles.html
++++ b/templates/practice/_workspace_styles.html
+@@ -295,7 +295,8 @@
+   align-items: baseline;
+   gap: 12px;
+ }
+-.practice-workspace__page-heading h1 {
++.practice-workspace__page-heading h1,
++.practice-workspace__page-heading h2 {
+   margin: 0;
+   color: var(--lw-neutral-900);
+   font-size: 32px;
+@@ -708,7 +709,8 @@
+   .practice-workspace__main { padding: 20px 14px 36px; }
+   .practice-workspace__page-watermark { display: none; }
+   .practice-workspace__page-heading { align-items: flex-start; flex-direction: column; gap: 14px; }
+-  .practice-workspace__page-heading h1 { font-size: 27px; }
++  .practice-workspace__page-heading h1,
++.practice-workspace__page-heading h2 { font-size: 27px; }
+   .practice-workspace__book-progress { width: 100%; flex-direction: row; align-items: center; }
+   .practice-workspace__book-progress > span:first-child { display: block; }
+   .practice-workspace__progress-track { flex: 1; width: auto; }
+@@ -748,4 +750,28 @@
+     transition-duration: .01ms !important;
+   }
+ }
++/* Shared navigation remains available at narrow widths. Catalog visuals stay unchanged. */
++.practice-workspace__title { margin: 0 0 20px; font-size: 24px; line-height: 1.3; }
++[data-practice-workspace-header] [hidden] { display: none !important; }
++[data-practice-workspace-header] .practice-workspace__identity {
++  max-width: 180px; padding: 7px 10px; border-radius: 999px;
++  background: var(--lw-green-50); color: var(--lw-green-600);
++  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
++}
++[data-practice-workspace-header] .practice-workspace__subjects a { white-space: nowrap; }
++[data-practice-workspace-header] .practice-workspace__account { min-width: 0; }
++@media (max-width: 1180px) {
++  [data-practice-workspace-header] { position: relative; height: auto; min-height: 60px; flex-wrap: wrap; gap: 8px; padding-top: 10px; padding-bottom: 10px; }
++  [data-practice-workspace-header] .practice-workspace__brand-nav { width: 100%; flex-wrap: wrap; gap: 12px; }
++  [data-practice-workspace-header] .practice-workspace__brand span { display: inline; }
++  [data-practice-workspace-header] .practice-workspace__subjects { flex-wrap: wrap; gap: 4px; min-height: 36px; }
++  [data-practice-workspace-header] .practice-workspace__subjects a { min-height: 36px; }
++  [data-practice-workspace-header] .practice-workspace__account { width: 100%; height: auto; flex-wrap: wrap; gap: 10px; }
++  [data-practice-workspace-header] .practice-workspace__account a,
++  [data-practice-workspace-header] .practice-workspace__account button { display: inline-flex; align-items: center; min-height: 32px; }
++}
++@media (max-width: 520px) {
++  [data-practice-workspace-header] .practice-workspace__subjects { width: 100%; justify-content: space-between; }
++  [data-practice-workspace-header] .practice-workspace__subjects a { min-width: 0; padding: 0 5px; font-size: 13px; }
++}
+ </style>
+diff --git a/templates/practice/exam_sprint.html b/templates/practice/exam_sprint.html
+index edd9034b..8cb3ef7f 100644
+--- a/templates/practice/exam_sprint.html
++++ b/templates/practice/exam_sprint.html
+@@ -16,28 +16,7 @@
+ </head>
+ <body class="practice-workspace-page" data-practice-hub="section">
+ <div class="practice-workspace" data-practice-workspace>
+-  <header class="practice-workspace__topbar">
+-    <div class="practice-workspace__brand-nav">
+-      <a class="practice-workspace__brand" href="{{ url_for('practice_library') }}" data-practice-module-back aria-label="返回练习中心">
+-        <img src="{{ url_for('static', filename='brand/sagepath-mark.png') }}" alt="">
+-        <span>Sage Path</span>
+-      </a>
+-      <span class="practice-workspace__context">考前冲刺</span>
+-      <nav class="practice-workspace__subjects" aria-label="科目导航">
+-        {% for key, label in [('listening', '听力'), ('reading', '阅读')] %}
+-        <a{% if subject == key %} class="is-active" aria-current="page"{% endif %} href="{{ url_for('exam_sprint.index', subject=key) }}">{{ label }}</a>
+-        {% endfor %}
+-        <a href="{{ url_for('writing_library.index') }}">写作</a>
+-      </nav>
+-    </div>
+-    <div class="practice-workspace__account">
+-      <a href="{{ url_for('practice_library') }}" data-practice-module-back>返回练习中心</a>
+-      <a href="{{ practice_navigation.module_exit_url }}" data-practice-module-exit>{{ practice_navigation.module_exit_label }}</a>
+-      {% if current_user.is_authenticated %}
+-      <span aria-label="当前用户 {{ current_user.username }}">{{ current_user.username[:1]|upper }}</span>
+-      {% endif %}
+-    </div>
+-  </header>
++  {% with workspace_active=subject %}{% include "practice/_workspace_header.html" %}{% endwith %}
+ 
+   <div class="practice-workspace__layout">
+     <aside class="practice-workspace__sidebar practice-workspace__sidebar--scroll" id="practice-catalog" aria-label="{{ subject_label }}冲刺目录">
+diff --git a/templates/practice/index_content.html b/templates/practice/index_content.html
+index 77500c7b..be3bb849 100644
+--- a/templates/practice/index_content.html
++++ b/templates/practice/index_content.html
+@@ -26,6 +26,7 @@ main.container {
+   letter-spacing: .12em;
+   text-transform: uppercase;
+ }
++.practice-hero h1,
+ .practice-hero h2 {
+   margin: 0;
+   color: var(--text-strong);
+@@ -514,12 +515,12 @@ a.practice-resource:hover {
+   <section class="practice-hero">
+     <div>
+       <p class="practice-hero__eyebrow">Practice Library</p>
+-      <h2>雅思与托福统一刷题入口</h2>
++      {% if practice_workspace_entry|default(false) %}<h1>练习中心</h1>{% else %}<h2>雅思与托福统一刷题入口</h2>{% endif %}
+       <p>雅思按科目与教材进入；托福按真题日期进入正式考试模式。</p>
+     </div>
+   </section>
+ 
+-  <section class="practice-identity{% if is_practice_staff_mode %} practice-identity--staff{% endif %}"
++  <section id="practiceIdentity" class="practice-identity{% if is_practice_staff_mode %} practice-identity--staff{% endif %}"
+            aria-label="{{ '访问模式' if is_practice_staff_mode else '学生身份' }}"
+            data-practice-staff-mode="{{ '1' if is_practice_staff_mode else '0' }}"
+            data-staff-name="{{ practice_staff_label|default('课堂模式') }}"
+@@ -936,6 +937,8 @@ body.admin-suite-v2 .practice-page{display:grid;grid-template-columns:190px minm
+     localStorage.setItem('listening_student', name);
+     sessionStorage.setItem('listening_student', name);
+     nameEl.textContent = name;
++    const headerIdentity = document.querySelector('[data-practice-identity-label]');
++    if (headerIdentity) headerIdentity.textContent = `学生：${name}`;
+     hintEl.textContent = '当前设备已绑定，提交后会进入后台练习记录。';
+     form.hidden = true;
+     switchBtn.hidden = false;
+@@ -959,6 +962,8 @@ body.admin-suite-v2 .practice-page{display:grid;grid-template-columns:190px minm
+     verified = false;
+     setNavigationIdentity('guest');
+     nameEl.textContent = '未绑定';
++    const headerIdentity = document.querySelector('[data-practice-identity-label]');
++    if (headerIdentity) headerIdentity.textContent = '未确认身份';
+     hintEl.textContent = '输入后台学生档案中的姓名后，刷题记录会同步到后台。';
+     form.hidden = false;
+     switchBtn.hidden = true;
+diff --git a/templates/question_type_practice/student_index.html b/templates/question_type_practice/student_index.html
+index 09918dcd..1e460b3c 100644
+--- a/templates/question_type_practice/student_index.html
++++ b/templates/question_type_practice/student_index.html
+@@ -4,11 +4,11 @@
+ {% block header_actions %}<a class="btn" href="{{ url_for('practice_library') }}" data-practice-module-back>返回练习中心</a>{% endblock %}
+ {% macro question_type_builder() %}
+ <style>
+-.qt-shell{max-width:1080px;margin:0 auto}.qt-hero,.qt-builder,.qt-preview{border:1px solid #dce4df;border-radius:15px;background:#fff;margin-bottom:12px}.qt-hero{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:16px 18px;background:linear-gradient(135deg,#e9f6f3,#fffdf8)}.qt-hero__copy{min-width:0}.qt-hero h2{margin:0 0 4px;font-size:22px}.qt-hero p{margin:0;color:#536175;font-size:14px}.qt-student{flex:0 0 auto;padding:7px 10px;border:1px solid #b9d9d4;border-radius:999px;background:#fff;color:#315c58;font-size:13px}.qt-warning{max-width:430px;padding:10px 12px;border-radius:9px;background:#fff7ed;color:#9a3412;font-size:13px}.qt-builder{padding:16px 18px}.qt-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:12px;align-items:start}.qt-field{display:grid;gap:5px;min-width:0}.qt-field--subject{grid-column:span 3}.qt-field--type{grid-column:span 9}.qt-field--scope{grid-column:span 3}.qt-field--library{grid-column:span 4}.qt-field--pace{grid-column:span 3}.qt-field--minutes{grid-column:span 2}.qt-field label,.qt-label{color:#334155;font-size:13px;font-weight:800}.qt-field select,.qt-field input{min-height:38px;min-width:0;border:1px solid #cbd5d1;border-radius:9px;padding:0 10px;background:#fff}.qt-filter-tabs{display:flex;gap:6px;flex-wrap:wrap}.qt-filter-tab{min-height:38px;border:1px solid transparent;border-radius:9px;padding:7px 11px;background:#f4f6f8;color:#536175;font-size:14px;cursor:pointer}.qt-filter-tab.is-active{border-color:#ffd7ca;background:#fff0eb;color:#d94c26;font-weight:800}.qt-pace{display:flex;gap:6px}.qt-pace label{display:flex;min-height:38px;gap:6px;align-items:center;border:1px solid #cbd5d1;border-radius:9px;padding:0 9px;white-space:nowrap}.qt-library-fact{min-height:38px;display:flex;align-items:center;border:1px solid #d9e5e1;border-radius:9px;padding:0 10px;background:#f7fbfa;color:#315c58;font-size:13px;font-weight:700}.qt-status{display:flex;align-items:center;gap:9px;min-height:20px;margin-top:10px;color:#536175;font-size:13px;font-weight:700}.qt-retry{border:1px solid #9bc9c2;border-radius:8px;padding:5px 9px;background:#fff;color:#225e5a;font:inherit;cursor:pointer}.qt-preview{padding:16px 18px calc(104px + env(safe-area-inset-bottom))}.qt-preview-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}.qt-preview-head h3{margin:0;font-size:19px}.qt-preview-hint{margin:4px 0 12px;color:#64748b;font-size:13px}.qt-selection-bar{position:fixed;left:50%;bottom:max(12px,env(safe-area-inset-bottom));z-index:30;display:flex;align-items:center;justify-content:space-between;gap:16px;width:min(calc(100% - 32px),1044px);box-sizing:border-box;padding:12px 14px;border:1px solid #9bc9c2;border-radius:13px;background:rgba(240,250,247,.97);box-shadow:0 12px 32px rgba(42,78,73,.22);transform:translateX(-50%);backdrop-filter:blur(12px)}.qt-selection-copy{display:grid;gap:2px;min-width:0}.qt-selection-label{color:#52716d;font-size:11px;font-weight:800;letter-spacing:.04em}.qt-selection-copy strong{color:#1f4f4c}.qt-selection-actions{display:flex;align-items:center;gap:8px;flex:0 0 auto}.qt-selection-bar button{min-height:40px;border-radius:9px;padding:8px 13px;font-weight:800;cursor:pointer}.qt-selection-bar button[disabled]{opacity:.45;cursor:not-allowed}.qt-clear{border:1px solid #9bc9c2;background:#fff;color:#225e5a}.qt-start{min-width:176px;border:1px solid #277c78;background:#277c78;color:#fff}.qt-books{display:grid;gap:10px}.qt-book{border:1px solid #dce4df;border-radius:13px;background:#fbfdfc;overflow:hidden}.qt-book>summary{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 14px;cursor:pointer;list-style:none}.qt-book>summary::-webkit-details-marker{display:none}.qt-book>summary:after{content:'展开';color:#277c78;font-size:13px;font-weight:800}.qt-book[open]>summary{border-bottom:1px solid #dce4df;background:#edf8f5}.qt-book[open]>summary:after{content:'收起'}.qt-book__meta{color:#64748b;font-size:13px}.qt-tests{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding:12px}.qt-test{display:grid;align-content:start;gap:8px}.qt-test h4{margin:0;color:#334155;font-size:16px}.qt-group{position:relative;width:100%;border:1px solid #dce4df;border-radius:11px;padding:12px 40px 12px 12px;background:#fff;color:inherit;font:inherit;text-align:left;cursor:pointer}.qt-group:hover{border-color:#8dc8c2;background:#f7fbfa}.qt-group:focus-visible{outline:3px solid rgba(39,124,120,.25);outline-offset:2px}.qt-group.is-selected{border:2px solid #277c78;background:#e4f6f1;padding:11px 39px 11px 11px;box-shadow:0 0 0 3px rgba(39,124,120,.12)}.qt-group strong{display:block}.qt-group__action{display:block;color:#277c78;font-size:12px;font-weight:800;margin-bottom:4px}.qt-group__check{position:absolute;top:12px;right:12px;display:grid;width:22px;height:22px;place-items:center;border:1px solid #8fa49f;border-radius:50%;color:transparent;font-size:13px;font-weight:900}.qt-group.is-selected .qt-group__check{border-color:#277c78;background:#277c78;color:#fff}.qt-meta{color:#64748b;font-size:12px;margin-top:4px}@media(max-width:880px){.qt-field--subject{grid-column:span 4}.qt-field--type{grid-column:span 8}.qt-field--scope,.qt-field--library{grid-column:span 6}.qt-field--pace{grid-column:span 7}.qt-field--minutes{grid-column:span 5}}@media(max-width:720px){.qt-shell{padding:0 2px}.qt-hero{display:block;padding:14px}.qt-hero p{margin-bottom:10px}.qt-warning{max-width:none}.qt-builder{padding:14px}.qt-grid,.qt-tests{grid-template-columns:1fr}.qt-field--subject,.qt-field--type,.qt-field--scope,.qt-field--library,.qt-field--pace,.qt-field--minutes{grid-column:auto}.qt-filter-tab{padding:7px 10px;font-size:13px}.qt-preview{padding:14px 14px calc(132px + env(safe-area-inset-bottom))}.qt-selection-bar{bottom:max(8px,env(safe-area-inset-bottom));align-items:stretch;flex-direction:column;gap:8px;width:calc(100% - 20px);padding:10px 12px}.qt-selection-actions{width:100%}.qt-clear{flex:0 0 auto}.qt-start{min-width:0;flex:1}}
++.qt-shell{max-width:1080px;margin:0 auto}.qt-hero,.qt-builder,.qt-preview{border:1px solid #dce4df;border-radius:15px;background:#fff;margin-bottom:12px}.qt-hero{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:16px 18px;background:linear-gradient(135deg,#e9f6f3,#fffdf8)}.qt-hero__copy{min-width:0}.qt-hero h1,.qt-hero h2{margin:0 0 4px;font-size:22px}.qt-hero p{margin:0;color:#536175;font-size:14px}.qt-student{flex:0 0 auto;padding:7px 10px;border:1px solid #b9d9d4;border-radius:999px;background:#fff;color:#315c58;font-size:13px}.qt-warning{max-width:430px;padding:10px 12px;border-radius:9px;background:#fff7ed;color:#9a3412;font-size:13px}.qt-builder{padding:16px 18px}.qt-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:12px;align-items:start}.qt-field{display:grid;gap:5px;min-width:0}.qt-field--subject{grid-column:span 3}.qt-field--type{grid-column:span 9}.qt-field--scope{grid-column:span 3}.qt-field--library{grid-column:span 4}.qt-field--pace{grid-column:span 3}.qt-field--minutes{grid-column:span 2}.qt-field label,.qt-label{color:#334155;font-size:13px;font-weight:800}.qt-field select,.qt-field input{min-height:38px;min-width:0;border:1px solid #cbd5d1;border-radius:9px;padding:0 10px;background:#fff}.qt-filter-tabs{display:flex;gap:6px;flex-wrap:wrap}.qt-filter-tab{min-height:38px;border:1px solid transparent;border-radius:9px;padding:7px 11px;background:#f4f6f8;color:#536175;font-size:14px;cursor:pointer}.qt-filter-tab.is-active{border-color:#ffd7ca;background:#fff0eb;color:#d94c26;font-weight:800}.qt-pace{display:flex;gap:6px}.qt-pace label{display:flex;min-height:38px;gap:6px;align-items:center;border:1px solid #cbd5d1;border-radius:9px;padding:0 9px;white-space:nowrap}.qt-library-fact{min-height:38px;display:flex;align-items:center;border:1px solid #d9e5e1;border-radius:9px;padding:0 10px;background:#f7fbfa;color:#315c58;font-size:13px;font-weight:700}.qt-status{display:flex;align-items:center;gap:9px;min-height:20px;margin-top:10px;color:#536175;font-size:13px;font-weight:700}.qt-retry{border:1px solid #9bc9c2;border-radius:8px;padding:5px 9px;background:#fff;color:#225e5a;font:inherit;cursor:pointer}.qt-preview{padding:16px 18px calc(104px + env(safe-area-inset-bottom))}.qt-preview-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}.qt-preview-head h3{margin:0;font-size:19px}.qt-preview-hint{margin:4px 0 12px;color:#64748b;font-size:13px}.qt-selection-bar{position:fixed;left:50%;bottom:max(12px,env(safe-area-inset-bottom));z-index:30;display:flex;align-items:center;justify-content:space-between;gap:16px;width:min(calc(100% - 32px),1044px);box-sizing:border-box;padding:12px 14px;border:1px solid #9bc9c2;border-radius:13px;background:rgba(240,250,247,.97);box-shadow:0 12px 32px rgba(42,78,73,.22);transform:translateX(-50%);backdrop-filter:blur(12px)}.qt-selection-copy{display:grid;gap:2px;min-width:0}.qt-selection-label{color:#52716d;font-size:11px;font-weight:800;letter-spacing:.04em}.qt-selection-copy strong{color:#1f4f4c}.qt-selection-actions{display:flex;align-items:center;gap:8px;flex:0 0 auto}.qt-selection-bar button{min-height:40px;border-radius:9px;padding:8px 13px;font-weight:800;cursor:pointer}.qt-selection-bar button[disabled]{opacity:.45;cursor:not-allowed}.qt-clear{border:1px solid #9bc9c2;background:#fff;color:#225e5a}.qt-start{min-width:176px;border:1px solid #277c78;background:#277c78;color:#fff}.qt-books{display:grid;gap:10px}.qt-book{border:1px solid #dce4df;border-radius:13px;background:#fbfdfc;overflow:hidden}.qt-book>summary{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 14px;cursor:pointer;list-style:none}.qt-book>summary::-webkit-details-marker{display:none}.qt-book>summary:after{content:'展开';color:#277c78;font-size:13px;font-weight:800}.qt-book[open]>summary{border-bottom:1px solid #dce4df;background:#edf8f5}.qt-book[open]>summary:after{content:'收起'}.qt-book__meta{color:#64748b;font-size:13px}.qt-tests{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding:12px}.qt-test{display:grid;align-content:start;gap:8px}.qt-test h4{margin:0;color:#334155;font-size:16px}.qt-group{position:relative;width:100%;border:1px solid #dce4df;border-radius:11px;padding:12px 40px 12px 12px;background:#fff;color:inherit;font:inherit;text-align:left;cursor:pointer}.qt-group:hover{border-color:#8dc8c2;background:#f7fbfa}.qt-group:focus-visible{outline:3px solid rgba(39,124,120,.25);outline-offset:2px}.qt-group.is-selected{border:2px solid #277c78;background:#e4f6f1;padding:11px 39px 11px 11px;box-shadow:0 0 0 3px rgba(39,124,120,.12)}.qt-group strong{display:block}.qt-group__action{display:block;color:#277c78;font-size:12px;font-weight:800;margin-bottom:4px}.qt-group__check{position:absolute;top:12px;right:12px;display:grid;width:22px;height:22px;place-items:center;border:1px solid #8fa49f;border-radius:50%;color:transparent;font-size:13px;font-weight:900}.qt-group.is-selected .qt-group__check{border-color:#277c78;background:#277c78;color:#fff}.qt-meta{color:#64748b;font-size:12px;margin-top:4px}@media(max-width:880px){.qt-field--subject{grid-column:span 4}.qt-field--type{grid-column:span 8}.qt-field--scope,.qt-field--library{grid-column:span 6}.qt-field--pace{grid-column:span 7}.qt-field--minutes{grid-column:span 5}}@media(max-width:720px){.qt-shell{padding:0 2px}.qt-hero{display:block;padding:14px}.qt-hero p{margin-bottom:10px}.qt-warning{max-width:none}.qt-builder{padding:14px}.qt-grid,.qt-tests{grid-template-columns:1fr}.qt-field--subject,.qt-field--type,.qt-field--scope,.qt-field--library,.qt-field--pace,.qt-field--minutes{grid-column:auto}.qt-filter-tab{padding:7px 10px;font-size:13px}.qt-preview{padding:14px 14px calc(132px + env(safe-area-inset-bottom))}.qt-selection-bar{bottom:max(8px,env(safe-area-inset-bottom));align-items:stretch;flex-direction:column;gap:8px;width:calc(100% - 20px);padding:10px 12px}.qt-selection-actions{width:100%}.qt-clear{flex:0 0 auto}.qt-start{min-width:0;flex:1}}
+ </style>
+ <main class="qt-shell" data-practice-hub="section">
+   <section class="qt-hero">
+-    <div class="qt-hero__copy"><h2>按题型练完整题组</h2><p>从剑雅册数、Test 到 Section / Passage 选题，共享题干、选项库和素材保持完整。</p></div>
++    <div class="qt-hero__copy">{% if practice_workspace_entry %}<h1>IELTS 题型专项</h1>{% else %}<h2>按题型练完整题组</h2>{% endif %}<p>从剑雅册数、Test 到 Section / Passage 选题，共享题干、选项库和素材保持完整。</p></div>
+     {% if student %}<strong class="qt-student">当前学生：{{ student.full_name }}</strong>{% else %}<div class="qt-warning">请先在“练习”首页验证学生姓名，再创建会同步到任务中心的自主专项。</div>{% endif %}
+   </section>
+   <section class="qt-builder">
+diff --git a/templates/reading/jijing_index.html b/templates/reading/jijing_index.html
+index 82fd2e09..ff54be6a 100644
+--- a/templates/reading/jijing_index.html
++++ b/templates/reading/jijing_index.html
+@@ -15,27 +15,7 @@
+ </head>
+ <body class="practice-workspace-page" data-practice-hub="section">
+ <div class="practice-workspace" data-practice-workspace>
+-  <header class="practice-workspace__topbar">
+-    <div class="practice-workspace__brand-nav">
+-      <a class="practice-workspace__brand" href="{{ url_for('practice_library') }}" data-practice-module-back aria-label="返回练习中心">
+-        <img src="{{ url_for('static', filename='brand/sagepath-mark.png') }}" alt="">
+-        <span>Sage Path</span>
+-      </a>
+-      <span class="practice-workspace__context">机经</span>
+-      <nav class="practice-workspace__subjects" aria-label="科目导航">
+-        <a href="{{ url_for('listening_jijing_index') }}">听力</a>
+-        <a class="is-active" href="{{ url_for('reading_jijing_index') }}" aria-current="page">阅读</a>
+-        <a href="{{ url_for('writing_library.index') }}">写作</a>
+-      </nav>
+-    </div>
+-    <div class="practice-workspace__account">
+-      <a href="{{ url_for('practice_library') }}" data-practice-module-back>返回练习中心</a>
+-      <a href="{{ practice_navigation.module_exit_url }}" data-practice-module-exit>{{ practice_navigation.module_exit_label }}</a>
+-      {% if current_user.is_authenticated %}
+-      <span aria-label="当前用户 {{ current_user.username }}">{{ current_user.username[:1]|upper }}</span>
+-      {% endif %}
+-    </div>
+-  </header>
++  {% with workspace_active='reading' %}{% include "practice/_workspace_header.html" %}{% endwith %}
+ 
+   <div class="practice-workspace__layout">
+     <aside class="practice-workspace__sidebar practice-workspace__sidebar--scroll" id="practice-catalog" aria-label="阅读机经目录">
+@@ -99,6 +79,7 @@
+     <button class="practice-workspace__scrim" type="button" aria-label="关闭题库目录" data-catalog-scrim hidden></button>
+ 
+     <main class="practice-workspace__main">
++      <h1 class="practice-workspace__title">阅读机经</h1>
+       <span class="practice-workspace__page-watermark" aria-hidden="true">SAGEPATH</span>
+       <button class="practice-workspace__catalog-button"
+               type="button"
+@@ -123,7 +104,7 @@
+             <div>
+               <p>阅读 / 机经 / {{ book.label }}</p>
+               <div>
+-                <h1>阅读机经 {{ book.book }}</h1>
++                <h2>阅读机经 {{ book.book }}</h2>
+                 <span>{{ book.tests|length }} Tests · {{ book_question_count }} 题</span>
+               </div>
+             </div>
+diff --git a/templates/reading/test_index.html b/templates/reading/test_index.html
+index d784e18e..9242395f 100644
+--- a/templates/reading/test_index.html
++++ b/templates/reading/test_index.html
+@@ -9,34 +9,14 @@
+ <head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+-<title>剑桥雅思阅读真题 · Sage Path</title>
++<title>剑雅阅读 · Sage Path</title>
+ <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+ {% include "practice/_workspace_styles.html" %}
+ </head>
+ <body class="practice-workspace-page" data-practice-hub="section">
+ {% set workspace_watermark = 'READING' %}
+ <div class="practice-workspace" data-practice-workspace>
+-  <header class="practice-workspace__topbar">
+-    <div class="practice-workspace__brand-nav">
+-      <a class="practice-workspace__brand" href="{{ url_for('practice_library') }}" data-practice-module-back aria-label="返回练习中心">
+-        <img src="{{ url_for('static', filename='brand/sagepath-mark.png') }}" alt="">
+-        <span>Sage Path</span>
+-      </a>
+-      <span class="practice-workspace__context">剑雅真题</span>
+-      <nav class="practice-workspace__subjects" aria-label="科目导航">
+-        <a href="{{ url_for('listening_test_index') }}">听力</a>
+-        <a class="is-active" href="{{ url_for('reading_test_index') }}" aria-current="page">阅读</a>
+-        <a href="{{ url_for('writing_library.index') }}">写作</a>
+-      </nav>
+-    </div>
+-    <div class="practice-workspace__account">
+-      <a href="{{ url_for('practice_library') }}" data-practice-module-back>返回练习中心</a>
+-      <a href="{{ practice_navigation.module_exit_url }}" data-practice-module-exit>{{ practice_navigation.module_exit_label }}</a>
+-      {% if current_user.is_authenticated %}
+-      <span aria-label="当前用户 {{ current_user.username }}">{{ current_user.username[:1]|upper }}</span>
+-      {% endif %}
+-    </div>
+-  </header>
++  {% with workspace_active='reading' %}{% include "practice/_workspace_header.html" %}{% endwith %}
+ 
+   <div class="practice-workspace__layout">
+     <aside class="practice-workspace__sidebar" id="practice-catalog" aria-label="阅读题库目录">
+@@ -104,6 +84,7 @@
+     <button class="practice-workspace__scrim" type="button" aria-label="关闭题库目录" data-catalog-scrim hidden></button>
+ 
+     <main class="practice-workspace__main">
++      <h1 class="practice-workspace__title">剑雅阅读</h1>
+       <span class="practice-workspace__page-watermark" aria-hidden="true">SAGEPATH</span>
+       <button class="practice-workspace__catalog-button"
+               type="button"
+@@ -128,7 +109,7 @@
+             <div>
+               <p>阅读 / 剑桥真题 / {{ book.label }}</p>
+               <div>
+-                <h1>剑桥雅思 {{ book.book }}</h1>
++                <h2>剑桥雅思 {{ book.book }}</h2>
+                 <span>{{ book.tests|length }} Tests · 每套 3 篇 Passage / 约 60 分钟</span>
+               </div>
+             </div>
+diff --git a/templates/writing/index.html b/templates/writing/index.html
+index 77da1d2a..929033bd 100644
+--- a/templates/writing/index.html
++++ b/templates/writing/index.html
+@@ -16,25 +16,7 @@
+ </head>
+ <body class="practice-workspace-page writing-library-page" data-practice-hub="section">
+ <div class="practice-workspace" data-practice-workspace data-writing-index>
+-  <header class="practice-workspace__topbar">
+-    <div class="practice-workspace__brand-nav">
+-      <a class="practice-workspace__brand" href="{{ url_for('practice_library') }}" data-practice-module-back aria-label="返回练习中心">
+-        <img src="{{ url_for('static', filename='brand/sagepath-mark.png') }}" alt="">
+-        <span>Sage Path</span>
+-      </a>
+-      <span class="practice-workspace__context">剑雅真题</span>
+-      <nav class="practice-workspace__subjects" aria-label="科目导航">
+-        <a href="{{ url_for('listening_test_index') }}">听力</a>
+-        <a href="{{ url_for('reading_test_index') }}">阅读</a>
+-        <a class="is-active" href="{{ url_for('writing_library.index') }}" aria-current="page">写作</a>
+-      </nav>
+-    </div>
+-    <div class="practice-workspace__account">
+-      <a href="{{ url_for('practice_library') }}" data-practice-module-back>返回练习中心</a>
+-      <a href="{{ practice_navigation.module_exit_url }}" data-practice-module-exit>{{ practice_navigation.module_exit_label }}</a>
+-      <span aria-label="{{ '当前学生 ' ~ student.full_name if student else '课堂模式' }}">{{ student.full_name[:1] if student else '课' }}</span>
+-    </div>
+-  </header>
++  {% with workspace_active='writing' %}{% include "practice/_workspace_header.html" %}{% endwith %}
+ 
+   <div class="practice-workspace__layout">
+     <aside class="practice-workspace__sidebar practice-workspace__sidebar--scroll" id="practice-catalog" aria-label="写作题库筛选">
+diff --git a/templates/writing/topics.html b/templates/writing/topics.html
+index 3a8dfeea..50667ccd 100644
+--- a/templates/writing/topics.html
++++ b/templates/writing/topics.html
+@@ -16,25 +16,7 @@
+ </head>
+ <body class="practice-workspace-page writing-library-page" data-practice-hub="section">
+ <div class="practice-workspace" data-practice-workspace data-mother-topics-index>
+-  <header class="practice-workspace__topbar">
+-    <div class="practice-workspace__brand-nav">
+-      <a class="practice-workspace__brand" href="{{ url_for('practice_library') }}" data-practice-module-back aria-label="返回练习中心">
+-        <img src="{{ url_for('static', filename='brand/sagepath-mark.png') }}" alt="">
+-        <span>Sage Path</span>
+-      </a>
+-      <span class="practice-workspace__context">剑雅真题</span>
+-      <nav class="practice-workspace__subjects" aria-label="科目导航">
+-        <a href="{{ url_for('listening_test_index') }}">听力</a>
+-        <a href="{{ url_for('reading_test_index') }}">阅读</a>
+-        <a class="is-active" href="{{ url_for('writing_library.index') }}" aria-current="page">写作</a>
+-      </nav>
+-    </div>
+-    <div class="practice-workspace__account">
+-      <a href="{{ url_for('writing_library.index') }}">40 题范文库</a>
+-      <a href="{{ practice_navigation.module_exit_url }}" data-practice-module-exit>{{ practice_navigation.module_exit_label }}</a>
+-      <span aria-label="{{ '当前学生 ' ~ student.full_name if student else '课堂模式' }}">{{ student.full_name[:1] if student else '课' }}</span>
+-    </div>
+-  </header>
++  {% with workspace_active='writing' %}{% include "practice/_workspace_header.html" %}{% endwith %}
+ 
+   <div class="practice-workspace__layout">
+     <aside class="practice-workspace__sidebar practice-workspace__sidebar--scroll" id="practice-catalog" aria-label="母题分类筛选">
+diff --git a/tests/test_exam_sprint_routes.py b/tests/test_exam_sprint_routes.py
+index e675debd..23edc925 100644
+--- a/tests/test_exam_sprint_routes.py
++++ b/tests/test_exam_sprint_routes.py
+@@ -84,8 +84,10 @@ class ExamSprintRoutesTest(unittest.TestCase):
+                 self.assertIn("九分学长 · 7天热榜", html)
+                 self.assertIn("每周一 06:00 更新（北京时间）", html)
+                 self.assertIn("根据考生近期反馈整理，仅供复习参考。", html)
+-                self.assertIn('href="/practice/sprint/listening"', html)
+-                self.assertIn('href="/practice/sprint/reading"', html)
++                for target in ("/practice", "/listening/tests", "/reading/tests", "/writing/", "/practice/question-types"):
++                    self.assertIn(f'href="{target}" data-practice-nav', html)
++                self.assertEqual(html.count("data-practice-home"), 1)
++                self.assertEqual(html.count("data-practice-module-back"), 1)
+ 
+     def test_only_ready_entries_get_practice_links_and_preserve_passage(self):
+         html = self.get_page()
+diff --git a/tests/test_practice_center_batch1.py b/tests/test_practice_center_batch1.py
+index 810b2e76..d3a33ac6 100644
+--- a/tests/test_practice_center_batch1.py
++++ b/tests/test_practice_center_batch1.py
+@@ -40,6 +40,7 @@ def render_practice(*, role=None, path="/practice", endpoint="practice_library")
+         ),
+         get_flashed_messages=lambda: [],
+         config={},
++        session={},
+     )
+     counts = dict(
+         cambridge_books=1, cambridge_tests=4, cambridge_questions=160,
+diff --git a/tests/test_practice_navigation_batch2.py b/tests/test_practice_navigation_batch2.py
+new file mode 100644
+index 00000000..8568346d
+--- /dev/null
++++ b/tests/test_practice_navigation_batch2.py
+@@ -0,0 +1,261 @@
++"""Real route/Jinja coverage for batch-two navigation, using synthetic identities.
++
++Run through the private SQLite runner; these assertions do not execute browser JS
++or claim browser layout/back-history verification.
++"""
++
++import re
++import unittest
++from pathlib import Path
++from tempfile import TemporaryDirectory
++from unittest.mock import patch
++
++from app import app
++from models import StudentProfile, User, db
++from tests.test_practice_center_batch1 import Elements
++
++
++class PracticeNavigationBatch2Test(unittest.TestCase):
++    @classmethod
++    def setUpClass(cls):
++        cls.student_name = "导航回归合成学生"
++        cls.parent_name = "导航回归合成家长"
++        with app.app_context():
++            student = User(
++                username="navigation_batch2_synthetic_student",
++                display_name=cls.student_name,
++                password_hash="synthetic-unused-hash",
++                role=User.ROLE_STUDENT,
++                is_active=True,
++            )
++            teacher = User(
++                username="navigation_batch2_synthetic_teacher",
++                display_name="导航回归合成教师",
++                password_hash="synthetic-unused-hash",
++                role=User.ROLE_TEACHER,
++                is_active=True,
++            )
++            parent = User(
++                username="navigation_batch2_synthetic_parent",
++                display_name=cls.parent_name,
++                password_hash="synthetic-unused-hash",
++                role=User.ROLE_PARENT,
++                is_active=True,
++            )
++            db.session.add_all([student, teacher, parent])
++            db.session.flush()
++            profile = StudentProfile(user_id=student.id, full_name=cls.student_name)
++            db.session.add(profile)
++            db.session.commit()
++            cls.student_id, cls.teacher_id, cls.profile_id = student.id, teacher.id, profile.id
++            cls.parent_id = parent.id
++
++    @classmethod
++    def tearDownClass(cls):
++        with app.app_context():
++            StudentProfile.query.filter_by(id=cls.profile_id).delete()
++            User.query.filter(User.id.in_([cls.student_id, cls.teacher_id, cls.parent_id])).delete(
++                synchronize_session=False
++            )
++            db.session.commit()
++
++    def setUp(self):
++        self.client = app.test_client()
++
++    def account(self, user_id):
++        with self.client.session_transaction() as session:
++            session["_user_id"] = str(user_id)
++            session["_fresh"] = True
++
++    def verified(self):
++        with self.client.session_transaction() as session:
++            session["practice_student_name"] = self.student_name
++
++    def page(self, path):
++        response = self.client.get(path)
++        self.assertEqual(response.status_code, 200, path)
++        return response.get_data(as_text=True)
++
++    def shared_header(self, html, *, back=True):
++        headers = re.findall(
++            r'<header[^>]*data-practice-workspace-header[^>]*>(.*?)</header>',
++            html,
++            re.S,
++        )
++        self.assertEqual(len(headers), 1)
++        header = headers[0]
++        elements = Elements(header)
++        self.assertEqual(len(elements.with_attr("data-practice-module-back")), int(back))
++        self.assertEqual(len(elements.with_attr("data-practice-module-exit")), 1)
++        brand = elements.with_attr("data-practice-home")
++        self.assertEqual(len(brand), 1)
++        self.assertEqual(brand[0]["href"], "/practice")
++        self.assertNotIn("data-practice-module-back", brand[0])
++        self.assertIn('brand/sagepath-mark.png', header)
++        self.assertIn("Sage Path</span>", header)
++        nav = re.search(r'<nav[^>]*>(.*?)</nav>', header, re.S).group(1)
++        self.assertEqual(
++            re.findall(r'>([^<>]+)</a>', nav),
++            ["练习中心", "听力", "阅读", "写作", "题型专项"],
++        )
++        return header
++
++    def test_guest_center_has_one_brand_and_no_self_back(self):
++        html = self.page("/practice")
++        header = self.shared_header(html, back=False)
++        self.assertIn("未确认身份", header)
++        self.assertIn("<title>练习中心 · Sage Path</title>", html)
++        self.assertEqual(re.findall(r'<h1[^>]*>(.*?)</h1>', html), ["练习中心"])
++        self.assertIn('id="practiceIdentityForm"', html)
++        self.assertIn('id="practiceAssignedTasks"', html)
++        self.assertFalse(Elements(html).with_class("practice-suite-preview"))
++
++    def test_verified_name_survives_catalog_render_and_navigation_defaults(self):
++        self.verified()
++        html = self.page("/reading/tests")
++        header = self.shared_header(html)
++        self.assertIn("学生：" + self.student_name, header)
++        self.assertIn('"identity_mode": "verified_student"', html)
++        self.assertEqual(
++            Elements(header).with_attr("data-practice-module-exit")[0]["href"],
++            "/login",
++        )
++
++    def test_parent_without_verified_student_never_appears_as_student_identity(self):
++        self.account(self.parent_id)
++        for path in ("/practice", "/listening/tests", "/reading/tests", "/practices"):
++            with self.subTest(path=path):
++                html = self.page(path)
++                header = self.shared_header(html, back=path != "/practice")
++                self.assertIn("未确认身份", header)
++                self.assertNotIn(self.parent_name, header)
++                self.assertNotIn("学生：", header)
++                self.assertIn('"identity_mode": "guest"', html)
++
++    def test_parent_verified_session_displays_child_instead_of_parent_account(self):
++        self.account(self.parent_id)
++        self.verified()
++        for path in ("/practice", "/listening/tests", "/reading/tests", "/practices"):
++            with self.subTest(path=path):
++                html = self.page(path)
++                header = self.shared_header(html, back=path != "/practice")
++                self.assertIn("学生：" + self.student_name, header)
++                self.assertNotIn(self.parent_name, header)
++                self.assertIn('"identity_mode": "verified_student"', html)
++
++    def test_classroom_keeps_browsing_and_hides_student_gate_and_management(self):
++        with self.client.session_transaction() as session:
++            session["classroom_unlocked"] = True
++        html = self.page("/practices")
++        header = self.shared_header(html)
++        self.assertIn("课堂模式", header)
++        self.assertIn("退出课堂刷题", header)
++        self.assertIn("员工登录", header)
++        self.assertNotIn('id="loginGate"', html)
++        self.assertFalse(Elements(html).with_class("js-delete-exercise"))
++        self.assertFalse(Elements(html).with_class("action-assign"))
++        self.assertNotIn('href="/listening/upload"', html)
++
++    def test_student_account_uses_shared_center_and_question_type_header(self):
++        self.account(self.student_id)
++        for path in ("/practice", "/practice/question-types"):
++            with self.subTest(path=path):
++                html = self.page(path)
++                header = self.shared_header(html, back=path != "/practice")
++                self.assertIn("学生：" + self.student_name, header)
++                self.assertIn('"identity_mode": "student_account"', html)
++                self.assertEqual(
++                    Elements(header).with_attr("data-practice-module-exit")[0]["href"],
++                    "/student/today",
++                )
++                self.assertFalse(Elements(html).with_class("app-shell"))
++                self.assertEqual(len(re.findall(r'<h1(?:\s|>)', html)), 1)
++
++    def test_teacher_center_retains_staff_shell_and_assignment_tools(self):
++        self.account(self.teacher_id)
++        html = self.page("/practice")
++        elements = Elements(html)
++        self.assertFalse(elements.with_attr("data-practice-workspace-header"))
++        self.assertTrue(elements.with_class("admin-suite-v2"))
++        self.assertTrue(elements.with_class("practice-suite-preview"))
++        self.assertTrue(elements.with_class("practice-suite-filters"))
++        self.assertEqual(len(elements.with_attr("data-practice-target-index")), 4)
++        self.assertIn("查看学生练习记录", html)
++        self.assertIn("布置给学生", html)
++
++    def test_teacher_intensive_catalog_keeps_management_and_staff_exit(self):
++        self.account(self.teacher_id)
++        html = self.page("/practices")
++        header = self.shared_header(html)
++        elements = Elements(html)
++        self.assertIn("教师 · 导航回归合成教师", header)
++        self.assertIn("返回工作台", header)
++        self.assertIn("退出登录", header)
++        self.assertNotIn('id="loginGate"', html)
++        self.assertIn('href="/listening/upload"', html)
++        self.assertTrue(elements.with_class("js-delete-exercise"))
++        self.assertTrue(elements.with_class("action-assign"))
++
++    def test_all_workbench_catalogs_have_one_back_brand_and_page_h1(self):
++        self.verified()
++        for path, title in (
++            ("/listening/tests", "剑雅听力"),
++            ("/reading/tests", "剑雅阅读"),
++            ("/listening/jijing", "听力机经"),
++            ("/reading/jijing", "阅读机经"),
++            ("/writing/", "写作范文与打字训练"),
++            ("/writing/topics", "大作文母题库"),
++            ("/practice/sprint/listening", "听力考前冲刺"),
++            ("/practice/sprint/reading", "阅读考前冲刺"),
++        ):
++            with self.subTest(path=path):
++                html = self.page(path)
++                self.shared_header(html)
++                self.assertEqual(re.findall(r'<h1[^>]*>(.*?)</h1>', html), [title])
++                self.assertRegex(html, r'<title>[^<]+ · Sage Path</title>')
++
++    def test_empty_catalogs_still_have_page_titles_and_one_return(self):
++        for path, loader, title in (
++            ("/listening/tests", "app._listening_test_catalog", "剑雅听力"),
++            ("/reading/tests", "app._reading_test_catalog", "剑雅阅读"),
++            ("/reading/jijing", "app._reading_jijing_catalog", "阅读机经"),
++        ):
++            with self.subTest(path=path), patch(loader, return_value=[]):
++                html = self.page(path)
++                self.shared_header(html)
++                self.assertEqual(re.findall(r'<h1[^>]*>(.*?)</h1>', html), [title])
++                self.assertFalse(Elements(html).with_attr("data-book-panel"))
++        with TemporaryDirectory(prefix="navigation-empty-catalog-") as empty:
++            with patch("app._listening_jijing_root", return_value=Path(empty)):
++                html = self.page("/listening/jijing")
++        self.shared_header(html)
++        self.assertEqual(re.findall(r'<h1[^>]*>(.*?)</h1>', html), ["听力机经"])
++        self.assertFalse(Elements(html).with_attr("data-book-panel"))
++
++    def test_intensive_aliases_have_one_header_identity_gate_and_no_overview(self):
++        for path in ("/practices", "/listening"):
++            with self.subTest(path=path):
++                html = self.page(path)
++                self.shared_header(html)
++                elements = Elements(html)
++                self.assertFalse(elements.with_class("auth-entry__brandbar"))
++                self.assertIn('id="studentVerifyForm"', html)
++                self.assertIn('action="/api/listening/verify"', html)
++                self.assertIn('id="practiceIntensiveIdentitySwitch"', html)
++                self.assertNotIn('id="newTasksList"', html)
++                self.assertNotIn('id="practiceHistoryList"', html)
++                self.assertNotIn("loadPracticeOverview", html)
++                self.assertNotIn("/api/practice/tasks", html)
++                self.assertNotIn("/api/practice/history", html)
++                self.assertIn("/practice#practiceAssignedTasks", html)
++
++    def test_regular_login_retains_its_original_brand_header(self):
++        html = self.page("/login")
++        elements = Elements(html)
++        self.assertEqual(len(elements.with_class("auth-entry__brandbar")), 1)
++        self.assertFalse(elements.with_attr("data-practice-workspace-header"))
++        self.assertIn('action="/login"', html)
++
++
++if __name__ == "__main__":
++    unittest.main()
+diff --git a/tests/test_practice_portal_catalog_grouping.py b/tests/test_practice_portal_catalog_grouping.py
+index 6291882f..016818ec 100644
+--- a/tests/test_practice_portal_catalog_grouping.py
++++ b/tests/test_practice_portal_catalog_grouping.py
+@@ -21,6 +21,7 @@ class PracticePortalCatalogGroupingTest(unittest.TestCase):
+         self.assertIn('class="practice-subject__name">机经</h3>', html)
+         self.assertIn('class="practice-subject__name">精听</h3>', html)
+ 
++        catalog = html.split('<section class="practice-subjects"', 1)[1].split('id="toeflPractice"', 1)[0]
+         for path in (
+             "/listening/tests",
+             "/reading/tests",
+@@ -29,7 +30,7 @@ class PracticePortalCatalogGroupingTest(unittest.TestCase):
+             "/reading/jijing",
+             "/listening",
+         ):
+-            self.assertEqual(html.count(f'href="{path}"'), 1)
++            self.assertEqual(catalog.count(f'href="{path}"'), 1)
+ 
+     def test_toefl_tasks_and_identity_sections_remain_available(self):
+         response = self.client.get("/practice")
+diff --git a/tests/test_practice_shell.js b/tests/test_practice_shell.js
+index c26c3dbe..53fb0a56 100644
+--- a/tests/test_practice_shell.js
++++ b/tests/test_practice_shell.js
+@@ -528,3 +528,180 @@ test('intensive note storage failure remains unsaved and a later successful retr
+   assert.equal(context.errorSummaries[0], 'new note')
+   assert.equal(saved, 1)
+ })
++
++function hubWindow(pathname = '/reading/tests', search = '', hash = '') {
++  const ui = interactiveWindow()
++  Object.assign(ui.win.location, { pathname, search, hash })
++  const marker = { dataset: { practiceHub: pathname === '/practice' ? 'root' : 'section' } }
++  const back = eventNode(), exit = eventNode(), brand = eventNode()
++  back.dataset.practiceModuleBack = ''
++  back.href = '/practice'
++  exit.dataset.practiceModuleExit = ''
++  exit.href = '/login'
++  brand.dataset.practiceHome = ''
++  brand.href = '/practice'
++  brand.textContent = 'Sage Path'
++  for (const node of [back, exit, brand]) node.hasAttribute = () => false
++  ui.win.document.querySelector = selector => selector === '[data-practice-hub]' ? marker : null
++  ui.win.document.querySelectorAll = selector => ({
++    '[data-practice-module-back]': [back], '[data-practice-module-exit]': [exit],
++    'a[href], [data-href]': [brand, back, exit]
++  })[selector] || []
++  ui.win.requestAnimationFrame = callback => callback()
++  ui.win.scrollTo = (_x, y) => { ui.win.scrollY = y }
++  return { ...ui, back, exit, brand, marker }
++}
++
++test('catalog back uses the incoming sprint context for its label, href, click and browser back', () => {
++  const query = '?practice_return=%2Fpractice%2Fsprint%2Freading%23sprint-2&practice_source=exam_sprint&practice_exit=%2Flogin&practice_identity=verified_student'
++  for (const browserBack of [false, true]) {
++    const ui = hubWindow('/reading/tests', query)
++    const { context } = shell.installHub({}, ui.win)
++    assert.equal(ui.brand.textContent, 'Sage Path')
++    assert.equal(ui.back.textContent, '← 返回考前冲刺')
++    assert.equal(ui.back.href, '/practice/sprint/reading#sprint-2')
++    assert.equal(context.identityMode, 'verified_student')
++    if (browserBack) ui.windowEvents.popstate()
++    else ui.back.fire('click')
++    assert.equal(ui.win.assigned, '/practice/sprint/reading#sprint-2')
++    assert.equal(JSON.parse(ui.win.sessionStorage.getItem(shell.CONTEXT_KEY)).returning, true)
++  }
++})
++
++test('catalog return infers a missing source mode and rejects a self-return bookmark', () => {
++  const sprint = hubWindow('/reading/tests', '?practice_return=%2Fpractice%2Fsprint%2Freading')
++  shell.installHub({}, sprint.win)
++  assert.equal(sprint.back.textContent, '← 返回考前冲刺')
++  const self = hubWindow('/reading/tests', '?practice_return=%2Freading%2Ftests%23book-10&practice_source=reading_tests')
++  shell.installHub({}, self.win)
++  assert.equal(self.back.href, '/practice')
++  assert.equal(self.back.textContent, '← 返回练习中心')
++  const root = hubWindow('/practice')
++  shell.installHub({}, root.win)
++  assert.equal(root.back.hidden, true)
++})
++
++test('return, exit and home links do not overwrite the incoming parent; main navigation to the center stays clean', () => {
++  const ui = hubWindow('/reading/tests', '?practice_return=%2Fpractice%2Fsprint%2Freading&practice_source=exam_sprint')
++  shell.installListContext({}, ui.win)
++  shell.installHub({}, ui.win)
++  const center = { href: 'http://practice.test/practice#practiceIdentity', dataset: { practiceNav: '' }, hasAttribute: () => false }
++  const samePage = { href: 'http://practice.test/reading/tests#cambridge-10', dataset: {}, hasAttribute: () => false }
++  for (const link of [ui.brand, ui.back, ui.exit, center, samePage]) {
++    const before = link.href
++    ui.documentEvents.click({ target: { closest: () => link }, defaultPrevented: false })
++    assert.equal(link.href, before)
++    assert.equal(ui.win.sessionStorage.getItem(shell.CONTEXT_KEY), null)
++  }
++})
++
++test('intensive entry participates in the module and sibling main navigation captures its immediate source', () => {
++  assert.equal(shell.isPracticeModulePath('/practices'), true)
++  const ui = hubWindow('/practice/sprint/reading', '', '#sprint-3')
++  ui.win.PRACTICE_NAVIGATION_DEFAULTS = { identityMode: 'verified_student' }
++  shell.installListContext({}, ui.win)
++  for (const path of ['/practices', '/reading/tests']) {
++    const link = { href: `http://practice.test${path}`, dataset: { practiceNav: '' }, hasAttribute: () => false }
++    ui.documentEvents.click({ target: { closest: () => link }, defaultPrevented: false })
++    const target = new URL(link.href)
++    assert.equal(target.searchParams.get('practice_return'), '/practice/sprint/reading#sprint-3')
++    assert.equal(target.searchParams.get('practice_source'), 'exam_sprint')
++    assert.equal(target.searchParams.get('practice_identity'), 'verified_student')
++    assert.equal(target.searchParams.get('practice_exit'), '/login')
++  }
++})
++
++test('a catalog opened in a new tab preserves its external module exit on the next navigation', () => {
++  const ui = hubWindow('/reading/tests', '?practice_return=%2Fpractice&practice_exit=%2Ftasks%3Ftab%3Dreading&practice_identity=staff')
++  ui.win.PRACTICE_NAVIGATION_DEFAULTS = { identityMode: 'staff', moduleExitUrl: '/', moduleExitLabel: '返回工作台' }
++  const captured = shell.captureListState(ui.win, { targetPath: '/reading/test/ielts10_test1' })
++  assert.equal(shell.moduleExitUrl(captured, ui.win.location.origin), '/tasks?tab=reading')
++  assert.equal(captured.moduleExitLabel, '返回任务中心')
++  assert.equal(captured.identityMode, 'staff')
++})
++
++test('sprint → catalog → detail → catalog retains the catalog parent and list position', async () => {
++  const catalog = hubWindow('/reading/tests', '?practice_return=%2Fpractice%2Fsprint%2Freading%23sprint-2&practice_source=exam_sprint', '#cambridge-10')
++  shell.installHub({}, catalog.win)
++  shell.captureListState(catalog.win, { targetPath: '/reading/test/ielts10_test1', filters: { status: 'todo' } })
++
++  const detail = interactiveWindow()
++  detail.win.location.search = ''
++  detail.win.sessionStorage = catalog.win.sessionStorage
++  const controller = shell.init({ fallbackUrl: '/reading/tests', fallbackMode: 'reading_tests' }, detail.win)
++  assert.equal(controller.context.sourceMode, 'reading_tests')
++  await controller.leave()
++  assert.equal(detail.win.assigned, '/reading/tests#cambridge-10')
++
++  const returned = hubWindow('/reading/tests', '', '#cambridge-10')
++  returned.win.sessionStorage = catalog.win.sessionStorage
++  shell.installListContext({}, returned.win)
++  shell.installHub({}, returned.win)
++  assert.equal(returned.win.scrollY, 684)
++  assert.equal(returned.back.textContent, '← 返回考前冲刺')
++  assert.equal(returned.back.href, '/practice/sprint/reading#sprint-2')
++  returned.back.fire('click')
++  assert.equal(returned.win.assigned, '/practice/sprint/reading#sprint-2')
++})
++
++test('an unrelated fresh catalog visit does not reuse an old parent and modified clicks keep native navigation', () => {
++  const first = hubWindow('/reading/tests', '?practice_return=%2Fpractice%2Fsprint%2Freading&practice_source=exam_sprint')
++  shell.installHub({}, first.win)
++  const fresh = hubWindow('/reading/tests')
++  fresh.win.sessionStorage = first.win.sessionStorage
++  shell.installHub({}, fresh.win)
++  assert.equal(fresh.back.href, '/practice')
++  first.back.fire('click', { ctrlKey: true })
++  assert.equal(first.win.assigned, undefined)
++  assert.equal(first.back.href, '/practice/sprint/reading')
++})
++
++
++function enterHub(previous, path) {
++  shell.navigate(path, {}, previous.win)
++  const target = new URL(previous.win.assigned)
++  const next = hubWindow(target.pathname, target.search, target.hash)
++  next.win.sessionStorage = previous.win.sessionStorage
++  shell.installHub({}, next.win)
++  return next
++}
++
++test('listening → reading → listening truncates the revisited parent instead of looping on Back', () => {
++  const listening = hubWindow('/listening/tests')
++  shell.installHub({}, listening.win)
++  const reading = enterHub(listening, '/reading/tests')
++  assert.equal(reading.back.href, '/listening/tests')
++  const revisited = enterHub(reading, '/listening/tests')
++  assert.equal(revisited.back.href, '/practice')
++  assert.equal(revisited.back.textContent, '← 返回练习中心')
++  revisited.back.fire('click')
++  assert.equal(revisited.win.assigned, '/practice')
++
++  // The other directory can still return to listening, whose parent is now stable.
++  const readingAgain = enterHub(revisited, '/reading/tests')
++  assert.equal(readingAgain.back.href, '/listening/tests')
++  readingAgain.back.fire('click')
++  const returned = hubWindow('/listening/tests')
++  returned.win.sessionStorage = readingAgain.win.sessionStorage
++  shell.installHub({}, returned.win)
++  returned.windowEvents.popstate()
++  assert.equal(returned.win.assigned, '/practice')
++})
++
++test('a three-catalog loop keeps the original sprint parent and remains acyclic on return', () => {
++  const sprint = hubWindow('/practice/sprint/reading', '', '#sprint-2')
++  shell.installHub({}, sprint.win)
++  const listening = enterHub(sprint, '/listening/tests')
++  const reading = enterHub(listening, '/reading/tests')
++  const writing = enterHub(reading, '/writing/')
++  const revisited = enterHub(writing, '/listening/tests')
++  assert.equal(revisited.back.href, '/practice/sprint/reading#sprint-2')
++  assert.equal(revisited.back.textContent, '← 返回考前冲刺')
++  revisited.back.fire('click')
++  const returned = hubWindow('/practice/sprint/reading', '', '#sprint-2')
++  returned.win.sessionStorage = revisited.win.sessionStorage
++  shell.installHub({}, returned.win)
++  assert.equal(returned.back.href, '/practice')
++  returned.back.fire('click')
++  assert.equal(returned.win.assigned, '/practice')
++})
+diff --git a/tests/test_practice_task_lists.js b/tests/test_practice_task_lists.js
+index 876a719c..79f0a951 100644
+--- a/tests/test_practice_task_lists.js
++++ b/tests/test_practice_task_lists.js
+@@ -246,51 +246,57 @@ function templatePage(templateName, response) {
+     });
+   }
+   const identity = { dataset: { practiceStaffMode: '0' } };
++  const headerIdentity = { textContent: '' };
++  const requests = [];
++  elements.set('practiceIntensiveIdentitySwitch', { hidden: true });
+   const storage = { getItem: () => null, setItem() {}, removeItem() {} };
+   const sandbox = {
+     PracticeTaskLists: lists,
+     document: {
+       getElementById: id => elements.get(id) || null,
+-      querySelector: selector => selector === '.practice-identity' ? identity : null,
++      querySelector: selector => selector === '.practice-identity' ? identity : selector === '[data-practice-identity-label]' ? headerIdentity : null,
+       querySelectorAll: () => [],
+       addEventListener() {},
+     },
+     window: { addEventListener() {} },
+     localStorage: storage, sessionStorage: storage,
+-    fetch: async () => ({ ok: true, json: async () => response }),
++    fetch: async url => { requests.push(url); return { ok: true, json: async () => response }; },
+     console, Date, Intl,
+   };
+   let script = [...html.matchAll(/<script>([\s\S]*?)<\/script>/g)]
+     .map(match => match[1])
+-    .find(source => source.includes('function renderNewTasks(') || source.includes('async function loadAssignedTasks('));
++    .find(source => source.includes('function updateIntensiveIdentity(') || source.includes('async function loadAssignedTasks('));
+   assert.ok(script, 'the real task-rendering script must exist');
+   if (templateName === 'practice/index_content.html') {
+     script = script.replace(/\}\)\(\);\s*$/, 'globalThis.taskPage = { loadAssignedTasks, hideAssignedTasks };\n})();');
+   }
+   vm.runInNewContext(script, sandbox, { filename });
+-  return { sandbox, elements, html };
++  return { sandbox, elements, html, requests, headerIdentity };
+ }
+ 
+-test('the actual listening homepage shows one current assignment, not forty expired cards', () => {
+-  const { sandbox, elements } = templatePage('listening/index.html');
+-  const backlog = Array.from({ length: 40 }, (_, index) => expired(index + 1, { title: `Closed assignment ${index}` }));
+-  const available = current(101, { title: 'Current assignment', category: '精听', status_label: '待完成' });
+-  sandbox.renderNewTasks({ groups: { assistant: backlog, teacher: [available] } });
+-
+-  assert.equal(elements.get('newTasksMeta').textContent, '1 项待完成');
+-  assert.match(elements.get('newTasksList').innerHTML, /Current assignment/);
+-  assert.doesNotMatch(elements.get('newTasksList').innerHTML, /Closed assignment/);
+-  assert.equal((elements.get('newTasksList').innerHTML.match(/<a class="today-task[" ]/g) || []).length, 1);
+-  assert.equal(elements.get('newTasksMore').hidden, false);
++test('intensive catalog verification keeps identity and progress without loading duplicate task lists', () => {
++  const { sandbox, elements, html, requests, headerIdentity } = templatePage('listening/index.html');
++  sandbox.showMain('Synthetic Student');
++  assert.equal(elements.get('loginGate').style.display, 'none');
++  assert.equal(elements.get('mainContent').style.display, 'block');
++  assert.equal(headerIdentity.textContent, '学生：Synthetic Student');
++  assert.equal(elements.get('practiceIntensiveIdentitySwitch').hidden, false);
++  assert.equal(sandbox.window.PRACTICE_NAVIGATION_DEFAULTS.identity_mode, 'verified_student');
++  assert.deepEqual(requests, []);
++  assert.doesNotMatch(html, /id="(?:newTasksList|practiceHistoryList)"|loadPracticeOverview/);
++  assert.match(html, /#practiceAssignedTasks/);
+ });
+ 
+-test('the actual listening homepage keeps the history entry when all assignments are closed', () => {
+-  const { sandbox, elements } = templatePage('listening/index.html');
+-  sandbox.renderNewTasks({ groups: { assistant: [expired(1)] } });
+-
+-  assert.equal(elements.get('newTasksMeta').textContent, '0 项待完成');
+-  assert.match(elements.get('newTasksList').innerHTML, /当前没有待完成任务/);
+-  assert.equal(elements.get('newTasksMore').hidden, false);
++test('intensive catalog switching restores the identity gate without removed overview references', () => {
++  const { sandbox, elements, requests, headerIdentity } = templatePage('listening/index.html');
++  sandbox.showMain('Synthetic Student');
++  sandbox.logout();
++  assert.equal(elements.get('loginGate').style.display, 'block');
++  assert.equal(elements.get('mainContent').style.display, 'none');
++  assert.equal(elements.get('practiceIntensiveIdentitySwitch').hidden, true);
++  assert.equal(headerIdentity.textContent, '未确认身份');
++  assert.equal(sandbox.window.PRACTICE_NAVIGATION_DEFAULTS.identity_mode, 'guest');
++  assert.deepEqual(requests, []);
+ });
+ 
+ test('the actual practice center counts current work and defaults every historical section to collapsed', async () => {
+diff --git a/tests/test_practice_workspace_regression.py b/tests/test_practice_workspace_regression.py
+index ab29786d..f3a70ea2 100644
+--- a/tests/test_practice_workspace_regression.py
++++ b/tests/test_practice_workspace_regression.py
+@@ -1,5 +1,6 @@
+ """统一工作台的访客空状态、公开路由与目录能力回归。"""
+ 
++import re
+ import unittest
+ from pathlib import Path
+ from unittest.mock import patch
+@@ -51,7 +52,7 @@ class PracticeWorkspaceRegressionTest(unittest.TestCase):
+         self.assertIn('src="/static/js/practice_workspace.js"', listening)
+         self.assertIn('src="/static/js/practice_workspace.js"', reading)
+ 
+-    def test_every_workspace_catalog_has_only_subject_navigation(self):
++    def test_every_workspace_catalog_has_shared_navigation_and_one_back_entry(self):
+         paths_and_templates = {
+             "/listening/tests": "templates/listening/test_index.html",
+             "/reading/tests": "templates/reading/test_index.html",
+@@ -65,8 +66,12 @@ class PracticeWorkspaceRegressionTest(unittest.TestCase):
+                 response = self.client.get(path)
+                 self.assertEqual(response.status_code, 200)
+                 html = response.get_data(as_text=True)
+-                self.assertIn('href="/writing/">写作</a>', html)
+-                self.assertEqual(html.count('href="/writing/">写作</a>'), 1)
++                header = html.split('data-practice-workspace-header>', 1)[1].split('</header>', 1)[0]
++                nav = header.split('<nav ', 1)[1].split('</nav>', 1)[0]
++                self.assertEqual(re.findall(r'>([^<>]+)</a>', nav), ['练习中心', '听力', '阅读', '写作', '题型专项'])
++                self.assertEqual(header.count('data-practice-module-back'), 1)
++                self.assertIn('data-practice-home', header)
++                self.assertIn('Sage Path</span>', header)
+                 template = (project_root / template_path).read_text(encoding="utf-8")
+                 self.assertNotIn("report_page", template)
+                 self.assertNotIn("学习报告", template)

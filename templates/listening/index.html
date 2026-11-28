@@ -9,7 +9,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>睿然练习系统 · Sage Path</title>
+<title>精听练习 · Sage Path</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
 <style>
@@ -292,208 +292,26 @@
 }
 .login-gate .staff-link:hover { color: var(--muted); text-decoration: underline; }
 
-/* 学生概览：新任务 / 做题记录 */
-.practice-overview {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
-  margin: 0 0 18px;
-}
-.practice-overview__panel {
-  min-width: 0;
-  padding: 18px 20px;
-  background: #fff;
-  border: 1px solid var(--line);
-  border-radius: var(--r);
-  box-shadow: var(--shadow-sm);
-}
-.practice-overview__panel--tasks { border-top: 4px solid var(--brand); }
-.practice-overview__panel--history { border-top: 4px solid var(--success); }
-.practice-overview__header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 12px;
-}
-.practice-overview__heading { min-width: 0; }
-.practice-overview__title { margin: 0; font-size: var(--fs-lg); color: var(--text-strong); }
-.practice-overview__description {
-  margin: 3px 0 0;
-  color: var(--muted);
-  font-size: var(--fs-xs);
-  line-height: 1.45;
-}
-.practice-overview__meta {
-  flex: 0 0 auto;
-  padding: 3px 9px;
-  border-radius: var(--r-pill);
-  background: var(--brand-tint);
-  color: var(--brand-dark);
-  font-size: var(--fs-xs);
-  font-weight: 700;
-}
-.practice-overview__panel--history .practice-overview__meta {
-  background: var(--success-soft);
-  color: var(--success);
-}
-.practice-overview__list { display: grid; gap: 10px; }
-.practice-overview__footer {
-  display: block;
-  margin-top: 12px;
-  text-align: right;
-  color: var(--brand-dark);
-  font-size: var(--fs-sm);
-  font-weight: 600;
-  text-decoration: none;
-}
-.practice-overview__footer[hidden] { display: none; }
-.practice-overview__footer:hover { text-decoration: underline; }
-.today-task {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: 12px 14px;
-  border: 1px solid var(--line);
-  border-radius: var(--r-sm);
-  background: var(--brand-soft);
-  text-decoration: none;
-  color: var(--text-strong);
-  transition: border-color .15s ease, transform .15s ease;
-}
-.today-task:hover { border-color: var(--brand); transform: translateY(-1px); }
-.today-task__row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-.today-task__category {
-  display: inline-block;
-  padding: 2px 8px;
-  border-radius: 999px;
-  background: var(--brand);
-  color: #fff;
-  font-size: var(--fs-xs);
-  font-weight: 700;
-  letter-spacing: .04em;
-}
-.today-task__status {
-  font-size: var(--fs-xs);
-  font-weight: 700;
-  padding: 2px 8px;
-  border-radius: 999px;
-}
-.today-task__status--pending { background: var(--line); color: var(--muted); }
-.today-task__status--in_progress { background: #fff3cd; color: #8a6d00; }
-.today-task__status--done { background: #d8f5e3; color: #186b3a; }
-.today-task__title { font-size: var(--fs-base); font-weight: 700; line-height: 1.35; }
-.today-task__hint { font-size: var(--fs-sm); color: var(--muted); }
-.practice-history {
-  display: block;
-  overflow: hidden;
-  border: 1px solid var(--line);
-  border-radius: var(--r-sm);
-  background: var(--success-soft);
-  color: var(--text-strong);
-  text-decoration: none;
-  transition: border-color .15s ease, transform .15s ease;
-}
-.practice-history:hover { border-color: var(--success); transform: translateY(-1px); }
-.practice-history__summary,
-.practice-history__single {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: 12px 14px;
-  color: inherit;
-  text-decoration: none;
-}
-.practice-history__summary { cursor: pointer; list-style: none; }
-.practice-history__summary::-webkit-details-marker { display: none; }
-.practice-history__expand {
-  color: var(--success);
-  font-size: var(--fs-xs);
-  font-weight: 700;
-}
-.practice-history[open] .practice-history__expand::after { content: "收起"; }
-.practice-history:not([open]) .practice-history__expand::after { content: "查看各部分"; }
-.practice-history__row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-}
-.practice-history__source {
-  color: var(--success);
-  font-size: var(--fs-xs);
-  font-weight: 800;
-  letter-spacing: .04em;
-}
-.practice-history__date { color: var(--muted); font-size: var(--fs-xs); }
-.practice-history__title {
-  overflow: hidden;
-  color: var(--text-strong);
-  font-size: var(--fs-base);
-  font-weight: 700;
-  line-height: 1.35;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.practice-history__result {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 10px;
-  color: var(--muted);
-  font-size: var(--fs-sm);
-}
-.practice-history__score { color: var(--success); font-weight: 800; }
-.practice-history__attempts {
-  display: grid;
-  gap: 7px;
-  padding: 10px 12px 12px;
-  border-top: 1px solid rgba(22, 163, 74, .2);
-  background: rgba(255, 255, 255, .62);
-}
-.practice-history__attempt {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  padding: 9px 10px;
-  border: 1px solid rgba(22, 163, 74, .2);
-  border-radius: 10px;
-  background: #fff;
-  color: var(--text-strong);
-  font-size: var(--fs-sm);
-  font-weight: 700;
-  text-decoration: none;
-}
-.practice-history__attempt:hover { border-color: var(--success); }
-.practice-history__attempt-meta { color: var(--muted); font-size: var(--fs-xs); font-weight: 500; }
-.practice-history__legacy-note {
-  padding: 9px 10px;
-  border-radius: 10px;
-  background: #fff8dc;
-  color: #765b00;
-  font-size: var(--fs-xs);
-  line-height: 1.5;
-}
-.practice-overview__empty {
-  padding: 16px;
-  text-align: center;
-  color: var(--muted);
-  font-size: var(--fs-sm);
-  border: 1px dashed var(--line-strong);
-  border-radius: var(--r-sm);
-  background: #fafbfd;
-}
 @media (max-width: 720px) {
   .listening-page { padding: 22px 14px 40px; }
-  .practice-overview { grid-template-columns: 1fr; }
-  .practice-overview__panel { padding: 16px; }
+}
+.listening-library.listening-library__page-title { padding-bottom: 0; }
+.auth-entry__heading #studentEntryTitle {
+  margin: 0; color: #10263f;
+  font-family: "Songti SC", "Noto Serif SC", STSong, SimSun, serif;
+  font-size: 40px; line-height: 1.25; font-weight: 700; letter-spacing: .02em;
+}
+@media (max-width: 720px) {
+  .auth-entry__heading #studentEntryTitle { font-size: 34px; }
 }
 </style>
 {% include "listening/_library_styles.html" %}
+{% include "practice/_workspace_styles.html" %}
 </head>
 {% set auth_gate_visible = not (staff_mode|default(show_upload)) %}
-<body class="{{ 'auth-entry-body' if auth_gate_visible else '' }}" data-practice-hub="section">
+<body class="practice-workspace-page {{ 'auth-entry-body' if auth_gate_visible else '' }}" data-practice-hub="section">
+{% with workspace_active='listening', workspace_intensive=true %}{% include "practice/_workspace_header.html" %}{% endwith %}
+<div class="listening-page listening-library listening-library__page-title"><h1 class="listening-library__title">精听练习</h1></div>
 
 {% macro render_intensive_catalog(catalog, staff=False, can_manage=False) %}
 {% set suffix = 'staff' if staff else 'student' %}
@@ -651,23 +469,11 @@
 {% if staff_mode|default(show_upload) %}
 {# 已登录员工或课堂口令模式：跳过学生姓名验证，直接显示内容 #}
 <div class="listening-page listening-library" id="mainContent">
-  <div class="identity-bar identity-bar--staff listening-library__identity">
-    <span>{{ '员工模式' if show_upload else '课堂模式' }} · <span class="name">{{ practice_staff_label or (current_user.display_name if current_user.is_authenticated else '课堂模式') or (current_user.username if current_user.is_authenticated else '课堂模式') }}</span></span>
-    <span class="actions">
-      <a href="{{ url_for('practice_library') }}" data-practice-module-back>返回练习中心</a>
-      <a href="{{ practice_navigation.module_exit_url }}" data-practice-module-exit>{{ practice_navigation.module_exit_label }}</a>
-      {% if current_user.is_authenticated %}
-      <a href="{{ url_for('logout') }}">退出登录</a>
-      {% else %}
-      <a href="{{ url_for('login') }}">员工登录</a>
-      {% endif %}
-    </span>
-  </div>
+
 
   <div class="listening-library__header">
     <div>
       <p class="listening-library__eyebrow">听力 / 精听</p>
-      <h1 class="listening-library__title">精听练习</h1>
       <p class="listening-library__summary">选择一个练习开始精听训练。学生自由练习会在当前浏览器自动保存进度。</p>
     </div>
     {% if show_upload %}
@@ -677,9 +483,7 @@
     {% endif %}
   </div>
 
-  {% set nav_subject = 'listening' %}
-  {% set nav_active = 'intensive' %}
-  {% include "practice/_nav.html" %}
+  <p><a href="{{ url_for('practice_library') }}#practiceAssignedTasks" data-practice-nav>在练习中心查看任务与记录</a></p>
 
   {% if exercises %}
   {{ render_intensive_catalog(intensive_catalog, staff=True, can_manage=show_upload) }}
@@ -701,9 +505,9 @@
 
 {% from "auth/_entrance_shell.html" import entrance_shell %}
 <div id="loginGate">
-  {% call entrance_shell('studentEntryTitle', 'auth-entry__panel-inner--student') %}
+  {% call entrance_shell('studentEntryTitle', 'auth-entry__panel-inner--student', show_brandbar=false) %}
   <div class="auth-entry__heading">
-    <h1 id="studentEntryTitle">学生练习入口</h1>
+    <h2 id="studentEntryTitle">确认学生身份</h2>
     <p>输入老师登记的姓名，继续你的练习。</p>
   </div>
 
@@ -739,55 +543,18 @@
 
 <!-- Main content (hidden until student verified) -->
 <div class="listening-page listening-library" id="mainContent" style="display:none">
-  <div class="identity-bar listening-library__identity">
-    <span>欢迎，<span class="name" id="displayName"></span></span>
-    <span class="actions">
-      <button onclick="logout()">切换账号</button>
-      <a href="{{ url_for('practice_library') }}" data-practice-module-back>返回练习中心</a>
-      <a href="{{ practice_navigation.module_exit_url }}" data-practice-module-exit>{{ practice_navigation.module_exit_label }}</a>
-    </span>
-  </div>
+
 
   <div class="listening-library__header">
     <div>
       <p class="listening-library__eyebrow">听力 / 精听</p>
-      <h1 class="listening-library__title">精听练习</h1>
       <p class="listening-library__summary">选择一个练习开始精听训练。自由练习进度会保存在当前浏览器。</p>
     </div>
   </div>
 
-  <section class="practice-overview" id="practiceOverview" aria-label="任务与做题记录">
-    <article class="practice-overview__panel practice-overview__panel--tasks">
-      <div class="practice-overview__header">
-        <div class="practice-overview__heading">
-          <h2 class="practice-overview__title">当前任务</h2>
-          <p class="practice-overview__description">现在可以开始或继续的练习</p>
-        </div>
-        <span class="practice-overview__meta" id="newTasksMeta">加载中</span>
-      </div>
-      <div class="practice-overview__list" id="newTasksList" aria-live="polite">
-        <div class="practice-overview__empty">正在加载任务…</div>
-      </div>
-      <a class="practice-overview__footer" id="newTasksMore" href="{{ url_for('practice_library') }}#practiceAssignedTasks">查看全部任务与历史 →</a>
-    </article>
 
-    <article class="practice-overview__panel practice-overview__panel--history">
-      <div class="practice-overview__header">
-        <div class="practice-overview__heading">
-          <h2 class="practice-overview__title">做题记录</h2>
-          <p class="practice-overview__description">服务器已保存的最近提交</p>
-        </div>
-        <span class="practice-overview__meta" id="practiceHistoryMeta">加载中</span>
-      </div>
-      <div class="practice-overview__list" id="practiceHistoryList" aria-live="polite">
-        <div class="practice-overview__empty">正在加载记录…</div>
-      </div>
-    </article>
-  </section>
 
-  {% set nav_subject = 'listening' %}
-  {% set nav_active = 'intensive' %}
-  {% include "practice/_nav.html" %}
+  <p><a href="{{ url_for('practice_library') }}#practiceAssignedTasks" data-practice-nav>在练习中心查看任务与记录</a></p>
 
   {% if exercises %}
   {{ render_intensive_catalog(intensive_catalog, staff=False) }}
@@ -801,7 +568,6 @@
 
 {% endif %}
 
-<script src="{{ url_for('static', filename='js/practice_task_lists.js') }}"></script>
 <script>
 // Only run student verification JS if not in staff mode
 if (document.getElementById('loginGate')) {
@@ -878,134 +644,23 @@ if (document.getElementById('loginGate')) {
     });
   }
 
+  function updateIntensiveIdentity(name) {
+    const label = document.querySelector('[data-practice-identity-label]');
+    if (label) label.textContent = name ? `学生：${name}` : '未确认身份';
+    const switchButton = document.getElementById('practiceIntensiveIdentitySwitch');
+    if (switchButton) switchButton.hidden = !name;
+    const defaults = window.PRACTICE_NAVIGATION_DEFAULTS || {};
+    if ((defaults.identityMode || defaults.identity_mode) !== 'student_account') {
+      defaults.identityMode = defaults.identity_mode = name ? 'verified_student' : 'guest';
+      window.PRACTICE_NAVIGATION_DEFAULTS = defaults;
+    }
+  }
+
   function showMain(name) {
     document.getElementById('loginGate').style.display = 'none';
     document.getElementById('mainContent').style.display = 'block';
-    document.getElementById('displayName').textContent = name;
+    updateIntensiveIdentity(name);
     refreshExerciseProgress(name);
-    loadPracticeOverview();
-  }
-
-  function escapeHtml(s) {
-    return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({
-      '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
-    })[c]);
-  }
-
-  function formatPracticeDate(value) {
-    const match = String(value || '').match(/^(\d{4})-(\d{2})-(\d{2})$/);
-    return match ? `${Number(match[2])}月${Number(match[3])}日` : (value || '');
-  }
-
-  function formatAttemptTime(value) {
-    if (!value) return '';
-    const normalized = /(?:Z|[+-]\d{2}:?\d{2})$/.test(value) ? value : `${value}Z`;
-    const date = new Date(normalized);
-    if (Number.isNaN(date.getTime())) return '';
-    return new Intl.DateTimeFormat('zh-CN', {
-      hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'Asia/Shanghai'
-    }).format(date);
-  }
-
-  function renderNewTasks(data) {
-    const list = document.getElementById('newTasksList');
-    const meta = document.getElementById('newTasksMeta');
-    const more = document.getElementById('newTasksMore');
-    if (!list || !meta) return;
-    const tasks = PracticeTaskLists.fromGroups(data && data.groups).current;
-    meta.textContent = `${tasks.length} 项待完成`;
-    if (more) more.hidden = false;
-    if (tasks.length === 0) {
-      list.innerHTML = '<div class="practice-overview__empty">当前没有待完成任务，可以从下方题库自由练习。</div>';
-      return;
-    }
-    list.innerHTML = tasks.slice(0, 4).map(task => {
-      const locked = PracticeTaskLists.isLocked(task);
-      const href = locked ? '#' : (task.url || '#');
-      const hint = task.status === 'in_progress'
-        ? ((task.completion_rate != null) ? `进度 ${task.completion_rate}% · 继续做题` : '继续做题')
-        : (locked ? (task.status_label || task.task_status_label || task.availability_label) : `${formatPracticeDate(task.date)} · 点击进入练习`);
-      return `
-        <a class="today-task${locked ? ' today-task--locked' : ''}" href="${escapeHtml(href)}"${locked ? ' aria-disabled="true" onclick="return false"' : ''}>
-          <div class="today-task__row">
-            <span class="today-task__category">${escapeHtml(task.category)}</span>
-            <span class="today-task__status today-task__status--${escapeHtml(task.status)}">${escapeHtml(task.status_label)}</span>
-          </div>
-          <div class="today-task__title">${escapeHtml(task.title)}</div>
-          <div class="today-task__hint">${escapeHtml(hint)}</div>
-        </a>`;
-    }).join('');
-  }
-
-  function renderPracticeHistory(data) {
-    const list = document.getElementById('practiceHistoryList');
-    const meta = document.getElementById('practiceHistoryMeta');
-    if (!list || !meta) return;
-    const records = Array.isArray(data && data.records) ? data.records : [];
-    meta.textContent = records.length ? `最近 ${records.length} 条` : '暂无记录';
-    if (records.length === 0) {
-      list.innerHTML = '<div class="practice-overview__empty">完成并提交练习后，记录会显示在这里。</div>';
-      return;
-    }
-    list.innerHTML = records.map(record => {
-      const attempts = Array.isArray(record.attempts) ? record.attempts : [];
-      const missing = Number(record.legacy_missing_attempts || 0);
-      const expandable = attempts.length > 1 || missing > 0;
-      const content = `
-        <div class="practice-history__row">
-          <span class="practice-history__source">${escapeHtml(record.source_label)}</span>
-          <span class="practice-history__date">${escapeHtml(formatPracticeDate(record.date))}</span>
-        </div>
-        <div class="practice-history__title">${escapeHtml(record.title)}</div>
-        <div class="practice-history__result">
-          <span>${escapeHtml(record.scope_label)}</span>
-          <span class="practice-history__score">${escapeHtml(record.correct_count)}/${escapeHtml(record.total_count)} · ${escapeHtml(record.accuracy)}%</span>
-        </div>`;
-      if (!expandable) {
-        return `<div class="practice-history"><a class="practice-history__single" href="${escapeHtml(record.url)}">${content}</a></div>`;
-      }
-      const attemptLinks = attempts.map(attempt => {
-        const time = formatAttemptTime(attempt.submitted_at);
-        return `
-          <a class="practice-history__attempt" href="${escapeHtml(attempt.url)}">
-            <span>${escapeHtml(attempt.label)}</span>
-            <span class="practice-history__attempt-meta">${time ? `${escapeHtml(time)} · ` : ''}${escapeHtml(attempt.correct_count)}/${escapeHtml(attempt.total_count)} · ${escapeHtml(attempt.accuracy)}%</span>
-          </a>`;
-      }).join('');
-      const legacyNote = missing > 0
-        ? `<div class="practice-history__legacy-note">另有 ${missing} 次旧版提交。旧版会覆盖前一次答案，因此只能确认提交发生过，无法安全还原答题明细。</div>`
-        : '';
-      return `
-        <details class="practice-history">
-          <summary class="practice-history__summary">
-            ${content}
-            <span class="practice-history__expand" aria-hidden="true"></span>
-          </summary>
-          <div class="practice-history__attempts">${attemptLinks}${legacyNote}</div>
-        </details>`;
-    }).join('');
-  }
-
-  function renderOverviewError(listId, metaId, message) {
-    const list = document.getElementById(listId);
-    const meta = document.getElementById(metaId);
-    if (list) list.innerHTML = `<div class="practice-overview__empty">${escapeHtml(message)}</div>`;
-    if (meta) meta.textContent = '加载失败';
-  }
-
-  function loadPracticeOverview() {
-    Promise.all([
-      fetch('/api/practice/tasks', { credentials: 'same-origin' }).then(r => r.ok ? r.json() : null),
-      fetch('/api/practice/history?limit=4', { credentials: 'same-origin' }).then(r => r.ok ? r.json() : null),
-    ]).then(([tasks, history]) => {
-      if (tasks && tasks.ok) renderNewTasks(tasks);
-      else renderOverviewError('newTasksList', 'newTasksMeta', '任务加载失败，请刷新重试。');
-      if (history && history.ok) renderPracticeHistory(history);
-      else renderOverviewError('practiceHistoryList', 'practiceHistoryMeta', '记录加载失败，请刷新重试。');
-    }).catch(() => {
-      renderOverviewError('newTasksList', 'newTasksMeta', '任务加载失败，请刷新重试。');
-      renderOverviewError('practiceHistoryList', 'practiceHistoryMeta', '记录加载失败，请刷新重试。');
-    });
   }
 
   function logout() {
@@ -1015,10 +670,7 @@ if (document.getElementById('loginGate')) {
     document.getElementById('mainContent').style.display = 'none';
     document.getElementById('studentName').value = '';
     document.getElementById('errorMsg').hidden = true;
-    document.getElementById('newTasksList').innerHTML = '<div class="practice-overview__empty">正在加载任务…</div>';
-    document.getElementById('newTasksMeta').textContent = '加载中';
-    document.getElementById('practiceHistoryList').innerHTML = '<div class="practice-overview__empty">正在加载记录…</div>';
-    document.getElementById('practiceHistoryMeta').textContent = '加载中';
+    updateIntensiveIdentity('');
     document.getElementById('studentName').focus();
   }
 
@@ -1032,7 +684,6 @@ if (document.getElementById('loginGate')) {
     const saved = sessionStorage.getItem('listening_student') || localStorage.getItem('listening_student');
     if (saved && document.getElementById('mainContent').style.display !== 'none') {
       refreshExerciseProgress(saved);
-      loadPracticeOverview();
     }
   });
 

@@ -40,6 +40,7 @@ def render_practice(*, role=None, path="/practice", endpoint="practice_library")
         ),
         get_flashed_messages=lambda: [],
         config={},
+        session={},
     )
     counts = dict(
         cambridge_books=1, cambridge_tests=4, cambridge_questions=160,

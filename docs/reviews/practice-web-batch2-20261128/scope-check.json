@@ -1,0 +1,765 @@
+{
+  "generated_at": "2026-11-28T04:04:11.293510+00:00",
+  "command": [
+    "/Users/zhouxin/Desktop/studytracker/.venv/bin/python",
+    "/private/tmp/studytracker-practice-web-batch2-20261128/docs/reviews/practice-web-batch2-20261128/verify_scope.py",
+    "--baseline",
+    "9c211ee807fa1084017cbf8e8a05c1c9fe95de77"
+  ],
+  "worktree": "/private/tmp/studytracker-practice-web-batch2-20261128",
+  "branch": "codex/practice-web-batch2-20261128",
+  "baseline_ref": "9c211ee807fa1084017cbf8e8a05c1c9fe95de77",
+  "baseline_commit": "9c211ee807fa1084017cbf8e8a05c1c9fe95de77",
+  "python": "3.13.3 (v3.13.3:6280bb54784, Apr  8 2025, 10:47:54) [Clang 15.0.0 (clang-1500.3.9.4)]",
+  "tracked_changes": [
+    ".github/workflows/ci.yml",
+    "docs/CODEX_HANDOFF.md",
+    "docs/WORKLOG.md",
+    "docs/reviews/practice-web-audit-20261126/flows.js",
+    "static/js/practice_shell.js",
+    "templates/auth/_entrance_shell.html",
+    "templates/base.html",
+    "templates/listening/index.html",
+    "templates/listening/jijing_index.html",
+    "templates/listening/test_index.html",
+    "templates/practice/_workspace_styles.html",
+    "templates/practice/exam_sprint.html",
+    "templates/practice/index_content.html",
+    "templates/question_type_practice/student_index.html",
+    "templates/reading/jijing_index.html",
+    "templates/reading/test_index.html",
+    "templates/writing/index.html",
+    "templates/writing/topics.html",
+    "tests/test_exam_sprint_routes.py",
+    "tests/test_practice_center_batch1.py",
+    "tests/test_practice_portal_catalog_grouping.py",
+    "tests/test_practice_shell.js",
+    "tests/test_practice_task_lists.js",
+    "tests/test_practice_workspace_regression.py"
+  ],
+  "untracked_paths": [
+    "docs/reviews/practice-web-batch2-20261128/README.md",
+    "docs/reviews/practice-web-batch2-20261128/batch2-delivery.tar.gz",
+    "docs/reviews/practice-web-batch2-20261128/batch2.patch",
+    "docs/reviews/practice-web-batch2-20261128/browser/browser-run.json",
+    "docs/reviews/practice-web-batch2-20261128/codex-handoff.md",
+    "docs/reviews/practice-web-batch2-20261128/independent-review.md",
+    "docs/reviews/practice-web-batch2-20261128/manifest.json",
+    "docs/reviews/practice-web-batch2-20261128/patch-check.json",
+    "docs/reviews/practice-web-batch2-20261128/release/browser-first/-listening-jijing-1440.png",
+    "docs/reviews/practice-web-batch2-20261128/release/browser-first/-listening-jijing-390.png",
+    "docs/reviews/practice-web-batch2-20261128/release/browser-first/-listening-tests-1440.png",
+    "docs/reviews/practice-web-batch2-20261128/release/browser-first/-listening-tests-390.png",
+    "docs/reviews/practice-web-batch2-20261128/release/browser-first/-practice-1440.png",
+    "docs/reviews/practice-web-batch2-20261128/release/browser-first/-practice-390.png",
+    "docs/reviews/practice-web-batch2-20261128/release/browser-first/-practice-question-types-1440.png",
+    "docs/reviews/practice-web-batch2-20261128/release/browser-first/-practice-question-types-390.png",
+    "docs/reviews/practice-web-batch2-20261128/release/browser-first/-practice-sprint-listening-1440.png",
+    "docs/reviews/practice-web-batch2-20261128/release/browser-first/-practice-sprint-listening-390.png",
+    "docs/reviews/practice-web-batch2-20261128/release/browser-first/-practice-sprint-reading-1440.png",
+    "docs/reviews/practice-web-batch2-20261128/release/browser-first/-practice-sprint-reading-390.png",
+    "docs/reviews/practice-web-batch2-20261128/release/browser-first/-practices-1440.png",
+    "docs/reviews/practice-web-batch2-20261128/release/browser-first/-practices-390.png",
+    "docs/reviews/practice-web-batch2-20261128/release/browser-first/-reading-jijing-1440.png",
+    "docs/reviews/practice-web-batch2-20261128/release/browser-first/-reading-jijing-390.png",
+    "docs/reviews/practice-web-batch2-20261128/release/browser-first/-reading-tests-1440.png",
+    "docs/reviews/practice-web-batch2-20261128/release/browser-first/-reading-tests-390.png",
+    "docs/reviews/practice-web-batch2-20261128/release/browser-first/-writing--1440.png",
+    "docs/reviews/practice-web-batch2-20261128/release/browser-first/-writing--390.png",
+    "docs/reviews/practice-web-batch2-20261128/release/browser-first/-writing-topics-1440.png",
+    "docs/reviews/practice-web-batch2-20261128/release/browser-first/-writing-topics-390.png",
+    "docs/reviews/practice-web-batch2-20261128/release/browser-first/flows.json",
+    "docs/reviews/practice-web-batch2-20261128/release/browser/-listening-jijing-1440.png",
+    "docs/reviews/practice-web-batch2-20261128/release/browser/-listening-jijing-390.png",
+    "docs/reviews/practice-web-batch2-20261128/release/browser/-listening-tests-1440.png",
+    "docs/reviews/practice-web-batch2-20261128/release/browser/-listening-tests-390.png",
+    "docs/reviews/practice-web-batch2-20261128/release/browser/-practice-1440.png",
+    "docs/reviews/practice-web-batch2-20261128/release/browser/-practice-390.png",
+    "docs/reviews/practice-web-batch2-20261128/release/browser/-practice-question-types-1440.png",
+    "docs/reviews/practice-web-batch2-20261128/release/browser/-practice-question-types-390.png",
+    "docs/reviews/practice-web-batch2-20261128/release/browser/-practice-sprint-listening-1440.png",
+    "docs/reviews/practice-web-batch2-20261128/release/browser/-practice-sprint-listening-390.png",
+    "docs/reviews/practice-web-batch2-20261128/release/browser/-practice-sprint-reading-1440.png",
+    "docs/reviews/practice-web-batch2-20261128/release/browser/-practice-sprint-reading-390.png",
+    "docs/reviews/practice-web-batch2-20261128/release/browser/-practices-1440.png",
+    "docs/reviews/practice-web-batch2-20261128/release/browser/-practices-390.png",
+    "docs/reviews/practice-web-batch2-20261128/release/browser/-reading-jijing-1440.png",
+    "docs/reviews/practice-web-batch2-20261128/release/browser/-reading-jijing-390.png",
+    "docs/reviews/practice-web-batch2-20261128/release/browser/-reading-tests-1440.png",
+    "docs/reviews/practice-web-batch2-20261128/release/browser/-reading-tests-390.png",
+    "docs/reviews/practice-web-batch2-20261128/release/browser/-writing--1440.png",
+    "docs/reviews/practice-web-batch2-20261128/release/browser/-writing--390.png",
+    "docs/reviews/practice-web-batch2-20261128/release/browser/-writing-topics-1440.png",
+    "docs/reviews/practice-web-batch2-20261128/release/browser/-writing-topics-390.png",
+    "docs/reviews/practice-web-batch2-20261128/release/browser/flows.json",
+    "docs/reviews/practice-web-batch2-20261128/release/extra-1.log",
+    "docs/reviews/practice-web-batch2-20261128/release/extra-2.log",
+    "docs/reviews/practice-web-batch2-20261128/release/extra-3.log",
+    "docs/reviews/practice-web-batch2-20261128/release/extra-commands.json",
+    "docs/reviews/practice-web-batch2-20261128/release/extra-first-1.log",
+    "docs/reviews/practice-web-batch2-20261128/release/extra-first-commands.json",
+    "docs/reviews/practice-web-batch2-20261128/release/independent-review.md",
+    "docs/reviews/practice-web-batch2-20261128/release/production-preflight.json",
+    "docs/reviews/practice-web-batch2-20261128/release/production-probe-selftest.json",
+    "docs/reviews/practice-web-batch2-20261128/release/py310.log",
+    "docs/reviews/practice-web-batch2-20261128/release/py313.log",
+    "docs/reviews/practice-web-batch2-20261128/release/python-commands.json",
+    "docs/reviews/practice-web-batch2-20261128/release/serve-fixture-notes.json",
+    "docs/reviews/practice-web-batch2-20261128/release/serve_fixture.py",
+    "docs/reviews/practice-web-batch2-20261128/release/verify_production.py",
+    "docs/reviews/practice-web-batch2-20261128/run_checks.py",
+    "docs/reviews/practice-web-batch2-20261128/scope-check.json",
+    "docs/reviews/practice-web-batch2-20261128/validation/final-static-commands.json",
+    "docs/reviews/practice-web-batch2-20261128/validation/initial-template-fixture-errors.log",
+    "docs/reviews/practice-web-batch2-20261128/validation/node-1.log",
+    "docs/reviews/practice-web-batch2-20261128/validation/node-2.log",
+    "docs/reviews/practice-web-batch2-20261128/validation/node-commands.json",
+    "docs/reviews/practice-web-batch2-20261128/validation/py310-1.log",
+    "docs/reviews/practice-web-batch2-20261128/validation/py310-commands.json",
+    "docs/reviews/practice-web-batch2-20261128/validation/py313-1.log",
+    "docs/reviews/practice-web-batch2-20261128/validation/py313-commands.json",
+    "docs/reviews/practice-web-batch2-20261128/verify_scope.py",
+    "docs/reviews/practice-web-batch2-20261128/worktree-status.json",
+    "templates/practice/_workspace_header.html",
+    "tests/test_practice_navigation_batch2.py"
+  ],
+  "checks": [
+    {
+      "name": "protected_products_have_no_git_changes",
+      "passed": true,
+      "changed_paths": [],
+      "protected_tracked_count": 235,
+      "rule": "app.py/models.py/api/**/services/**, listening/player and listening/reading test templates, all static and miniprogram JS except practice_shell.js"
+    },
+    {
+      "name": "product_scope_allowlist",
+      "passed": true,
+      "changed_paths": [
+        "static/js/practice_shell.js",
+        "templates/auth/_entrance_shell.html",
+        "templates/base.html",
+        "templates/listening/index.html",
+        "templates/listening/jijing_index.html",
+        "templates/listening/test_index.html",
+        "templates/practice/_workspace_header.html",
+        "templates/practice/_workspace_styles.html",
+        "templates/practice/exam_sprint.html",
+        "templates/practice/index_content.html",
+        "templates/question_type_practice/student_index.html",
+        "templates/reading/jijing_index.html",
+        "templates/reading/test_index.html",
+        "templates/writing/index.html",
+        "templates/writing/topics.html"
+      ],
+      "unexpected_paths": []
+    },
+    {
+      "name": "byte_identical:app.py",
+      "passed": true,
+      "path": "app.py",
+      "baseline_sha256": "39ca98aaebfd9aa67b23cf0762feb8408b08ebcf0de17005f84042606d5d4b92",
+      "current_sha256": "39ca98aaebfd9aa67b23cf0762feb8408b08ebcf0de17005f84042606d5d4b92",
+      "baseline_bytes": 383002,
+      "current_bytes": 383002
+    },
+    {
+      "name": "byte_identical:models.py",
+      "passed": true,
+      "path": "models.py",
+      "baseline_sha256": "53f72d965c301e323699aa7b15288f1b12b42a8073b5084354c9f1ff11e6c562",
+      "current_sha256": "53f72d965c301e323699aa7b15288f1b12b42a8073b5084354c9f1ff11e6c562",
+      "baseline_bytes": 128348,
+      "current_bytes": 128348
+    },
+    {
+      "name": "byte_identical:templates/listening/test_practice.html",
+      "passed": true,
+      "path": "templates/listening/test_practice.html",
+      "baseline_sha256": "cfd39a6639373831ba2ca5e008062201a0d81ab94d6e91c7965a681a3b6cc395",
+      "current_sha256": "cfd39a6639373831ba2ca5e008062201a0d81ab94d6e91c7965a681a3b6cc395",
+      "baseline_bytes": 111420,
+      "current_bytes": 111420
+    },
+    {
+      "name": "byte_identical:templates/listening/player.html",
+      "passed": true,
+      "path": "templates/listening/player.html",
+      "baseline_sha256": "1049801dd4f528d972115476d4c41a57a8dfab58a26ce5b1307e36c0bf4e9410",
+      "current_sha256": "1049801dd4f528d972115476d4c41a57a8dfab58a26ce5b1307e36c0bf4e9410",
+      "baseline_bytes": 96808,
+      "current_bytes": 96808
+    },
+    {
+      "name": "byte_identical:templates/reading/test_practice.html",
+      "passed": true,
+      "path": "templates/reading/test_practice.html",
+      "baseline_sha256": "803c9a719186ba1daae37fbd1c004a892416e4469207e02b11f75e8397c99b39",
+      "current_sha256": "803c9a719186ba1daae37fbd1c004a892416e4469207e02b11f75e8397c99b39",
+      "baseline_bytes": 74529,
+      "current_bytes": 74529
+    },
+    {
+      "name": "shell_init_and_all_save_exit_timer_code_byte_identical",
+      "passed": true,
+      "path": "static/js/practice_shell.js",
+      "baseline_sha256": "d7229707d9a92abc4f6bb596f0c74f67643e2df1f40de5325efaa8ee9e1fb0eb",
+      "current_sha256": "d7229707d9a92abc4f6bb596f0c74f67643e2df1f40de5325efaa8ee9e1fb0eb",
+      "baseline_bytes": 6499,
+      "current_bytes": 6499
+    },
+    {
+      "name": "intensive_catalog_macro_byte_identical",
+      "passed": true,
+      "path": "templates/listening/index.html",
+      "baseline_sha256": "1ded6716b031a76216df2b598c71fdcc0d7be0132a0d3ea1aed0dca56b6c9f1e",
+      "current_sha256": "1ded6716b031a76216df2b598c71fdcc0d7be0132a0d3ea1aed0dca56b6c9f1e",
+      "baseline_bytes": 8548,
+      "current_bytes": 8548
+    },
+    {
+      "name": "intensive_progress_card_and_management_script_byte_identical",
+      "passed": true,
+      "path": "templates/listening/index.html",
+      "baseline_sha256": "6911d4c569cd80a99fa60e768b33b4e58a82028a302a4453a042d87d067f2d5c",
+      "current_sha256": "6911d4c569cd80a99fa60e768b33b4e58a82028a302a4453a042d87d067f2d5c",
+      "baseline_bytes": 2689,
+      "current_bytes": 2689
+    },
+    {
+      "name": "jinja_parse:templates/auth/_entrance_shell.html",
+      "passed": true
+    },
+    {
+      "name": "jinja_parse:templates/base.html",
+      "passed": true
+    },
+    {
+      "name": "jinja_parse:templates/listening/index.html",
+      "passed": true
+    },
+    {
+      "name": "jinja_parse:templates/listening/jijing_index.html",
+      "passed": true
+    },
+    {
+      "name": "jinja_parse:templates/listening/test_index.html",
+      "passed": true
+    },
+    {
+      "name": "jinja_parse:templates/practice/_workspace_header.html",
+      "passed": true
+    },
+    {
+      "name": "jinja_parse:templates/practice/_workspace_styles.html",
+      "passed": true
+    },
+    {
+      "name": "jinja_parse:templates/practice/exam_sprint.html",
+      "passed": true
+    },
+    {
+      "name": "jinja_parse:templates/practice/index_content.html",
+      "passed": true
+    },
+    {
+      "name": "jinja_parse:templates/question_type_practice/student_index.html",
+      "passed": true
+    },
+    {
+      "name": "jinja_parse:templates/reading/jijing_index.html",
+      "passed": true
+    },
+    {
+      "name": "jinja_parse:templates/reading/test_index.html",
+      "passed": true
+    },
+    {
+      "name": "jinja_parse:templates/writing/index.html",
+      "passed": true
+    },
+    {
+      "name": "jinja_parse:templates/writing/topics.html",
+      "passed": true
+    },
+    {
+      "name": "node_check:docs/reviews/practice-web-audit-20261126/flows.js",
+      "passed": true
+    },
+    {
+      "name": "node_check:static/js/practice_shell.js",
+      "passed": true
+    },
+    {
+      "name": "node_check:tests/test_practice_shell.js",
+      "passed": true
+    },
+    {
+      "name": "node_check:tests/test_practice_task_lists.js",
+      "passed": true
+    },
+    {
+      "name": "git_diff_check_tracked_sources",
+      "passed": true,
+      "paths": [
+        ".github/workflows/ci.yml",
+        "docs/CODEX_HANDOFF.md",
+        "docs/WORKLOG.md",
+        "docs/reviews/practice-web-audit-20261126/flows.js",
+        "static/js/practice_shell.js",
+        "templates/auth/_entrance_shell.html",
+        "templates/base.html",
+        "templates/listening/index.html",
+        "templates/listening/jijing_index.html",
+        "templates/listening/test_index.html",
+        "templates/practice/_workspace_styles.html",
+        "templates/practice/exam_sprint.html",
+        "templates/practice/index_content.html",
+        "templates/question_type_practice/student_index.html",
+        "templates/reading/jijing_index.html",
+        "templates/reading/test_index.html",
+        "templates/writing/index.html",
+        "templates/writing/topics.html",
+        "tests/test_exam_sprint_routes.py",
+        "tests/test_practice_center_batch1.py",
+        "tests/test_practice_portal_catalog_grouping.py",
+        "tests/test_practice_shell.js",
+        "tests/test_practice_task_lists.js",
+        "tests/test_practice_workspace_regression.py"
+      ]
+    },
+    {
+      "name": "git_diff_check_new_source:docs/reviews/practice-web-batch2-20261128/README.md",
+      "passed": true
+    },
+    {
+      "name": "git_diff_check_new_source:docs/reviews/practice-web-batch2-20261128/codex-handoff.md",
+      "passed": true
+    },
+    {
+      "name": "git_diff_check_new_source:docs/reviews/practice-web-batch2-20261128/independent-review.md",
+      "passed": true
+    },
+    {
+      "name": "git_diff_check_new_source:docs/reviews/practice-web-batch2-20261128/release/independent-review.md",
+      "passed": true
+    },
+    {
+      "name": "git_diff_check_new_source:docs/reviews/practice-web-batch2-20261128/release/serve_fixture.py",
+      "passed": true
+    },
+    {
+      "name": "git_diff_check_new_source:docs/reviews/practice-web-batch2-20261128/release/verify_production.py",
+      "passed": true
+    },
+    {
+      "name": "git_diff_check_new_source:docs/reviews/practice-web-batch2-20261128/run_checks.py",
+      "passed": true
+    },
+    {
+      "name": "git_diff_check_new_source:docs/reviews/practice-web-batch2-20261128/verify_scope.py",
+      "passed": true
+    },
+    {
+      "name": "git_diff_check_new_source:templates/practice/_workspace_header.html",
+      "passed": true
+    },
+    {
+      "name": "git_diff_check_new_source:tests/test_practice_navigation_batch2.py",
+      "passed": true
+    }
+  ],
+  "commands": [
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "--verify",
+        "9c211ee807fa1084017cbf8e8a05c1c9fe95de77^{commit}"
+      ],
+      "cwd": "/private/tmp/studytracker-practice-web-batch2-20261128",
+      "exit_code": 0,
+      "stdout": "9c211ee807fa1084017cbf8e8a05c1c9fe95de77\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "branch",
+        "--show-current"
+      ],
+      "cwd": "/private/tmp/studytracker-practice-web-batch2-20261128",
+      "exit_code": 0,
+      "stdout": "codex/practice-web-batch2-20261128\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--name-only",
+        "-z",
+        "9c211ee807fa1084017cbf8e8a05c1c9fe95de77",
+        "--"
+      ],
+      "cwd": "/private/tmp/studytracker-practice-web-batch2-20261128",
+      "exit_code": 0,
+      "stdout": ".github/workflows/ci.yml\u0000docs/CODEX_HANDOFF.md\u0000docs/WORKLOG.md\u0000docs/reviews/practice-web-audit-20261126/flows.js\u0000static/js/practice_shell.js\u0000templates/auth/_entrance_shell.html\u0000templates/base.html\u0000templates/listening/index.html\u0000templates/listening/jijing_index.html\u0000templates/listening/test_index.html\u0000templates/practice/_workspace_styles.html\u0000templates/practice/exam_sprint.html\u0000templates/practice/index_content.html\u0000templates/question_type_practice/student_index.html\u0000templates/reading/jijing_index.html\u0000templates/reading/test_index.html\u0000templates/writing/index.html\u0000templates/writing/topics.html\u0000tests/test_exam_sprint_routes.py\u0000tests/test_practice_center_batch1.py\u0000tests/test_practice_portal_catalog_grouping.py\u0000tests/test_practice_shell.js\u0000tests/test_practice_task_lists.js\u0000tests/test_practice_workspace_regression.py\u0000",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "ls-files",
+        "--others",
+        "--exclude-standard",
+        "-z"
+      ],
+      "cwd": "/private/tmp/studytracker-practice-web-batch2-20261128",
+      "exit_code": 0,
+      "stdout": "docs/reviews/practice-web-batch2-20261128/README.md\u0000docs/reviews/practice-web-batch2-20261128/batch2-delivery.tar.gz\u0000docs/reviews/practice-web-batch2-20261128/batch2.patch\u0000docs/reviews/practice-web-batch2-20261128/browser/browser-run.json\u0000docs/reviews/practice-web-batch2-20261128/codex-handoff.md\u0000docs/reviews/practice-web-batch2-20261128/independent-review.md\u0000docs/reviews/practice-web-batch2-20261128/manifest.json\u0000docs/reviews/practice-web-batch2-20261128/patch-check.json\u0000docs/reviews/practice-web-batch2-20261128/release/browser-first/-listening-jijing-1440.png\u0000docs/reviews/practice-web-batch2-20261128/release/browser-first/-listening-jijing-390.png\u0000docs/reviews/practice-web-batch2-20261128/release/browser-first/-listening-tests-1440.png\u0000docs/reviews/practice-web-batch2-20261128/release/browser-first/-listening-tests-390.png\u0000docs/reviews/practice-web-batch2-20261128/release/browser-first/-practice-1440.png\u0000docs/reviews/practice-web-batch2-20261128/release/browser-first/-practice-390.png\u0000docs/reviews/practice-web-batch2-20261128/release/browser-first/-practice-question-types-1440.png\u0000docs/reviews/practice-web-batch2-20261128/release/browser-first/-practice-question-types-390.png\u0000docs/reviews/practice-web-batch2-20261128/release/browser-first/-practice-sprint-listening-1440.png\u0000docs/reviews/practice-web-batch2-20261128/release/browser-first/-practice-sprint-listening-390.png\u0000docs/reviews/practice-web-batch2-20261128/release/browser-first/-practice-sprint-reading-1440.png\u0000docs/reviews/practice-web-batch2-20261128/release/browser-first/-practice-sprint-reading-390.png\u0000docs/reviews/practice-web-batch2-20261128/release/browser-first/-practices-1440.png\u0000docs/reviews/practice-web-batch2-20261128/release/browser-first/-practices-390.png\u0000docs/reviews/practice-web-batch2-20261128/release/browser-first/-reading-jijing-1440.png\u0000docs/reviews/practice-web-batch2-20261128/release/browser-first/-reading-jijing-390.png\u0000docs/reviews/practice-web-batch2-20261128/release/browser-first/-reading-tests-1440.png\u0000docs/reviews/practice-web-batch2-20261128/release/browser-first/-reading-tests-390.png\u0000docs/reviews/practice-web-batch2-20261128/release/browser-first/-writing--1440.png\u0000docs/reviews/practice-web-batch2-20261128/release/browser-first/-writing--390.png\u0000docs/reviews/practice-web-batch2-20261128/release/browser-first/-writing-topics-1440.png\u0000docs/reviews/practice-web-batch2-20261128/release/browser-first/-writing-topics-390.png\u0000docs/reviews/practice-web-batch2-20261128/release/browser-first/flows.json\u0000docs/reviews/practice-web-batch2-20261128/release/browser/-listening-jijing-1440.png\u0000docs/reviews/practice-web-batch2-20261128/release/browser/-listening-jijing-390.png\u0000docs/reviews/practice-web-batch2-20261128/release/browser/-listening-tests-1440.png\u0000docs/reviews/practice-web-batch2-20261128/release/browser/-listening-tests-390.png\u0000docs/reviews/practice-web-batch2-20261128/release/browser/-practice-1440.png\u0000docs/reviews/practice-web-batch2-20261128/release/browser/-practice-390.png\u0000docs/reviews/practice-web-batch2-20261128/release/browser/-practice-question-types-1440.png\u0000docs/reviews/practice-web-batch2-20261128/release/browser/-practice-question-types-390.png\u0000docs/reviews/practice-web-batch2-20261128/release/browser/-practice-sprint-listening-1440.png\u0000docs/reviews/practice-web-batch2-20261128/release/browser/-practice-sprint-listening-390.png\u0000docs/reviews/practice-web-batch2-20261128/release/browser/-practice-sprint-reading-1440.png\u0000docs/reviews/practice-web-batch2-20261128/release/browser/-practice-sprint-reading-390.png\u0000docs/reviews/practice-web-batch2-20261128/release/browser/-practices-1440.png\u0000docs/reviews/practice-web-batch2-20261128/release/browser/-practices-390.png\u0000docs/reviews/practice-web-batch2-20261128/release/browser/-reading-jijing-1440.png\u0000docs/reviews/practice-web-batch2-20261128/release/browser/-reading-jijing-390.png\u0000docs/reviews/practice-web-batch2-20261128/release/browser/-reading-tests-1440.png\u0000docs/reviews/practice-web-batch2-20261128/release/browser/-reading-tests-390.png\u0000docs/reviews/practice-web-batch2-20261128/release/browser/-writing--1440.png\u0000docs/reviews/practice-web-batch2-20261128/release/browser/-writing--390.png\u0000docs/reviews/practice-web-batch2-20261128/release/browser/-writing-topics-1440.png\u0000docs/reviews/practice-web-batch2-20261128/release/browser/-writing-topics-390.png\u0000docs/reviews/practice-web-batch2-20261128/release/browser/flows.json\u0000docs/reviews/practice-web-batch2-20261128/release/extra-1.log\u0000docs/reviews/practice-web-batch2-20261128/release/extra-2.log\u0000docs/reviews/practice-web-batch2-20261128/release/extra-3.log\u0000docs/reviews/practice-web-batch2-20261128/release/extra-commands.json\u0000docs/reviews/practice-web-batch2-20261128/release/extra-first-1.log\u0000docs/reviews/practice-web-batch2-20261128/release/extra-first-commands.json\u0000docs/reviews/practice-web-batch2-20261128/release/independent-review.md\u0000docs/reviews/practice-web-batch2-20261128/release/production-preflight.json\u0000docs/reviews/practice-web-batch2-20261128/release/production-probe-selftest.json\u0000docs/reviews/practice-web-batch2-20261128/release/py310.log\u0000docs/reviews/practice-web-batch2-20261128/release/py313.log\u0000docs/reviews/practice-web-batch2-20261128/release/python-commands.json\u0000docs/reviews/practice-web-batch2-20261128/release/serve-fixture-notes.json\u0000docs/reviews/practice-web-batch2-20261128/release/serve_fixture.py\u0000docs/reviews/practice-web-batch2-20261128/release/verify_production.py\u0000docs/reviews/practice-web-batch2-20261128/run_checks.py\u0000docs/reviews/practice-web-batch2-20261128/scope-check.json\u0000docs/reviews/practice-web-batch2-20261128/validation/final-static-commands.json\u0000docs/reviews/practice-web-batch2-20261128/validation/initial-template-fixture-errors.log\u0000docs/reviews/practice-web-batch2-20261128/validation/node-1.log\u0000docs/reviews/practice-web-batch2-20261128/validation/node-2.log\u0000docs/reviews/practice-web-batch2-20261128/validation/node-commands.json\u0000docs/reviews/practice-web-batch2-20261128/validation/py310-1.log\u0000docs/reviews/practice-web-batch2-20261128/validation/py310-commands.json\u0000docs/reviews/practice-web-batch2-20261128/validation/py313-1.log\u0000docs/reviews/practice-web-batch2-20261128/validation/py313-commands.json\u0000docs/reviews/practice-web-batch2-20261128/verify_scope.py\u0000docs/reviews/practice-web-batch2-20261128/worktree-status.json\u0000templates/practice/_workspace_header.html\u0000tests/test_practice_navigation_batch2.py\u0000",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "ls-files",
+        "-z"
+      ],
+      "cwd": "/private/tmp/studytracker-practice-web-batch2-20261128",
+      "exit_code": 0,
+      "stdout_sha256": "c159a1c2b69fde66ed7de02486aa4a226110158d9e74136a00811ced48cb973e",
+      "stdout_bytes": 204600
+    },
+    {
+      "argv": [
+        "git",
+        "show",
+        "9c211ee807fa1084017cbf8e8a05c1c9fe95de77:app.py"
+      ],
+      "cwd": "/private/tmp/studytracker-practice-web-batch2-20261128",
+      "exit_code": 0,
+      "stdout_sha256": "39ca98aaebfd9aa67b23cf0762feb8408b08ebcf0de17005f84042606d5d4b92",
+      "stdout_bytes": 383002
+    },
+    {
+      "argv": [
+        "git",
+        "show",
+        "9c211ee807fa1084017cbf8e8a05c1c9fe95de77:models.py"
+      ],
+      "cwd": "/private/tmp/studytracker-practice-web-batch2-20261128",
+      "exit_code": 0,
+      "stdout_sha256": "53f72d965c301e323699aa7b15288f1b12b42a8073b5084354c9f1ff11e6c562",
+      "stdout_bytes": 128348
+    },
+    {
+      "argv": [
+        "git",
+        "show",
+        "9c211ee807fa1084017cbf8e8a05c1c9fe95de77:templates/listening/test_practice.html"
+      ],
+      "cwd": "/private/tmp/studytracker-practice-web-batch2-20261128",
+      "exit_code": 0,
+      "stdout_sha256": "cfd39a6639373831ba2ca5e008062201a0d81ab94d6e91c7965a681a3b6cc395",
+      "stdout_bytes": 111420
+    },
+    {
+      "argv": [
+        "git",
+        "show",
+        "9c211ee807fa1084017cbf8e8a05c1c9fe95de77:templates/listening/player.html"
+      ],
+      "cwd": "/private/tmp/studytracker-practice-web-batch2-20261128",
+      "exit_code": 0,
+      "stdout_sha256": "1049801dd4f528d972115476d4c41a57a8dfab58a26ce5b1307e36c0bf4e9410",
+      "stdout_bytes": 96808
+    },
+    {
+      "argv": [
+        "git",
+        "show",
+        "9c211ee807fa1084017cbf8e8a05c1c9fe95de77:templates/reading/test_practice.html"
+      ],
+      "cwd": "/private/tmp/studytracker-practice-web-batch2-20261128",
+      "exit_code": 0,
+      "stdout_sha256": "803c9a719186ba1daae37fbd1c004a892416e4469207e02b11f75e8397c99b39",
+      "stdout_bytes": 74529
+    },
+    {
+      "argv": [
+        "git",
+        "show",
+        "9c211ee807fa1084017cbf8e8a05c1c9fe95de77:static/js/practice_shell.js"
+      ],
+      "cwd": "/private/tmp/studytracker-practice-web-batch2-20261128",
+      "exit_code": 0,
+      "stdout_sha256": "b3c875efefa1a6ff111ae794d09520a16df9b3964cce70e62ee314034305f42e",
+      "stdout_bytes": 26782
+    },
+    {
+      "argv": [
+        "git",
+        "show",
+        "9c211ee807fa1084017cbf8e8a05c1c9fe95de77:templates/listening/index.html"
+      ],
+      "cwd": "/private/tmp/studytracker-practice-web-batch2-20261128",
+      "exit_code": 0,
+      "stdout_sha256": "8374e147eb7d3da460fad7c99913c6b438e4b9a6c2eeab49099e193bbd71e57a",
+      "stdout_bytes": 44675
+    },
+    {
+      "argv": [
+        "git",
+        "show",
+        "9c211ee807fa1084017cbf8e8a05c1c9fe95de77:templates/listening/index.html"
+      ],
+      "cwd": "/private/tmp/studytracker-practice-web-batch2-20261128",
+      "exit_code": 0,
+      "stdout_sha256": "8374e147eb7d3da460fad7c99913c6b438e4b9a6c2eeab49099e193bbd71e57a",
+      "stdout_bytes": 44675
+    },
+    {
+      "argv": [
+        "node",
+        "--check",
+        "docs/reviews/practice-web-audit-20261126/flows.js"
+      ],
+      "cwd": "/private/tmp/studytracker-practice-web-batch2-20261128",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "node",
+        "--check",
+        "static/js/practice_shell.js"
+      ],
+      "cwd": "/private/tmp/studytracker-practice-web-batch2-20261128",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "node",
+        "--check",
+        "tests/test_practice_shell.js"
+      ],
+      "cwd": "/private/tmp/studytracker-practice-web-batch2-20261128",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "node",
+        "--check",
+        "tests/test_practice_task_lists.js"
+      ],
+      "cwd": "/private/tmp/studytracker-practice-web-batch2-20261128",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--check",
+        "9c211ee807fa1084017cbf8e8a05c1c9fe95de77",
+        "--",
+        ".github/workflows/ci.yml",
+        "docs/CODEX_HANDOFF.md",
+        "docs/WORKLOG.md",
+        "docs/reviews/practice-web-audit-20261126/flows.js",
+        "static/js/practice_shell.js",
+        "templates/auth/_entrance_shell.html",
+        "templates/base.html",
+        "templates/listening/index.html",
+        "templates/listening/jijing_index.html",
+        "templates/listening/test_index.html",
+        "templates/practice/_workspace_styles.html",
+        "templates/practice/exam_sprint.html",
+        "templates/practice/index_content.html",
+        "templates/question_type_practice/student_index.html",
+        "templates/reading/jijing_index.html",
+        "templates/reading/test_index.html",
+        "templates/writing/index.html",
+        "templates/writing/topics.html",
+        "tests/test_exam_sprint_routes.py",
+        "tests/test_practice_center_batch1.py",
+        "tests/test_practice_portal_catalog_grouping.py",
+        "tests/test_practice_shell.js",
+        "tests/test_practice_task_lists.js",
+        "tests/test_practice_workspace_regression.py"
+      ],
+      "cwd": "/private/tmp/studytracker-practice-web-batch2-20261128",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--no-index",
+        "--check",
+        "--",
+        "/dev/null",
+        "docs/reviews/practice-web-batch2-20261128/README.md"
+      ],
+      "cwd": "/private/tmp/studytracker-practice-web-batch2-20261128",
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--no-index",
+        "--check",
+        "--",
+        "/dev/null",
+        "docs/reviews/practice-web-batch2-20261128/codex-handoff.md"
+      ],
+      "cwd": "/private/tmp/studytracker-practice-web-batch2-20261128",
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--no-index",
+        "--check",
+        "--",
+        "/dev/null",
+        "docs/reviews/practice-web-batch2-20261128/independent-review.md"
+      ],
+      "cwd": "/private/tmp/studytracker-practice-web-batch2-20261128",
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--no-index",
+        "--check",
+        "--",
+        "/dev/null",
+        "docs/reviews/practice-web-batch2-20261128/release/independent-review.md"
+      ],
+      "cwd": "/private/tmp/studytracker-practice-web-batch2-20261128",
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--no-index",
+        "--check",
+        "--",
+        "/dev/null",
+        "docs/reviews/practice-web-batch2-20261128/release/serve_fixture.py"
+      ],
+      "cwd": "/private/tmp/studytracker-practice-web-batch2-20261128",
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--no-index",
+        "--check",
+        "--",
+        "/dev/null",
+        "docs/reviews/practice-web-batch2-20261128/release/verify_production.py"
+      ],
+      "cwd": "/private/tmp/studytracker-practice-web-batch2-20261128",
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--no-index",
+        "--check",
+        "--",
+        "/dev/null",
+        "docs/reviews/practice-web-batch2-20261128/run_checks.py"
+      ],
+      "cwd": "/private/tmp/studytracker-practice-web-batch2-20261128",
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--no-index",
+        "--check",
+        "--",
+        "/dev/null",
+        "docs/reviews/practice-web-batch2-20261128/verify_scope.py"
+      ],
+      "cwd": "/private/tmp/studytracker-practice-web-batch2-20261128",
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--no-index",
+        "--check",
+        "--",
+        "/dev/null",
+        "templates/practice/_workspace_header.html"
+      ],
+      "cwd": "/private/tmp/studytracker-practice-web-batch2-20261128",
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--no-index",
+        "--check",
+        "--",
+        "/dev/null",
+        "tests/test_practice_navigation_batch2.py"
+      ],
+      "cwd": "/private/tmp/studytracker-practice-web-batch2-20261128",
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "summary": {
+    "passed": 39,
+    "failed": 0,
+    "jinja_templates": 14,
+    "standalone_js": 4
+  },
+  "limits": [
+    "Static scope and syntax verification only; no application import, browser execution, database access, network or production requests.",
+    "Jinja parse does not resolve template context, render pages or validate inline JavaScript; browser/HTTP regressions are separate evidence.",
+    "Git diff covers tracked files against the recorded baseline plus nonignored untracked filenames; ignored data/assets and historical runtime state are outside this check.",
+    "No commit, push, deployment or mini-program publication is performed."
+  ]
+}

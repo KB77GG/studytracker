@@ -1,0 +1,146 @@
+{
+  "checked_at_utc": "2026-11-28T03:52:35.116438+00:00",
+  "mode": "preflight",
+  "scope": "Read-only git/files/systemd/proc metadata and anonymous GET; no app/models import, DB, secrets/environment, cookies or write requests.",
+  "head": "efeac80c468cc47a6347d6136b6736c1ddbd0996",
+  "expected_head": null,
+  "tracked_clean": true,
+  "service": {
+    "MainPID": "791544",
+    "NRestarts": "0",
+    "ExecMainStartTimestamp": "Fri 2026-11-27 07:38:39 CST",
+    "ActiveState": "active",
+    "SubState": "running"
+  },
+  "gunicorn_file_config": {
+    "bind": "127.0.0.1:5002",
+    "workers": 1,
+    "worker_class": "gthread",
+    "threads": 6
+  },
+  "runtime_worker_count": 1,
+  "files_match": {},
+  "loopback_pages": {
+    "/login": {
+      "status": 200,
+      "sha256": "6f578e9e1ad0f05f8c77bb270ce87530b53a2b42fbb283b59a4b409b76127a43",
+      "redirects_to_login": false,
+      "redirects_to_practice": false,
+      "no_store": true
+    },
+    "/practice": {
+      "status": 200,
+      "sha256": "563ee2038963d5b734a72db489db5cd4c7ea386bd162c478f7d9be56e1ad873b",
+      "redirects_to_login": false,
+      "redirects_to_practice": false,
+      "no_store": true
+    },
+    "/tasks": {
+      "status": 302,
+      "sha256": "70d4d99b05dbacf5809382cb9c91c31e4956ddf4b3f31b20b806ecdb5c2bddde",
+      "redirects_to_login": true,
+      "redirects_to_practice": false,
+      "no_store": true
+    },
+    "/materials": {
+      "status": 302,
+      "sha256": "f971d4b6ecbd150682a89fbdec87c8b91a53686ce049ccf1363cf8b3c98d6019",
+      "redirects_to_login": true,
+      "redirects_to_practice": false,
+      "no_store": true
+    },
+    "/practice/vocabulary/tasks/0": {
+      "status": 401,
+      "sha256": "2d8ca071ed41109440936c0e950c20dfd04c96ae87484b1320e8315f4a99cfa6",
+      "redirects_to_login": false,
+      "redirects_to_practice": false,
+      "no_store": true,
+      "identity_missing": true,
+      "no_student_or_csrf_payload": true
+    },
+    "/api/practice/vocabulary/tasks/0/state": {
+      "status": 401,
+      "sha256": "c343b38becd0e2848569bb91ca591ca1f5c55176ed3f218a453feeaef6855e87",
+      "redirects_to_login": false,
+      "redirects_to_practice": false,
+      "no_store": true,
+      "identity_missing": true,
+      "no_student_or_csrf_payload": true
+    }
+  },
+  "public_pages": {
+    "/login": {
+      "status": 200,
+      "sha256": "6f578e9e1ad0f05f8c77bb270ce87530b53a2b42fbb283b59a4b409b76127a43",
+      "redirects_to_login": false,
+      "redirects_to_practice": false,
+      "no_store": true
+    },
+    "/practice": {
+      "status": 200,
+      "sha256": "563ee2038963d5b734a72db489db5cd4c7ea386bd162c478f7d9be56e1ad873b",
+      "redirects_to_login": false,
+      "redirects_to_practice": false,
+      "no_store": true
+    },
+    "/tasks": {
+      "status": 302,
+      "sha256": "70d4d99b05dbacf5809382cb9c91c31e4956ddf4b3f31b20b806ecdb5c2bddde",
+      "redirects_to_login": true,
+      "redirects_to_practice": false,
+      "no_store": true
+    },
+    "/materials": {
+      "status": 302,
+      "sha256": "f971d4b6ecbd150682a89fbdec87c8b91a53686ce049ccf1363cf8b3c98d6019",
+      "redirects_to_login": true,
+      "redirects_to_practice": false,
+      "no_store": true
+    },
+    "/practice/vocabulary/tasks/0": {
+      "status": 401,
+      "sha256": "2d8ca071ed41109440936c0e950c20dfd04c96ae87484b1320e8315f4a99cfa6",
+      "redirects_to_login": false,
+      "redirects_to_practice": false,
+      "no_store": true,
+      "identity_missing": true,
+      "no_student_or_csrf_payload": true
+    },
+    "/api/practice/vocabulary/tasks/0/state": {
+      "status": 401,
+      "sha256": "c343b38becd0e2848569bb91ca591ca1f5c55176ed3f218a453feeaef6855e87",
+      "redirects_to_login": false,
+      "redirects_to_practice": false,
+      "no_store": true,
+      "identity_missing": true,
+      "no_student_or_csrf_payload": true
+    }
+  },
+  "public_assets": {},
+  "checks": {
+    "head_matches": true,
+    "tracked_clean": true,
+    "service_active": true,
+    "gunicorn_config_expected": true,
+    "one_worker_running": true,
+    "loopback/login_health": true,
+    "loopback/practice_health": true,
+    "loopback/tasks_health": true,
+    "loopback/materials_health": true,
+    "loopback/practice/vocabulary/tasks/0_enabled_and_gated": true,
+    "loopback/api/practice/vocabulary/tasks/0/state_enabled_and_gated": true,
+    "public/login_health": true,
+    "public/practice_health": true,
+    "public/tasks_health": true,
+    "public/materials_health": true,
+    "public/practice/vocabulary/tasks/0_enabled_and_gated": true,
+    "public/api/practice/vocabulary/tasks/0/state_enabled_and_gated": true
+  },
+  "limitations": [
+    "Anonymous HTML structure checks do not execute JS, render a browser or prove signed-in/student/teacher journeys.",
+    "Writing catalogs retain their existing anonymous redirect; their authenticated HTML is not checked here.",
+    "Gunicorn class/thread/bind values are read from config; worker count and loopback health are independent runtime checks.",
+    "Vocabulary feature remains enabled by requiring existing identity_missing responses; no .env or process environment is read or changed."
+  ],
+  "ok": true
+}

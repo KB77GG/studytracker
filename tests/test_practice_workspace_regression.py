@@ -1,5 +1,6 @@
 """统一工作台的访客空状态、公开路由与目录能力回归。"""
 
+import re
 import unittest
 from pathlib import Path
 from unittest.mock import patch
@@ -51,7 +52,7 @@ class PracticeWorkspaceRegressionTest(unittest.TestCase):
         self.assertIn('src="/static/js/practice_workspace.js"', listening)
         self.assertIn('src="/static/js/practice_workspace.js"', reading)
 
-    def test_every_workspace_catalog_has_only_subject_navigation(self):
+    def test_every_workspace_catalog_has_shared_navigation_and_one_back_entry(self):
         paths_and_templates = {
             "/listening/tests": "templates/listening/test_index.html",
             "/reading/tests": "templates/reading/test_index.html",
@@ -65,8 +66,12 @@ class PracticeWorkspaceRegressionTest(unittest.TestCase):
                 response = self.client.get(path)
                 self.assertEqual(response.status_code, 200)
                 html = response.get_data(as_text=True)
-                self.assertIn('href="/writing/">写作</a>', html)
-                self.assertEqual(html.count('href="/writing/">写作</a>'), 1)
+                header = html.split('data-practice-workspace-header>', 1)[1].split('</header>', 1)[0]
+                nav = header.split('<nav ', 1)[1].split('</nav>', 1)[0]
+                self.assertEqual(re.findall(r'>([^<>]+)</a>', nav), ['练习中心', '听力', '阅读', '写作', '题型专项'])
+                self.assertEqual(header.count('data-practice-module-back'), 1)
+                self.assertIn('data-practice-home', header)
+                self.assertIn('Sage Path</span>', header)
                 template = (project_root / template_path).read_text(encoding="utf-8")
                 self.assertNotIn("report_page", template)
                 self.assertNotIn("学习报告", template)

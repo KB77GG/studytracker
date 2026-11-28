@@ -1,0 +1,28 @@
+{
+  "baseline": "9c211ee807fa1084017cbf8e8a05c1c9fe95de77",
+  "commands": [
+    {
+      "argv": [
+        "git",
+        "read-tree",
+        "9c211ee807fa1084017cbf8e8a05c1c9fe95de77"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "apply",
+        "--check",
+        "--cached",
+        "/private/tmp/studytracker-practice-web-batch2-20261128/docs/reviews/practice-web-batch2-20261128/release/batch2.patch"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "ok": true
+}

@@ -1,0 +1,39 @@
+[
+  {
+    "argv": [
+      "node",
+      "--test",
+      "tests/test_practice_vocabulary_core.js",
+      "tests/test_practice_vocabulary_timing.js",
+      "tests/test_practice_task_lists.js",
+      "tests/test_practice_shell.js",
+      "tests/test_vocabulary_feedback.js",
+      "tests/test_exam_sprint_assignment_picker.js",
+      "tests/test_mock_sprint_picker.js",
+      "tests/test_listening_practice_client.js",
+      "tests/test_mock_review_paper.js",
+      "tests/test_practice_center_identity.js",
+      "tests/test_reading_study_entry.js",
+      "tests/test_practice_modes.js",
+      "tests/test_reading_practice_navigation.js",
+      "tests/test_listening_practice_navigation.js",
+      "tests/test_listening_player_redo.js",
+      "tests/test_practice_redo.js",
+      "tests/test_admin_suite_v2_structure.js"
+    ],
+    "cwd": "/private/tmp/studytracker-practice-web-batch2-20261128",
+    "exit_code": 0,
+    "seconds": 0.322,
+    "log": "validation/node-1.log"
+  },
+  {
+    "argv": [
+      "node",
+      "docs/reviews/practice-web-batch1-20261126/independent_exit_probe.js"
+    ],
+    "cwd": "/private/tmp/studytracker-practice-web-batch2-20261128",
+    "exit_code": 0,
+    "seconds": 0.052,
+    "log": "validation/node-2.log"
+  }
+]

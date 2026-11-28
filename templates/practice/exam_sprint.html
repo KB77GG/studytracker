@@ -16,28 +16,7 @@
 </head>
 <body class="practice-workspace-page" data-practice-hub="section">
 <div class="practice-workspace" data-practice-workspace>
-  <header class="practice-workspace__topbar">
-    <div class="practice-workspace__brand-nav">
-      <a class="practice-workspace__brand" href="{{ url_for('practice_library') }}" data-practice-module-back aria-label="返回练习中心">
-        <img src="{{ url_for('static', filename='brand/sagepath-mark.png') }}" alt="">
-        <span>Sage Path</span>
-      </a>
-      <span class="practice-workspace__context">考前冲刺</span>
-      <nav class="practice-workspace__subjects" aria-label="科目导航">
-        {% for key, label in [('listening', '听力'), ('reading', '阅读')] %}
-        <a{% if subject == key %} class="is-active" aria-current="page"{% endif %} href="{{ url_for('exam_sprint.index', subject=key) }}">{{ label }}</a>
-        {% endfor %}
-        <a href="{{ url_for('writing_library.index') }}">写作</a>
-      </nav>
-    </div>
-    <div class="practice-workspace__account">
-      <a href="{{ url_for('practice_library') }}" data-practice-module-back>返回练习中心</a>
-      <a href="{{ practice_navigation.module_exit_url }}" data-practice-module-exit>{{ practice_navigation.module_exit_label }}</a>
-      {% if current_user.is_authenticated %}
-      <span aria-label="当前用户 {{ current_user.username }}">{{ current_user.username[:1]|upper }}</span>
-      {% endif %}
-    </div>
-  </header>
+  {% with workspace_active=subject %}{% include "practice/_workspace_header.html" %}{% endwith %}
 
   <div class="practice-workspace__layout">
     <aside class="practice-workspace__sidebar practice-workspace__sidebar--scroll" id="practice-catalog" aria-label="{{ subject_label }}冲刺目录">

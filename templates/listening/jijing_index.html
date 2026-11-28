@@ -19,27 +19,7 @@
   {% set collections = [{"id": "idictation", "title": "听力机经", "part_count": catalog.part_count}] %}
 {% endif %}
 <div class="practice-workspace" data-practice-workspace>
-  <header class="practice-workspace__topbar">
-    <div class="practice-workspace__brand-nav">
-      <a class="practice-workspace__brand" href="{{ url_for('practice_library') }}" data-practice-module-back aria-label="返回练习中心">
-        <img src="{{ url_for('static', filename='brand/sagepath-mark.png') }}" alt="">
-        <span>Sage Path</span>
-      </a>
-      <span class="practice-workspace__context">机经</span>
-      <nav class="practice-workspace__subjects" aria-label="科目导航">
-        <a class="is-active" href="{{ url_for('listening_jijing_index') }}" aria-current="page">听力</a>
-        <a href="{{ url_for('reading_jijing_index') }}">阅读</a>
-        <a href="{{ url_for('writing_library.index') }}">写作</a>
-      </nav>
-    </div>
-    <div class="practice-workspace__account">
-      <a href="{{ url_for('practice_library') }}" data-practice-module-back>返回练习中心</a>
-      <a href="{{ practice_navigation.module_exit_url }}" data-practice-module-exit>{{ practice_navigation.module_exit_label }}</a>
-      {% if current_user.is_authenticated %}
-      <span aria-label="当前用户 {{ current_user.username }}">{{ current_user.username[:1]|upper }}</span>
-      {% endif %}
-    </div>
-  </header>
+  {% with workspace_active='listening' %}{% include "practice/_workspace_header.html" %}{% endwith %}
 
   <div class="practice-workspace__layout">
     <aside class="practice-workspace__sidebar practice-workspace__sidebar--scroll" id="practice-catalog" aria-label="听力机经目录">
@@ -96,6 +76,7 @@
     <button class="practice-workspace__scrim" type="button" aria-label="关闭题库目录" data-catalog-scrim hidden></button>
 
     <main class="practice-workspace__main">
+      <h1 class="practice-workspace__title">听力机经</h1>
       <span class="practice-workspace__page-watermark" aria-hidden="true">SAGEPATH</span>
       <button class="practice-workspace__catalog-button"
               type="button"
@@ -121,7 +102,7 @@
             <div>
               <p>听力 / 机经 / {{ collection.title }} {{ book.in_book }}</p>
               <div>
-                <h1>{{ book_label }} {{ book.in_book }}</h1>
+                <h2>{{ book_label }} {{ book.in_book }}</h2>
                 <span>{{ book.tests|length }} 个练习 · {{ book.progress.total }} 个 Part</span>
               </div>
             </div>

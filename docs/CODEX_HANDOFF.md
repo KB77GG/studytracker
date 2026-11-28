@@ -1,5 +1,15 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-28 — 网页刷题批2已通过发布验收，正在执行授权部署
+
+- 用户已明确允许修复完成后直接部署；本轮沿任务分支提交、CI验证后fast-forward main触发既有部署链。当前尚未提交/推送，生产预检仍为 `efeac80c468cc47a6347d6136b6736c1ddbd0996`，不能把候选写成已上线。
+- 实施树 `/private/tmp/studytracker-practice-web-batch2-20261128`，分支 `codex/practice-web-batch2-20261128`，基线/当前HEAD `9c211ee807fa1084017cbf8e8a05c1c9fe95de77`，最新fetch main无推进。开工clean；本轮共享顶栏、品牌/唯一来源返回、父级与环路保护、精听去重复列表、h1/title和身份教师保留。追加修复父母账号不冒充学生标签，补两例身份回归。受保护235文件、shell init到EOF、精听管理/进度等8项逐字相同；判分计时保存/第三批不变。
+- 本轮未提交文件：产品15项、测试/CI/flows与复现工具详 `docs/reviews/practice-web-batch2-20261128/release/source-manifest.json`；新共享header、新导航测试、整个批2证据目录和两份交接；无开工既有改动。源树 `/Users/zhouxin/Desktop/studytracker` 仍main@6ded77d2，既有8M/27顶层U/0staged，业务文件未改，仅两交接镜像。
+- 最终验证：Python3.13/原生3.10各85/85，额外冲刺/写作/模考/防作弊66/66，Node207/207、精听退出9/9；私有SQLite、无.env/app.db、network0。精确argv和日志在release/python-commands.json及extra-commands.json；来源核验39/39、14Jinja、4JS，定向Ruff通过。源比对命令 `.venv/bin/python docs/reviews/practice-web-batch2-20261128/verify_scope.py --baseline 9c211ee807fa1084017cbf8e8a05c1c9fe95de77`，解释器实际为旧资料树绝对路径。
+- 浏览器已获本机端口/Chromium启动权限，复用原flows.js最终44/44、22张1440/390截图，无目录横溢；8张独审。命令与合成服务见release/README.md，修复任务render等待/折叠条目选择、仅测试fixture补真实题目的合成冲刺入口。原失败证据保留。未验Safari/原生zoom/真机/音频CDN/生产真实学生UI；不得将合成热榜当生产热榜验收。
+- 生产只读预检17/17：active/running、1worker/gthread6/5002，tracked clean；词汇开关此前已开启，匿名page/state401 identity_missing/no-store（此事实覆盖11/27较早默认关闭记录），本轮不改开关/数据库。未部署或小程序上传提审发布。
+- 直接下一步：按release报告完成分支CI→main→Deploy→只读生产HEAD及15文件SHA/公开结构验收，更新此段为实际结果；停止本轮5116合成服务，勿动来源不明5055。
+
 ## 2026-11-27 — 词汇默认关闭与刷题批1已联合部署
 
 - **授权/版本**：用户明确“你部署吧”。依此前联合发布和默认关闭约定，产品 **`efeac80c468cc47a6347d6136b6736c1ddbd0996`** 已commit/push联合分支及main并部署。词汇flag仍false，不是开放给学生；不包含网页批2/批3或微信前端发布。收尾报告/生产证据与两交接通过独立skip-ci文档提交同步main/联合分支，最终文档HEAD看Git；服务器业务HEAD保持efeac80c。

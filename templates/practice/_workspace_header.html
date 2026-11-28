@@ -1,0 +1,39 @@
+{# Shared catalog navigation. The brand is never a context-sensitive back button. #}
+{% set workspace_active = workspace_active|default('center') %}
+{% set identity_mode = practice_navigation.identity_mode|default('guest') %}
+{% set identity_name = (current_user.display_name or current_user.username) if identity_mode in ['staff', 'student_account'] else (session.get('practice_student_name', '') if identity_mode == 'verified_student' else '') %}
+{% if identity_mode in ['verified_student', 'student_account'] and student is defined and student %}{% set identity_name = student.full_name %}{% endif %}
+<header class="practice-workspace__topbar" data-practice-workspace-header>
+  <div class="practice-workspace__brand-nav">
+    <a class="practice-workspace__brand" href="{{ url_for('practice_library') }}" data-practice-home aria-label="Sage Path 练习中心">
+      <img src="{{ url_for('static', filename='brand/sagepath-mark.png') }}" alt="">
+      <span>Sage Path</span>
+    </a>
+    <nav class="practice-workspace__subjects" aria-label="练习导航">
+      {% for key, label, target in [('center', '练习中心', url_for('practice_library')), ('listening', '听力', url_for('listening_test_index')), ('reading', '阅读', url_for('reading_test_index')), ('writing', '写作', url_for('writing_library.index')), ('question_types', '题型专项', '/practice/question-types')] %}
+      <a href="{{ target }}" data-practice-nav{% if workspace_active == key %} class="is-active" aria-current="page"{% endif %}>{{ label }}</a>
+      {% endfor %}
+    </nav>
+  </div>
+  <div class="practice-workspace__account">
+    {% if request.endpoint != 'practice_library' %}
+    <a href="{{ url_for('practice_library') }}" data-practice-module-back>返回练习中心</a>
+    {% endif %}
+    <a class="practice-workspace__identity" href="{{ url_for('practice_library') }}#practiceIdentity" data-practice-nav data-practice-identity-label>
+      {%- if identity_mode == 'staff' -%}{{ {'admin': '管理员', 'teacher': '教师', 'assistant': '助教'}.get(current_user.role, '员工') }} · {{ identity_name }}
+      {%- elif identity_mode == 'classroom' -%}课堂模式
+      {%- elif identity_name -%}学生：{{ identity_name }}
+      {%- else -%}未确认身份
+      {%- endif -%}
+    </a>
+    {% if workspace_intensive|default(false) and identity_mode not in ['staff', 'classroom'] %}
+    <button type="button" id="practiceIntensiveIdentitySwitch" onclick="logout()" hidden>切换学生</button>
+    {% endif %}
+    <a href="{{ practice_navigation.module_exit_url }}" data-practice-module-exit>{{ practice_navigation.module_exit_label }}</a>
+    {% if identity_mode == 'staff' %}
+    <a href="{{ url_for('logout') }}">退出登录</a>
+    {% elif identity_mode == 'classroom' %}
+    <a href="{{ url_for('login') }}">员工登录</a>
+    {% endif %}
+  </div>
+</header>
